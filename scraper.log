@@ -1,0 +1,308 @@
+2026-09-02 13:09:04 [INFO] ============================================================
+2026-09-02 13:09:04 [INFO] OCW UI Scraper — Dataset Builder untuk CBR/NLP
+2026-09-02 13:09:04 [INFO] Output  : C:\Users\USER\Downloads\Data\dataset_ocw_ui
+2026-09-02 13:09:04 [INFO] Dry Run : True
+2026-09-02 13:09:04 [INFO] Skip Ex.: True
+2026-09-02 13:09:04 [INFO] Delay   : 1.5–3.5 detik
+2026-09-02 13:09:04 [INFO] Course  : 29, 31
+2026-09-02 13:09:04 [INFO] ============================================================
+2026-09-02 13:09:04 [INFO] Mengambil daftar course dari: https://ocw.ui.ac.id/course/index.php?categoryid=12
+2026-09-02 13:09:06 [INFO] Ditemukan 16 course.
+2026-09-02 13:09:06 [INFO]   [95] Manajemen Proyek TI
+2026-09-02 13:09:06 [INFO]   [96] Analisis dan Perancangan Sistem Informasi
+2026-09-02 13:09:06 [INFO]   [142] Dasar-dasar Pemrograman 1
+2026-09-02 13:09:06 [INFO]   [143] Pemrograman Fungsional
+2026-09-02 13:09:06 [INFO]   [55] Sistem Interaksi (Human Computer Interaction)
+2026-09-02 13:09:06 [INFO]   [33] Pemrograman Logika
+2026-09-02 13:09:06 [INFO]   [32] Aljabar Linier
+2026-09-02 13:09:06 [INFO]   [31] IKI20230 : Sistem Operasi
+2026-09-02 13:09:06 [INFO]   [30] IKI10610 : Matematika Diskret 2
+2026-09-02 13:09:06 [INFO]   [29] IKI10400 : Prinsip-Prinsip Sistem Informasi
+2026-09-02 13:09:06 [INFO]   [28] IKI80050T : Metodologi Penelitian
+2026-09-02 13:09:06 [INFO]   [27] IKI82406T : Perencanaan Strategis Sistem Informasi
+2026-09-02 13:09:06 [INFO]   [26] IKI83403T : Data Mining and Business Intelligence
+2026-09-02 13:09:06 [INFO]   [25] IKI81404T : Perancangan Sistem Informasi
+2026-09-02 13:09:06 [INFO]   [47] Dasar-Dasar Pemrograman 2 (Java)
+2026-09-02 13:09:06 [INFO]   [97] Dasar-Dasar Arsitektur Komputer
+2026-09-02 13:09:06 [INFO] Filter aktif: hanya 2 course diproses.
+2026-09-02 13:09:06 [INFO] Scraping course: IKI20230 : Sistem Operasi (https://ocw.ui.ac.id/course/view.php?id=31)
+2026-09-02 13:09:09 [INFO]   → 11 section, 11 resource.
+2026-09-02 13:09:12 [INFO]   [DRY RUN] ui_ocw_000001: News forum (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=355
+2026-09-02 13:09:15 [INFO]   [DRY RUN] ui_ocw_000002: Download (PDF, 739KB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI20230_-_Sistem_Operasi/01-SO0910-Konsep_Dasar_Memori.pdf
+2026-09-02 13:09:18 [INFO]   [DRY RUN] ui_ocw_000003: Download (PDF, 670KB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI20230_-_Sistem_Operasi/02-SO0910-Alokasi_Memori.pdf
+2026-09-02 13:09:21 [INFO]   [DRY RUN] ui_ocw_000004: Download (PDF, 1.07MB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI20230_-_Sistem_Operasi/03-SO0910-Paging.pdf
+2026-09-02 13:09:23 [INFO]   [DRY RUN] ui_ocw_000005: Download (PDF, 972KB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI20230_-_Sistem_Operasi/04-SO0910-Struktur_Page_Table.pdf
+2026-09-02 13:09:25 [INFO]   [DRY RUN] ui_ocw_000006: Download (PDF, 1.21MB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI20230_-_Sistem_Operasi/05-SO0910-Segmentasi_Paging_Intel_Pentium.pdf
+2026-09-02 13:09:28 [INFO]   [DRY RUN] ui_ocw_000007: Download (PDF, 905KB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI20230_-_Sistem_Operasi/06-SO0910-Memori_Virtual.pdf
+2026-09-02 13:09:30 [INFO]   [DRY RUN] ui_ocw_000008: Download (PDF, 768KB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI20230_-_Sistem_Operasi/07-SO0910-Algoritma_Pergantian_Page.pdf
+2026-09-02 13:09:32 [INFO]   [DRY RUN] ui_ocw_000009: Download (PDF, 338KB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI20230_-_Sistem_Operasi/09-SO0910-Alokasi-Memori-Kernel.pdf
+2026-09-02 13:09:35 [INFO]   [DRY RUN] ui_ocw_000010: Download (PDF, 208KB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI30820-Pemrograman_Logika/slide09_-_Programming_styles_and_techniques.pdf
+2026-09-02 13:09:37 [INFO]   [DRY RUN] ui_ocw_000011: Download (PDF, 395KB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI20230_-_Sistem_Operasi/10-SO0910-Memori-Pada-Sistem-Linux.pdf
+2026-09-02 13:09:37 [INFO] Scraping course: IKI10400 : Prinsip-Prinsip Sistem Informasi (https://ocw.ui.ac.id/course/view.php?id=29)
+2026-09-02 13:09:40 [INFO]   → 12 section, 10 resource.
+2026-09-02 13:09:43 [INFO]   [DRY RUN] ui_ocw_000012: News forum (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=335
+2026-09-02 13:09:46 [INFO]   [DRY RUN] ui_ocw_000013: Download (PDF, 4.18MB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI10400_-_Prinsip-Prinsip_Sistem_Informasi/PPSI01-Konsep_Sistem.pdf
+2026-09-02 13:09:48 [INFO]   [DRY RUN] ui_ocw_000014: Download (PDF, 1.81MB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI10400_-_Prinsip-Prinsip_Sistem_Informasi/PPSI02-Konsep_Informasi.pdf
+2026-09-02 13:09:50 [INFO]   [DRY RUN] ui_ocw_000015: Download (PDF, 4.17MB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI10400_-_Prinsip-Prinsip_Sistem_Informasi/PPSI03-Pengantar_Teori_Organisasi_dan_Manajemen.pdf
+2026-09-02 13:09:52 [INFO]   [DRY RUN] ui_ocw_000016: Download (PDF, 3.9MB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI10400_-_Prinsip-Prinsip_Sistem_Informasi/PPSI04-Sistem_Informasi_dan_Information_System_Modelling.pdf
+2026-09-02 13:09:55 [INFO]   [DRY RUN] ui_ocw_000017: Download (PDF, 1.44MB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI10400_-_Prinsip-Prinsip_Sistem_Informasi/PPSI05-Teknologi_Informasi.pdf
+2026-09-02 13:09:58 [INFO]   [DRY RUN] ui_ocw_000018: Download (PDF, 2.13MB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI10400_-_Prinsip-Prinsip_Sistem_Informasi/PPSI06-Internet,_Intranet_dan_Extranet.pdf
+2026-09-02 13:10:01 [INFO]   [DRY RUN] ui_ocw_000019: Download (PDF, 4.06MB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI10400_-_Prinsip-Prinsip_Sistem_Informasi/PPSI07-Business_Information_Systems.pdf
+2026-09-02 13:10:04 [INFO]   [DRY RUN] ui_ocw_000020: Download (PDF, 2.79MB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI10400_-_Prinsip-Prinsip_Sistem_Informasi/PPSI08-Pengembangan_dan_Pemeliharaan_Sistem_Informasi_(Bagian_1).pdf
+2026-09-02 13:10:07 [INFO]   [DRY RUN] ui_ocw_000021: Download (PDF, 2.61MB) (pdf) → http://ocw.ui.ac.id/materials/12.01_FASILKOM/IKI10400_-_Prinsip-Prinsip_Sistem_Informasi/PPSI11-Knowledge_Management_dan_Learning_Organization.pdf
+2026-09-02 13:10:07 [INFO] ============================================================
+2026-09-02 13:10:07 [INFO] SELESAI — Resource: 21 | Dokumen teks: 0
+2026-09-02 13:10:07 [INFO] Output: C:\Users\USER\Downloads\Data\dataset_ocw_ui
+2026-09-02 13:11:19 [INFO] ============================================================
+2026-09-02 13:11:19 [INFO] OCW UI Scraper — Dataset Builder untuk CBR/NLP
+2026-09-02 13:11:19 [INFO] Output  : C:\Users\USER\Downloads\Data\dataset_ocw_ui
+2026-09-02 13:11:19 [INFO] Dry Run : True
+2026-09-02 13:11:19 [INFO] Skip Ex.: True
+2026-09-02 13:11:19 [INFO] Delay   : 1.5–3.5 detik
+2026-09-02 13:11:19 [INFO] ============================================================
+2026-09-02 13:11:19 [INFO] Mengambil daftar course dari: https://ocw.ui.ac.id/course/index.php?categoryid=12
+2026-09-02 13:11:22 [INFO] Ditemukan 16 course.
+2026-09-02 13:11:22 [INFO]   [95] Manajemen Proyek TI
+2026-09-02 13:11:22 [INFO]   [96] Analisis dan Perancangan Sistem Informasi
+2026-09-02 13:11:22 [INFO]   [142] Dasar-dasar Pemrograman 1
+2026-09-02 13:11:22 [INFO]   [143] Pemrograman Fungsional
+2026-09-02 13:11:22 [INFO]   [55] Sistem Interaksi (Human Computer Interaction)
+2026-09-02 13:11:22 [INFO]   [33] Pemrograman Logika
+2026-09-02 13:11:22 [INFO]   [32] Aljabar Linier
+2026-09-02 13:11:22 [INFO]   [31] IKI20230 : Sistem Operasi
+2026-09-02 13:11:22 [INFO]   [30] IKI10610 : Matematika Diskret 2
+2026-09-02 13:11:22 [INFO]   [29] IKI10400 : Prinsip-Prinsip Sistem Informasi
+2026-09-02 13:11:22 [INFO]   [28] IKI80050T : Metodologi Penelitian
+2026-09-02 13:11:22 [INFO]   [27] IKI82406T : Perencanaan Strategis Sistem Informasi
+2026-09-02 13:11:22 [INFO]   [26] IKI83403T : Data Mining and Business Intelligence
+2026-09-02 13:11:22 [INFO]   [25] IKI81404T : Perancangan Sistem Informasi
+2026-09-02 13:11:22 [INFO]   [47] Dasar-Dasar Pemrograman 2 (Java)
+2026-09-02 13:11:22 [INFO]   [97] Dasar-Dasar Arsitektur Komputer
+2026-09-02 13:11:22 [INFO] Scraping course: Manajemen Proyek TI (https://ocw.ui.ac.id/course/view.php?id=95)
+2026-09-02 13:11:24 [INFO]   → 18 section, 89 resource.
+2026-09-02 13:11:26 [INFO]   [DRY RUN] ui_ocw_000001: Announcements Forum (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11258
+2026-09-02 13:11:28 [INFO]   [DRY RUN] ui_ocw_000002: Pengumuman Forum (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11261
+2026-09-02 13:11:34 [INFO]   [DRY RUN] ui_ocw_000003: BRP Manajemen Proyek TI File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13357%2Fmod_resource%2Fcontent%2F4%2FManpro%20BRP%202020%20-%20online.pdf
+2026-09-02 13:11:37 [INFO]   [DRY RUN] ui_ocw_000004: Jadwal Kegiatan Page (other) → https://ocw.ui.ac.id/mod/page/view.php?id=11263
+2026-09-02 13:11:40 [INFO]   [DRY RUN] ui_ocw_000005: Evaluasi Hasil Pemelajaran Page (other) → https://ocw.ui.ac.id/mod/page/view.php?id=11264
+2026-09-02 13:11:43 [INFO]   [DRY RUN] ui_ocw_000006: Daftar Referensi Page (other) → https://ocw.ui.ac.id/mod/page/view.php?id=11265
+2026-09-02 13:11:46 [INFO]   [DRY RUN] ui_ocw_000007: Inisial Kahoot URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11266
+2026-09-02 13:11:49 [INFO]   [DRY RUN] ui_ocw_000008: Tugas 1 Individu (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=11274
+2026-09-02 13:11:52 [INFO]   [DRY RUN] ui_ocw_000009: Forum Tugas 1 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11272
+2026-09-02 13:11:59 [INFO]   [DRY RUN] ui_ocw_000010: Deskripsi Tugas 1 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13368%2Fmod_resource%2Fcontent%2F2%2FTugas%20Individu%201%20rev%201.0.pdf
+2026-09-02 13:12:03 [INFO]   [DRY RUN] ui_ocw_000011: IEEE Paper Template File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13370%2Fmod_resource%2Fcontent%2F1%2Fconference-template-a4%20%282%29.docx
+2026-09-02 13:12:05 [INFO]   [DRY RUN] ui_ocw_000012: Tugas 2 Individu (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=11281
+2026-09-02 13:12:06 [INFO]   [DRY RUN] ui_ocw_000013: Forum Tugas 2 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11277
+2026-09-02 13:12:12 [INFO]   [DRY RUN] ui_ocw_000014: Deskripsi Tugas Individu 2 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13373%2Fmod_resource%2Fcontent%2F1%2FDeskripsi%20Tugas%20Individu%202.pdf
+2026-09-02 13:12:18 [INFO]   [DRY RUN] ui_ocw_000015: Deskripsi Studi Kasus File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13374%2Fmod_resource%2Fcontent%2F1%2FDeskripsi%20Studi%20Kasus.pdf
+2026-09-02 13:12:23 [INFO]   [DRY RUN] ui_ocw_000016: Pembagian Kode Soal File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13375%2Fmod_resource%2Fcontent%2F1%2FPembagian%20Kode%20Soal.pdf
+2026-09-02 13:12:25 [INFO]   [DRY RUN] ui_ocw_000017: Tugas 3 Kelompok (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=11285
+2026-09-02 13:12:27 [INFO]   [DRY RUN] ui_ocw_000018: Forum Tugas 3 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11283
+2026-09-02 13:12:31 [INFO]   [DRY RUN] ui_ocw_000019: Deskripsi Tugas 3 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13379%2Fmod_resource%2Fcontent%2F1%2FDeskripsi%20Tugas%203.pdf
+2026-09-02 13:12:36 [INFO]   [DRY RUN] ui_ocw_000020: Mekanisme Tanya Jawab Tugas Project Plan File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13382%2Fmod_resource%2Fcontent%2F2%2FMekanisme%20Presentasi%20Tugas%203.pdf
+2026-09-02 13:12:38 [INFO]   [DRY RUN] ui_ocw_000021: [Kelas A] Tanya Jawab Tugas 3 Forum (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11288
+2026-09-02 13:12:40 [INFO]   [DRY RUN] ui_ocw_000022: [Kelas B] Tanya Jawab Tugas 3 Forum (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11289
+2026-09-02 13:12:42 [INFO]   [DRY RUN] ui_ocw_000023: Forum Diskusi Minggu 1 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11291
+2026-09-02 13:12:48 [INFO]   [DRY RUN] ui_ocw_000024: Schwalbe 8th Ed - Chapter 01 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13388%2Fmod_resource%2Fcontent%2F1%2FSchwalbe%208th%20-%20Chapter%2001.pdf
+2026-09-02 13:12:53 [INFO]   [DRY RUN] ui_ocw_000025: Slide 01 - Introduction to Project Management File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13389%2Fmod_resource%2Fcontent%2F1%2F01%20-%20IT%20Project%20Management%20%5BOnline%20Class%5D.pdf
+2026-09-02 13:12:56 [INFO]   [DRY RUN] ui_ocw_000026: Pengenalan Manajemen Proyek TI URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11295
+2026-09-02 13:12:59 [INFO]   [DRY RUN] ui_ocw_000027: Forum Diskusi Minggu 2 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11299
+2026-09-02 13:13:04 [INFO]   [DRY RUN] ui_ocw_000028: Schwalbe 8th Ed - Chapter 02 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13396%2Fmod_resource%2Fcontent%2F2%2FSchwalbe%208th%20-%20Chapter%2002.pdf
+2026-09-02 13:13:09 [INFO]   [DRY RUN] ui_ocw_000029: Slide 02 - The Project Management and IT Context File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13397%2Fmod_resource%2Fcontent%2F1%2F02%20-%20Project%20Management%20and%20IT%20Context%20%5BOnline%20Class%5D.pdf
+2026-09-02 13:13:12 [INFO]   [DRY RUN] ui_ocw_000030: Fase Proyek dan Project Lifecycle URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11303
+2026-09-02 13:13:13 [INFO]   [DRY RUN] ui_ocw_000031: Forum Diskusi Minggu 3 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11307
+2026-09-02 13:13:17 [INFO]   [DRY RUN] ui_ocw_000032: [Kelas A] Pembagian Kelompok FGD URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11308
+2026-09-02 13:13:22 [INFO]   [DRY RUN] ui_ocw_000033: [Kelas B] Pembagian Kelompok FGD File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13404%2Fmod_resource%2Fcontent%2F3%2Fmanpro-fgd.xlsx
+2026-09-02 13:13:28 [INFO]   [DRY RUN] ui_ocw_000034: Slide 03 - The Project Management Process Groups File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13406%2Fmod_resource%2Fcontent%2F1%2F03%20-%20Project%20Management%20Process%20Group%20%5BOnline%20Class%5D%20-%20FGD.pdf
+2026-09-02 13:13:34 [INFO]   [DRY RUN] ui_ocw_000035: Schwalbe 8th Ed - Chapter 03 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13407%2Fmod_resource%2Fcontent%2F3%2FSchwalbe%208th%20-%20Chapter%2003.pdf
+2026-09-02 13:13:36 [INFO]   [DRY RUN] ui_ocw_000036: Project Management Process Group URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11313
+2026-09-02 13:13:37 [INFO]   [DRY RUN] ui_ocw_000037: project integration management (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11322
+2026-09-02 13:13:39 [INFO]   [DRY RUN] ui_ocw_000038: Forum Diskusi Minggu 4 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11316
+2026-09-02 13:13:45 [INFO]   [DRY RUN] ui_ocw_000039: Diskusi Minggu 4 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13412%2Fmod_resource%2Fcontent%2F1%2FExersice%20Week%204.pdf
+2026-09-02 13:13:52 [INFO]   [DRY RUN] ui_ocw_000040: Slide 04 -Project Integration Management File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13414%2Fmod_resource%2Fcontent%2F1%2F04%20-%20Project%20Integration%20%5BOnline%20Class%5D.pdf
+2026-09-02 13:13:58 [INFO]   [DRY RUN] ui_ocw_000041: Schwalbe 8th Ed - Chapter 04 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13415%2Fmod_resource%2Fcontent%2F3%2FSchwalbe%208th%20-%20Chapter%2004.pdf
+2026-09-02 13:14:01 [INFO]   [DRY RUN] ui_ocw_000042: Metode Pemilihan Proyek URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11321
+2026-09-02 13:14:03 [INFO]   [DRY RUN] ui_ocw_000043: Forum Diskusi Minggu 5 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11326
+2026-09-02 13:14:10 [INFO]   [DRY RUN] ui_ocw_000044: Diskusi Minggu 5 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13422%2Fmod_resource%2Fcontent%2F1%2FExersice%20Week%205.pdf
+2026-09-02 13:14:15 [INFO]   [DRY RUN] ui_ocw_000045: Slide 05- Project Scope Management File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13424%2Fmod_resource%2Fcontent%2F1%2F05%20-%20Project%20Scope%20Management%20%5BOnline%20Class%5D.pdf
+2026-09-02 13:14:20 [INFO]   [DRY RUN] ui_ocw_000046: Schwalbe 8th Ed - Chapter 05 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13425%2Fmod_resource%2Fcontent%2F3%2FSchwalbe%208th%20-%20Chapter%2005.pdf
+2026-09-02 13:14:24 [INFO]   [DRY RUN] ui_ocw_000047: Project Scope Management URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11331
+2026-09-02 13:14:27 [INFO]   [DRY RUN] ui_ocw_000048: Work Breakdown Stucture URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11332
+2026-09-02 13:14:29 [INFO]   [DRY RUN] ui_ocw_000049: project time management (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11341
+2026-09-02 13:14:32 [INFO]   [DRY RUN] ui_ocw_000050: Forum Diskusi Minggu 6 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11336
+2026-09-02 13:14:39 [INFO]   [DRY RUN] ui_ocw_000051: Diskusi Minggu 6 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13432%2Fmod_resource%2Fcontent%2F1%2FExersice%20Week%206.pdf
+2026-09-02 13:14:44 [INFO]   [DRY RUN] ui_ocw_000052: Slide 06 - Project Time Management File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13434%2Fmod_resource%2Fcontent%2F1%2F06%20-%20Project%20Time%20Management%20%5BOnline%20Class%5D.pdf
+2026-09-02 13:14:50 [INFO]   [DRY RUN] ui_ocw_000053: Schwalbe 8th Ed - Chapter 06 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13435%2Fmod_resource%2Fcontent%2F2%2FSchwalbe%208th%20-%20Chapter%2002.pdf
+2026-09-02 13:14:52 [INFO]   [DRY RUN] ui_ocw_000054: Critical Path Method URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11342
+2026-09-02 13:14:55 [INFO]   [DRY RUN] ui_ocw_000055: project cost management (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11353
+2026-09-02 13:14:57 [INFO]   [DRY RUN] ui_ocw_000056: Forum Diskusi Minggu 9 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11349
+2026-09-02 13:15:02 [INFO]   [DRY RUN] ui_ocw_000057: Diskusi Minggu 9 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13445%2Fmod_resource%2Fcontent%2F1%2FExersice%20Week%207.pdf
+2026-09-02 13:15:08 [INFO]   [DRY RUN] ui_ocw_000058: Slide 07 - Project Cost Management File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13447%2Fmod_resource%2Fcontent%2F1%2F07%20-%20Project%20Cost%20Management%20%5BOnline%20Class%5D.pdf
+2026-09-02 13:15:11 [INFO]   [DRY RUN] ui_ocw_000059: Earned Value Management URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11354
+2026-09-02 13:15:17 [INFO]   [DRY RUN] ui_ocw_000060: Schwalbe 8th Ed - Chapter 07 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13450%2Fmod_resource%2Fcontent%2F3%2FSchwalbe%208th%20-%20Chapter%2007.pdf
+2026-09-02 13:15:19 [INFO]   [DRY RUN] ui_ocw_000061: project quality management (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11365
+2026-09-02 13:15:21 [INFO]   [DRY RUN] ui_ocw_000062: Forum Diskusi Minggu 10 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11359
+2026-09-02 13:15:23 [INFO]   [DRY RUN] ui_ocw_000063: [Kelas A] Kelompok FGD - Minggu 10 URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11360
+2026-09-02 13:15:28 [INFO]   [DRY RUN] ui_ocw_000064: [Kelas B] Kelompok FGD - Minggu 10 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13456%2Fmod_resource%2Fcontent%2F1%2Fmanpro-fgd-pekan-10.pdf
+2026-09-02 13:15:33 [INFO]   [DRY RUN] ui_ocw_000065: Focus Group Discussion - Minggu 10 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13457%2Fmod_resource%2Fcontent%2F1%2FFGD%20Week%2010.pdf
+2026-09-02 13:15:37 [INFO]   [DRY RUN] ui_ocw_000066: Slide 08 - Project Quality Management File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13459%2Fmod_resource%2Fcontent%2F1%2F08%20-%20Project%20Quality%20Management-online.pdf
+2026-09-02 13:15:42 [INFO]   [DRY RUN] ui_ocw_000067: Schwalbe 8th Ed - Chapter 08 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13461%2Fmod_resource%2Fcontent%2F1%2FSchwalbe%208th%20-%20Chapter%2008.pdf
+2026-09-02 13:15:44 [INFO]   [DRY RUN] ui_ocw_000068: project human resources management (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11374
+2026-09-02 13:15:47 [INFO]   [DRY RUN] ui_ocw_000069: Forum Diskusi Minggu 11 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11370
+2026-09-02 13:15:52 [INFO]   [DRY RUN] ui_ocw_000070: Diskusi Minggu 11 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13466%2Fmod_resource%2Fcontent%2F1%2FExersice%20Week%2011.pdf
+2026-09-02 13:15:57 [INFO]   [DRY RUN] ui_ocw_000071: Slide 09 - Project Human Resource Management File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13468%2Fmod_resource%2Fcontent%2F1%2F09%20-%20Project%20HR%20Management-online.pdf
+2026-09-02 13:16:01 [INFO]   [DRY RUN] ui_ocw_000072: Schwalbe 8th - Chapter 09 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13470%2Fmod_resource%2Fcontent%2F1%2FSchwalbe%208th%20-%20Chapter%2009.pdf
+2026-09-02 13:16:04 [INFO]   [DRY RUN] ui_ocw_000073: project communication management (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11383
+2026-09-02 13:16:06 [INFO]   [DRY RUN] ui_ocw_000074: Forum Diskusi Minggu 12 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11379
+2026-09-02 13:16:12 [INFO]   [DRY RUN] ui_ocw_000075: Diskusi Minggu 12 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13475%2Fmod_resource%2Fcontent%2F2%2FExersice%20Week%2012.pdf
+2026-09-02 13:16:17 [INFO]   [DRY RUN] ui_ocw_000076: Slide 10 - Project Communication Management File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13477%2Fmod_resource%2Fcontent%2F1%2F10%20-%20Project%20Communication%20Management-online.pdf
+2026-09-02 13:16:23 [INFO]   [DRY RUN] ui_ocw_000077: Schwalbe 8th - Chapter 10 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13479%2Fmod_resource%2Fcontent%2F1%2FSchwalbe%208th%20-%20Chapter%2010.pdf
+2026-09-02 13:16:28 [INFO]   [DRY RUN] ui_ocw_000078: Slide 11 Project Stakeholder Management File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13480%2Fmod_resource%2Fcontent%2F1%2F11%20-%20Project%20Stakeholder%20Management-online.pdf
+2026-09-02 13:16:33 [INFO]   [DRY RUN] ui_ocw_000079: Schwalbe 8th - Chapter 13 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13481%2Fmod_resource%2Fcontent%2F1%2FSchwalbe%208th%20-%20Chapter%2013.pdf
+2026-09-02 13:16:39 [INFO]   [DRY RUN] ui_ocw_000080: Manpro A - Minggu 12 (Audio Only) File (html_page) → https://ocw.ui.ac.id/mod/resource/view.php?id=11387
+2026-09-02 13:16:42 [INFO]   [DRY RUN] ui_ocw_000081: project risk management (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11395
+2026-09-02 13:16:45 [INFO]   [DRY RUN] ui_ocw_000082: Forum Diskusi Minggu 13 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11392
+2026-09-02 13:16:50 [INFO]   [DRY RUN] ui_ocw_000083: Slide 12 - Project Risk Management File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13489%2Fmod_resource%2Fcontent%2F1%2F12%20-%20Project%20risk%20Management-online.pdf
+2026-09-02 13:16:56 [INFO]   [DRY RUN] ui_ocw_000084: Schwalbe 8th - Chapter 11 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13491%2Fmod_resource%2Fcontent%2F1%2FSchwalbe%208th%20-%20Chapter%2011.pdf
+2026-09-02 13:16:59 [INFO]   [DRY RUN] ui_ocw_000085: project procurement management (other) → https://ocw.ui.ac.id/mod/url/view.php?id=11405
+2026-09-02 13:17:01 [INFO]   [DRY RUN] ui_ocw_000086: Forum Diskusi Minggu 14 (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=11401
+2026-09-02 13:17:06 [INFO]   [DRY RUN] ui_ocw_000087: Diskusi Minggu 14 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13497%2Fmod_resource%2Fcontent%2F1%2FExersice%20Week%2014.pdf
+2026-09-02 13:17:12 [INFO]   [DRY RUN] ui_ocw_000088: Slide 13 - Project Procurement Management File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13499%2Fmod_resource%2Fcontent%2F2%2F13%20-%20Project%20Procurement%20Management-online%20v1.pdf
+2026-09-02 13:17:17 [INFO]   [DRY RUN] ui_ocw_000089: Schwalbe 8th - Chapter 12 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F13501%2Fmod_resource%2Fcontent%2F1%2FSchwalbe%208th%20-%20Chapter%2012.pdf
+2026-09-02 13:17:17 [INFO] Scraping course: Analisis dan Perancangan Sistem Informasi (https://ocw.ui.ac.id/course/view.php?id=96)
+2026-09-02 13:17:20 [INFO]   → 16 section, 82 resource.
+2026-09-02 13:17:24 [INFO]   [DRY RUN] ui_ocw_000090: Pengumuman Forum (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5803
+2026-09-02 13:17:26 [INFO]   [DRY RUN] ui_ocw_000091: Evaluasi Hasil Pemelajaran Page (other) → https://ocw.ui.ac.id/mod/page/view.php?id=5804
+2026-09-02 13:17:29 [INFO]   [DRY RUN] ui_ocw_000092: Daftar Pustaka Page (other) → https://ocw.ui.ac.id/mod/page/view.php?id=5805
+2026-09-02 13:17:34 [INFO]   [DRY RUN] ui_ocw_000093: Buku Rancangan Pengajaran File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7458%2Fmod_resource%2Fcontent%2F1%2FBRP%20Anaperancis%202020%20-%20PJJ%20versi%203.pdf
+2026-09-02 13:17:38 [INFO]   [DRY RUN] ui_ocw_000094: Forum Diskusi (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5808
+2026-09-02 13:17:43 [INFO]   [DRY RUN] ui_ocw_000095: Introduction to System Analysis and Design File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7461%2Fmod_resource%2Fcontent%2F1%2F%5B1%5D%20Intro%20to%20System%20Analysis%20and%20Design.pdf
+2026-09-02 13:17:47 [INFO]   [DRY RUN] ui_ocw_000096: Self Test 1 Quiz (other) → https://ocw.ui.ac.id/mod/quiz/view.php?id=5812
+2026-09-02 13:17:50 [INFO]   [DRY RUN] ui_ocw_000097: Forum Diskusi (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5814
+2026-09-02 13:17:55 [INFO]   [DRY RUN] ui_ocw_000098: Project Identification and Selection File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7467%2Fmod_resource%2Fcontent%2F1%2F%5B2%5D%20Project%20Identification%20and%20Selection.pdf
+2026-09-02 13:18:00 [INFO]   [DRY RUN] ui_ocw_000099: Example Cost Benefit Analysis File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7470%2Fmod_resource%2Fcontent%2F1%2F%282%29%20Cost%20Benefit%20Analysis%20with%20case.xlsx
+2026-09-02 13:18:02 [INFO]   [DRY RUN] ui_ocw_000100: Self Test 2 Quiz (other) → https://ocw.ui.ac.id/mod/quiz/view.php?id=5819
+2026-09-02 13:18:05 [INFO]   [DRY RUN] ui_ocw_000101: Forum Diskusi (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5821
+2026-09-02 13:18:10 [INFO]   [DRY RUN] ui_ocw_000102: Requirement Analysis File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7474%2Fmod_resource%2Fcontent%2F1%2F%5B3%5D%20Requirement%20Analysis.pdf
+2026-09-02 13:18:12 [INFO]   [DRY RUN] ui_ocw_000103: Self Test 3 Quiz (other) → https://ocw.ui.ac.id/mod/quiz/view.php?id=5825
+2026-09-02 13:18:18 [INFO]   [DRY RUN] ui_ocw_000104: [GA 1] Assignment 1: Problem Analysis & Requirement Identification File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7479%2Fmod_resource%2Fcontent%2F1%2F%5BTugas%20Kelompok%201%5D%20Port%20Aventura%20v2.pdf
+2026-09-02 13:18:20 [INFO]   [DRY RUN] ui_ocw_000105: Assignment 1: Problem Analysis & Requirement Identification (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5828
+2026-09-02 13:18:22 [INFO]   [DRY RUN] ui_ocw_000106: Peer Review Assignment 1 (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5829
+2026-09-02 13:18:24 [INFO]   [DRY RUN] ui_ocw_000107: Forum Diskusi (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5831
+2026-09-02 13:18:28 [INFO]   [DRY RUN] ui_ocw_000108: Functional Modelling File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7484%2Fmod_resource%2Fcontent%2F1%2F%5B4%5D%20Functional%20Modeling.pdf
+2026-09-02 13:18:33 [INFO]   [DRY RUN] ui_ocw_000109: Worksheet 1 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7489%2Fmod_resource%2Fcontent%2F1%2FWS-Functional%20Modelling.pdf
+2026-09-02 13:18:37 [INFO]   [DRY RUN] ui_ocw_000110: Submission Worksheet 1 Assignment (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5838
+2026-09-02 13:18:42 [INFO]   [DRY RUN] ui_ocw_000111: [GA 2] Assignment Description File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7492%2Fmod_resource%2Fcontent%2F1%2F%5BGA2%5D%20Assignment%20Description.pdf
+2026-09-02 13:18:47 [INFO]   [DRY RUN] ui_ocw_000112: [GA 2] Project Description File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7493%2Fmod_resource%2Fcontent%2F1%2F%5BGA2-GA6%5D%20Project%20Description_E-Commerce%20IS%20for%20Anapedia.pdf
+2026-09-02 13:18:53 [INFO]   [DRY RUN] ui_ocw_000113: [GA 2] Panduan Konten System Proposal File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7494%2Fmod_resource%2Fcontent%2F1%2F%5BGA2%5D%20Guideline%20System%20Proposal.docx
+2026-09-02 13:18:57 [INFO]   [DRY RUN] ui_ocw_000114: Assignment 2: Functional Modelling Part 1 (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5843
+2026-09-02 13:19:00 [INFO]   [DRY RUN] ui_ocw_000115: Peer Review Assignment 2 (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5844
+2026-09-02 13:19:05 [INFO]   [DRY RUN] ui_ocw_000116: [GA 3] Assignment Description File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7498%2Fmod_resource%2Fcontent%2F1%2F%5BGA3%5D%20Assignment%20Description.pdf
+2026-09-02 13:19:09 [INFO]   [DRY RUN] ui_ocw_000117: Assignment 3: Functional Modelling Part 2 (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5847
+2026-09-02 13:19:11 [INFO]   [DRY RUN] ui_ocw_000118: Peer Review Assignment 3 (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5848
+2026-09-02 13:19:12 [INFO]   [DRY RUN] ui_ocw_000119: Forum Diskusi (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5850
+2026-09-02 13:19:18 [INFO]   [DRY RUN] ui_ocw_000120: Structural Modelling File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7503%2Fmod_resource%2Fcontent%2F1%2F%5B5%5D%20Structural%20Modeling.pdf
+2026-09-02 13:19:24 [INFO]   [DRY RUN] ui_ocw_000121: Worksheet 2 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7510%2Fmod_resource%2Fcontent%2F1%2FWS-Structural%20Modelling.pdf
+2026-09-02 13:19:27 [INFO]   [DRY RUN] ui_ocw_000122: Submission Worksheet 2 Assignment (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5859
+2026-09-02 13:19:29 [INFO]   [DRY RUN] ui_ocw_000123: Assignment 4: Structural Modelling (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5862
+2026-09-02 13:19:34 [INFO]   [DRY RUN] ui_ocw_000124: [GA4] Assignment Description File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7513%2Fmod_resource%2Fcontent%2F1%2FGA4_Assignment%20Description.pdf
+2026-09-02 13:19:37 [INFO]   [DRY RUN] ui_ocw_000125: Peer Review Assignment 4 (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5863
+2026-09-02 13:19:39 [INFO]   [DRY RUN] ui_ocw_000126: kuis 1 (other) → https://ocw.ui.ac.id/mod/quiz/view.php?id=5865
+2026-09-02 13:19:45 [INFO]   [DRY RUN] ui_ocw_000127: Structural Modelling (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7503%2Fmod_resource%2Fcontent%2F1%2F%5B5%5D%20Structural%20Modeling.pdf
+2026-09-02 13:19:51 [INFO]   [DRY RUN] ui_ocw_000128: Ketentuan UTS File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7519%2Fmod_resource%2Fcontent%2F1%2FKetentuan%20UTS%20Anaperancis.pdf
+2026-09-02 13:19:53 [INFO]   [DRY RUN] ui_ocw_000129: UTS - Bagian 1 Quiz (other) → https://ocw.ui.ac.id/mod/quiz/view.php?id=5868
+2026-09-02 13:19:59 [INFO]   [DRY RUN] ui_ocw_000130: UTS Bagian 2 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7521%2Fmod_resource%2Fcontent%2F1%2FSoal%20UTS%20Anaperancis_Bagian%202.pdf
+2026-09-02 13:20:00 [INFO]   [DRY RUN] ui_ocw_000131: Submission UTS Bagian 2 Assignment (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5870
+2026-09-02 13:20:03 [INFO]   [DRY RUN] ui_ocw_000132: Forum Diskusi (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5872
+2026-09-02 13:20:08 [INFO]   [DRY RUN] ui_ocw_000133: Behavioral Modelling File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7525%2Fmod_resource%2Fcontent%2F1%2F%5B6%5D%20Behavioral%20Modeling%20v2.pdf
+2026-09-02 13:20:14 [INFO]   [DRY RUN] ui_ocw_000134: Worksheet 3 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7533%2Fmod_resource%2Fcontent%2F1%2FWS-Behavioral%20Modeling.pdf
+2026-09-02 13:20:17 [INFO]   [DRY RUN] ui_ocw_000135: Submission Worksheet 3 Assignment (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5882
+2026-09-02 13:20:20 [INFO]   [DRY RUN] ui_ocw_000136: Assignment 5: Behavioral Modelling (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5885
+2026-09-02 13:20:25 [INFO]   [DRY RUN] ui_ocw_000137: [GA 5] Assignment Description File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7536%2Fmod_resource%2Fcontent%2F1%2FGA5_Assignment%20Description.pdf
+2026-09-02 13:20:28 [INFO]   [DRY RUN] ui_ocw_000138: Peer Review Assignment 5 (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5886
+2026-09-02 13:20:30 [INFO]   [DRY RUN] ui_ocw_000139: Forum Diskusi (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5888
+2026-09-02 13:20:35 [INFO]   [DRY RUN] ui_ocw_000140: [7] Process Modelling File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7541%2Fmod_resource%2Fcontent%2F1%2F%5B7%5D%20Process%20and%20Data%20Modeling.pdf
+2026-09-02 13:20:39 [INFO]   [DRY RUN] ui_ocw_000141: Worksheet 4 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7545%2Fmod_resource%2Fcontent%2F1%2FWS-Process%20Modeling.pdf
+2026-09-02 13:20:42 [INFO]   [DRY RUN] ui_ocw_000142: Submission Worksheet 4 Assignment (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5894
+2026-09-02 13:20:46 [INFO]   [DRY RUN] ui_ocw_000143: [8] Moving on to Design File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7548%2Fmod_resource%2Fcontent%2F1%2F%5B8%5D%20Moving%20on%20Design%20v2.pdf
+2026-09-02 13:20:52 [INFO]   [DRY RUN] ui_ocw_000144: [8] User Interface Design File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7549%2Fmod_resource%2Fcontent%2F1%2F%5B8%5D%20User%20Interface%20Design.pdf
+2026-09-02 13:20:54 [INFO]   [DRY RUN] ui_ocw_000145: Self Test 4 Quiz (other) → https://ocw.ui.ac.id/mod/quiz/view.php?id=5899
+2026-09-02 13:20:57 [INFO]   [DRY RUN] ui_ocw_000146: Forum Focus Group (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5901
+2026-09-02 13:21:03 [INFO]   [DRY RUN] ui_ocw_000147: Pemicu FGD UI Design File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7554%2Fmod_resource%2Fcontent%2F1%2F%5BWeek%2012%5D%20FGD%20-%20UI%20Design.pdf
+2026-09-02 13:21:06 [INFO]   [DRY RUN] ui_ocw_000148: Forum Home Group (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5903
+2026-09-02 13:21:11 [INFO]   [DRY RUN] ui_ocw_000149: Pemicu HGD UI Design File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7556%2Fmod_resource%2Fcontent%2F1%2F%5BWeek%2012%5D%20HGD%20-%20UI%20Design.pdf
+2026-09-02 13:21:14 [INFO]   [DRY RUN] ui_ocw_000150: Assignment 6: User Interface Design (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5907
+2026-09-02 13:21:19 [INFO]   [DRY RUN] ui_ocw_000151: [GA 6] Assignment Description File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7558%2Fmod_resource%2Fcontent%2F1%2FGA6_Assignment%20Description.pdf
+2026-09-02 13:21:22 [INFO]   [DRY RUN] ui_ocw_000152: Peer Review Assignment 6 (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5908
+2026-09-02 13:21:27 [INFO]   [DRY RUN] ui_ocw_000153: [9] Architecture Design File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7561%2Fmod_resource%2Fcontent%2F1%2F%5B9%5D%20Architecture%20Design.pdf
+2026-09-02 13:21:30 [INFO]   [DRY RUN] ui_ocw_000154: Self Test 5 Quiz (other) → https://ocw.ui.ac.id/mod/quiz/view.php?id=5911
+2026-09-02 13:21:32 [INFO]   [DRY RUN] ui_ocw_000155: Forum Focus Group (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5913
+2026-09-02 13:21:37 [INFO]   [DRY RUN] ui_ocw_000156: Pemicu FGD Architecture Design File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7566%2Fmod_resource%2Fcontent%2F1%2F%5BWeek%2013%5D%20FGD%20-%20Physical%20Architecture.pdf
+2026-09-02 13:21:39 [INFO]   [DRY RUN] ui_ocw_000157: Forum Home Group (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5915
+2026-09-02 13:21:43 [INFO]   [DRY RUN] ui_ocw_000158: Pemicu HGD Architecture Design File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7568%2Fmod_resource%2Fcontent%2F1%2F%5BWeek%2013%5D%20HGD%20-%20Physical%20Architecture.pdf
+2026-09-02 13:21:48 [INFO]   [DRY RUN] ui_ocw_000159: [10] System Construction & Installation File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7571%2Fmod_resource%2Fcontent%2F1%2F%5B10%5D%20System%20Testing%20and%20Installation.pdf
+2026-09-02 13:21:50 [INFO]   [DRY RUN] ui_ocw_000160: Self Test 6 Quiz (other) → https://ocw.ui.ac.id/mod/quiz/view.php?id=5920
+2026-09-02 13:21:54 [INFO]   [DRY RUN] ui_ocw_000161: Forum Focus Group (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5922
+2026-09-02 13:21:58 [INFO]   [DRY RUN] ui_ocw_000162: Pemicu FGD System Construction & Installation File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7575%2Fmod_resource%2Fcontent%2F1%2F%5BWeek%2013%5D%20FGD%20-%20System%20Installation%20%20Testing.docx
+2026-09-02 13:22:01 [INFO]   [DRY RUN] ui_ocw_000163: Forum Home Group (other) → https://ocw.ui.ac.id/mod/forum/view.php?id=5924
+2026-09-02 13:22:07 [INFO]   [DRY RUN] ui_ocw_000164: Pemicu HGD System Construction & Installation File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7577%2Fmod_resource%2Fcontent%2F1%2F%5BWeek%2013%5D%20HGD%20-%20System%20Installation%20%20Testing.docx
+2026-09-02 13:22:09 [INFO]   [DRY RUN] ui_ocw_000165: kuis (other) → https://ocw.ui.ac.id/mod/quiz/view.php?id=5865
+2026-09-02 13:22:15 [INFO]   [DRY RUN] ui_ocw_000166: Behavioral Modelling (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7525%2Fmod_resource%2Fcontent%2F1%2F%5B6%5D%20Behavioral%20Modeling%20v2.pdf
+2026-09-02 13:22:19 [INFO]   [DRY RUN] ui_ocw_000167: S (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7503%2Fmod_resource%2Fcontent%2F1%2F%5B5%5D%20Structural%20Modeling.pdf
+2026-09-02 13:22:20 [INFO]   [DRY RUN] ui_ocw_000168: Kuis 2 Quiz (other) → https://ocw.ui.ac.id/mod/quiz/view.php?id=5927
+2026-09-02 13:22:26 [INFO]   [DRY RUN] ui_ocw_000169: Ketentuan UAS File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F7581%2Fmod_resource%2Fcontent%2F1%2FKetentuan%20UTS%20Anaperancis.pdf
+2026-09-02 13:22:29 [INFO]   [DRY RUN] ui_ocw_000170: UAS Bagian 1 Quiz (other) → https://ocw.ui.ac.id/mod/quiz/view.php?id=5930
+2026-09-02 13:22:32 [INFO]   [DRY RUN] ui_ocw_000171: UAS Bagian 2 Assignment (other) → https://ocw.ui.ac.id/mod/assign/view.php?id=5931
+2026-09-02 13:22:32 [INFO] Scraping course: Dasar-dasar Pemrograman 1 (https://ocw.ui.ac.id/course/view.php?id=142)
+2026-09-02 13:22:36 [INFO]   → 21 section, 71 resource.
+2026-09-02 13:22:42 [INFO]   [DRY RUN] ui_ocw_000172: BRP (Silabus) DDP 1 MOOC File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3826%2Fmod_resource%2Fcontent%2F0%2Fbrp-ui_ddp1-mooc_v008_emas.pdf
+2026-09-02 13:22:44 [INFO]   [DRY RUN] ui_ocw_000173: Video DDP 1 MOOC Playlist - Semua Topik URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2669
+2026-09-02 13:22:47 [INFO]   [DRY RUN] ui_ocw_000174: Tips and Tricks Video - How to be a TOP programming student? URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=12525
+2026-09-02 13:22:52 [INFO]   [DRY RUN] ui_ocw_000175: Midterm Exam Questions and Solutions by DDP 1 Teaching Team File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F14683%2Fmod_resource%2Fcontent%2F0%2Fmidterm-by-ddp1-teaching-team.pdf
+2026-09-02 13:22:57 [INFO]   [DRY RUN] ui_ocw_000176: Finalterm Exam Questions and Solutions File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?forcedownload=1&file=%2F14666%2Fmod_resource%2Fcontent%2F0%2F0007_UAS%20DDP%201%20Susulan%20-%20Semester%20Gasal%202020-2021%20-%20Fariz%20Darari%20%281%29.zip
+2026-09-02 13:23:02 [INFO]   [DRY RUN] ui_ocw_000177: TP01 - Vicious Labyrinth File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F14668%2Fmod_resource%2Fcontent%2F0%2FTP01.pdf
+2026-09-02 13:23:09 [INFO]   [DRY RUN] ui_ocw_000178: TP02 - Taman Melodi File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F14670%2Fmod_resource%2Fcontent%2F0%2FTP02.pdf
+2026-09-02 13:23:15 [INFO]   [DRY RUN] ui_ocw_000179: TP03 - The Great Library Part 1 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F14669%2Fmod_resource%2Fcontent%2F0%2FTP03.pdf
+2026-09-02 13:23:20 [INFO]   [DRY RUN] ui_ocw_000180: TP04 - The Great Library Part 2 File (pdf) → https://ocw.ui.ac.id/pluginfile.php?file=%2F14671%2Fmod_resource%2Fcontent%2F0%2FTP04.pdf
+2026-09-02 13:23:25 [INFO]   [DRY RUN] ui_ocw_000181: DDP 1 - Lab 0-10 Folder (html_page) → https://ocw.ui.ac.id/mod/folder/view.php?id=12538
+2026-09-02 13:23:27 [INFO]   [DRY RUN] ui_ocw_000182: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3828/mod_label/intro/cover-yt.png
+2026-09-02 13:23:29 [INFO]   [DRY RUN] ui_ocw_000183: Video DDP 1 MOOC - Topik Komputer dan Pemrograman URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2671
+2026-09-02 13:23:34 [INFO]   [DRY RUN] ui_ocw_000184: Slides DDP 1 MOOC - Topik Komputer dan Pemrograman File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3830%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-01-computerandprogramming_open.pptx
+2026-09-02 13:23:37 [INFO]   [DRY RUN] ui_ocw_000185: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3831/mod_label/intro/cover-yt.png
+2026-09-02 13:23:39 [INFO]   [DRY RUN] ui_ocw_000186: Video DDP 1 MOOC - Topik Variabel dan Tipe Data URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2674
+2026-09-02 13:23:44 [INFO]   [DRY RUN] ui_ocw_000187: Slides DDP 1 MOOC - Topik Variabel dan Tipe Data File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3833%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-02a-variablesanddatatypes_open.pptx
+2026-09-02 13:23:47 [INFO]   [DRY RUN] ui_ocw_000188: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3834/mod_label/intro/cover-yt-2.png
+2026-09-02 13:23:49 [INFO]   [DRY RUN] ui_ocw_000189: Video DDP 1 MOOC - Topik Sistem Bilangan pada Komputer URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2677
+2026-09-02 13:23:54 [INFO]   [DRY RUN] ui_ocw_000190: Slides DDP 1 MOOC - Topik Sistem Bilangan pada Komputer File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3836%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-03-numberSystems_rev01_recording_take05_clean.pptx
+2026-09-02 13:23:57 [INFO]   [DRY RUN] ui_ocw_000191: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3837/mod_label/intro/yt-cover.png
+2026-09-02 13:24:00 [INFO]   [DRY RUN] ui_ocw_000192: Video DDP 1 MOOC - Topik Conditionals URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2680
+2026-09-02 13:24:07 [INFO]   [DRY RUN] ui_ocw_000193: Slides DDP 1 MOOC - Topik Conditionals File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3839%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-03a-conditionals_take03_clean.pptx
+2026-09-02 13:24:09 [INFO]   [DRY RUN] ui_ocw_000194: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3840/mod_label/intro/cover-yt.png
+2026-09-02 13:24:12 [INFO]   [DRY RUN] ui_ocw_000195: Video DDP 1 MOOC - Topik Loops URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2683
+2026-09-02 13:24:17 [INFO]   [DRY RUN] ui_ocw_000196: Slides DDP 1 MOOC - Topik Loops File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3842%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-03b-loops_rev03_take02_clean.pptx
+2026-09-02 13:24:18 [INFO]   [DRY RUN] ui_ocw_000197: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3843/mod_label/intro/cover-yt.png
+2026-09-02 13:24:21 [INFO]   [DRY RUN] ui_ocw_000198: Video DDP 1 MOOC - Topik Strings URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2686
+2026-09-02 13:24:25 [INFO]   [DRY RUN] ui_ocw_000199: Slides DDP 1 MOOC - Topik Strings File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3845%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-04-strings_rev03_clean.pptx
+2026-09-02 13:24:28 [INFO]   [DRY RUN] ui_ocw_000200: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3846/mod_label/intro/cover-yt.png
+2026-09-02 13:24:30 [INFO]   [DRY RUN] ui_ocw_000201: Video DDP 1 MOOC - Topik Berkas Teks URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2689
+2026-09-02 13:24:35 [INFO]   [DRY RUN] ui_ocw_000202: Slides DDP 1 MOOC - Topik Berkas Teks File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3848%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-05a-textfiles_rev04_clean.pptx
+2026-09-02 13:24:37 [INFO]   [DRY RUN] ui_ocw_000203: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3849/mod_label/intro/cover-yt.png
+2026-09-02 13:24:39 [INFO]   [DRY RUN] ui_ocw_000204: Video DDP 1 MOOC - Topik Penanganan Exception URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2692
+2026-09-02 13:24:45 [INFO]   [DRY RUN] ui_ocw_000205: Slides DDP 1 MOOC - Topik Penanganan Exception File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3851%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-05b-exceptions_rev03_clean.pptx
+2026-09-02 13:24:47 [INFO]   [DRY RUN] ui_ocw_000206: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3852/mod_label/intro/cover-yt.png
+2026-09-02 13:24:49 [INFO]   [DRY RUN] ui_ocw_000207: Video DDP 1 MOOC - Topik Fungsi URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2695
+2026-09-02 13:24:55 [INFO]   [DRY RUN] ui_ocw_000208: Slides DDP 1 MOOC - Topik Fungsi File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3854%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-06a-functions_rev02_clean.pptx
+2026-09-02 13:24:58 [INFO]   [DRY RUN] ui_ocw_000209: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3855/mod_label/intro/cover-list.png
+2026-09-02 13:25:01 [INFO]   [DRY RUN] ui_ocw_000210: Video DDP 1 MOOC - Topik List URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2698
+2026-09-02 13:25:06 [INFO]   [DRY RUN] ui_ocw_000211: Slides DDP 1 MOOC - Topik List File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3857%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-06b-lists_rev06_clean.pptx
+2026-09-02 13:25:08 [INFO]   [DRY RUN] ui_ocw_000212: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3858/mod_label/intro/cover-yt-img.png
+2026-09-02 13:25:11 [INFO]   [DRY RUN] ui_ocw_000213: Video DDP 1 MOOC - Topik Tuple URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2701
+2026-09-02 13:25:16 [INFO]   [DRY RUN] ui_ocw_000214: Slides DDP 1 MOOC - Topik Tuple File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3860%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-07a-tuplesandmutability_rev06_clean.pptx
+2026-09-02 13:25:18 [INFO]   [DRY RUN] ui_ocw_000215: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3861/mod_label/intro/cover-yt-img.png
+2026-09-02 13:25:20 [INFO]   [DRY RUN] ui_ocw_000216: Video DDP 1 MOOC - Topik Set URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2704
+2026-09-02 13:25:27 [INFO]   [DRY RUN] ui_ocw_000217: Slides DDP 1 MOOC - Topik Set File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3863%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-07b-sets_rev06_clean.pptx
+2026-09-02 13:25:30 [INFO]   [DRY RUN] ui_ocw_000218: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3864/mod_label/intro/cover-yt.png
+2026-09-02 13:25:32 [INFO]   [DRY RUN] ui_ocw_000219: Video DDP 1 MOOC - Topik Dictionary URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2707
+2026-09-02 13:25:37 [INFO]   [DRY RUN] ui_ocw_000220: Slides DDP 1 MOOC - Topik Dictionary File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3866%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-07c-dictionaries_rev03_clean.pptx
+2026-09-02 13:25:41 [INFO]   [DRY RUN] ui_ocw_000221: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3867/mod_label/intro/cover-yt.png
+2026-09-02 13:25:43 [INFO]   [DRY RUN] ui_ocw_000222: Video DDP 1 MOOC - Topik Recursion URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2710
