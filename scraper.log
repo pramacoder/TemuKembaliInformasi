@@ -306,3 +306,341 @@
 2026-09-02 13:25:37 [INFO]   [DRY RUN] ui_ocw_000220: Slides DDP 1 MOOC - Topik Dictionary File (pluginfile) → https://ocw.ui.ac.id/pluginfile.php?file=%2F3866%2Fmod_resource%2Fcontent%2F0%2Fddp1-slides-07c-dictionaries_rev03_clean.pptx
 2026-09-02 13:25:41 [INFO]   [DRY RUN] ui_ocw_000221: Resource (pluginfile) → https://ocw.ui.ac.id/pluginfile.php/3867/mod_label/intro/cover-yt.png
 2026-09-02 13:25:43 [INFO]   [DRY RUN] ui_ocw_000222: Video DDP 1 MOOC - Topik Recursion URL (other) → https://ocw.ui.ac.id/mod/url/view.php?id=2710
+2026-09-03 14:22:10 [INFO] ============================================================
+2026-09-03 14:22:10 [INFO] OCW UI Scraper — Dataset Builder untuk CBR/NLP
+2026-09-03 14:22:10 [INFO] Output  : C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui
+2026-09-03 14:22:10 [INFO] Dry Run : False
+2026-09-03 14:22:10 [INFO] Skip Ex.: False
+2026-09-03 14:22:10 [INFO] Delay   : 1.5–3.5 detik
+2026-09-03 14:22:10 [INFO] ============================================================
+2026-09-03 14:22:10 [INFO] Mengambil daftar course dari: https://ocw.ui.ac.id/course/index.php?categoryid=12
+2026-09-03 14:22:12 [INFO] Ditemukan 16 course.
+2026-09-03 14:22:12 [INFO]   [95] Manajemen Proyek TI
+2026-09-03 14:22:12 [INFO]   [96] Analisis dan Perancangan Sistem Informasi
+2026-09-03 14:22:12 [INFO]   [142] Dasar-dasar Pemrograman 1
+2026-09-03 14:22:12 [INFO]   [143] Pemrograman Fungsional
+2026-09-03 14:22:12 [INFO]   [55] Sistem Interaksi (Human Computer Interaction)
+2026-09-03 14:22:12 [INFO]   [33] Pemrograman Logika
+2026-09-03 14:22:12 [INFO]   [32] Aljabar Linier
+2026-09-03 14:22:12 [INFO]   [31] IKI20230 : Sistem Operasi
+2026-09-03 14:22:12 [INFO]   [30] IKI10610 : Matematika Diskret 2
+2026-09-03 14:22:12 [INFO]   [29] IKI10400 : Prinsip-Prinsip Sistem Informasi
+2026-09-03 14:22:12 [INFO]   [28] IKI80050T : Metodologi Penelitian
+2026-09-03 14:22:12 [INFO]   [27] IKI82406T : Perencanaan Strategis Sistem Informasi
+2026-09-03 14:22:12 [INFO]   [26] IKI83403T : Data Mining and Business Intelligence
+2026-09-03 14:22:12 [INFO]   [25] IKI81404T : Perancangan Sistem Informasi
+2026-09-03 14:22:12 [INFO]   [47] Dasar-Dasar Pemrograman 2 (Java)
+2026-09-03 14:22:12 [INFO]   [97] Dasar-Dasar Arsitektur Komputer
+2026-09-03 14:22:12 [INFO] Scraping course: Manajemen Proyek TI (https://ocw.ui.ac.id/course/view.php?id=95)
+2026-09-03 14:22:16 [INFO]   → 18 section, 89 resource.
+2026-09-03 14:22:25 [INFO]   Download PDF [ui_ocw_000003]: BRP_Manajemen_Proyek_TI_File.pdf
+2026-09-03 14:23:25 [INFO]   Download PDF [ui_ocw_000014]: Deskripsi_Tugas_Individu_2_File.pdf
+2026-09-03 14:23:29 [INFO]   Download PDF [ui_ocw_000015]: Deskripsi_Studi_Kasus_File.pdf
+2026-09-03 14:23:35 [INFO]   Download PDF [ui_ocw_000016]: Pembagian_Kode_Soal_File.pdf
+2026-09-03 14:23:44 [INFO]   Download PDF [ui_ocw_000019]: Deskripsi_Tugas_3_File.pdf
+2026-09-03 14:23:49 [INFO]   Download PDF [ui_ocw_000020]: Mekanisme_Tanya_Jawab_Tugas_Project_Plan_File.pdf
+2026-09-03 14:24:03 [INFO]   Download PDF [ui_ocw_000024]: Schwalbe_8th_Ed_-_Chapter_01_File.pdf
+2026-09-03 14:24:10 [INFO]   Download PDF [ui_ocw_000025]: Slide_01_-_Introduction_to_Project_Management_File.pdf
+2026-09-03 14:24:20 [INFO]   Download PDF [ui_ocw_000028]: Schwalbe_8th_Ed_-_Chapter_02_File.pdf
+2026-09-03 14:24:26 [INFO]   Download PDF [ui_ocw_000029]: Slide_02_-_The_Project_Management_and_IT_Context_File.pdf
+2026-09-03 14:24:43 [INFO]   Download PDF [ui_ocw_000034]: Slide_03_-_The_Project_Management_Process_Groups_File.pdf
+2026-09-03 14:24:49 [INFO]   Download PDF [ui_ocw_000035]: Schwalbe_8th_Ed_-_Chapter_03_File.pdf
+2026-09-03 14:25:05 [INFO]   Download PDF [ui_ocw_000039]: Diskusi_Minggu_4_File.pdf
+2026-09-03 14:25:11 [INFO]   Download PDF [ui_ocw_000040]: Slide_04_-Project_Integration_Management_File.pdf
+2026-09-03 14:25:17 [INFO]   Download PDF [ui_ocw_000041]: Schwalbe_8th_Ed_-_Chapter_04_File.pdf
+2026-09-03 14:25:29 [INFO]   Download PDF [ui_ocw_000044]: Diskusi_Minggu_5_File.pdf
+2026-09-03 14:25:34 [INFO]   Download PDF [ui_ocw_000045]: Slide_05-_Project_Scope_Management_File.pdf
+2026-09-03 14:25:40 [INFO]   Download PDF [ui_ocw_000046]: Schwalbe_8th_Ed_-_Chapter_05_File.pdf
+2026-09-03 14:25:57 [INFO]   Download PDF [ui_ocw_000051]: Diskusi_Minggu_6_File.pdf
+2026-09-03 14:26:02 [INFO]   Download PDF [ui_ocw_000052]: Slide_06_-_Project_Time_Management_File.pdf
+2026-09-03 14:26:06 [INFO]   Download PDF [ui_ocw_000053]: Schwalbe_8th_Ed_-_Chapter_06_File.pdf
+2026-09-03 14:26:21 [INFO]   Download PDF [ui_ocw_000057]: Diskusi_Minggu_9_File.pdf
+2026-09-03 14:26:25 [INFO]   Download PDF [ui_ocw_000058]: Slide_07_-_Project_Cost_Management_File.pdf
+2026-09-03 14:26:33 [INFO]   Download PDF [ui_ocw_000060]: Schwalbe_8th_Ed_-_Chapter_07_File.pdf
+2026-09-03 14:26:49 [INFO]   Download PDF [ui_ocw_000064]: [Kelas_B]_Kelompok_FGD_-_Minggu_10_File.pdf
+2026-09-03 14:26:54 [INFO]   Download PDF [ui_ocw_000065]: Focus_Group_Discussion_-_Minggu_10_File.pdf
+2026-09-03 14:27:01 [INFO]   Download PDF [ui_ocw_000066]: Slide_08_-_Project_Quality_Management_File.pdf
+2026-09-03 14:27:06 [INFO]   Download PDF [ui_ocw_000067]: Schwalbe_8th_Ed_-_Chapter_08_File.pdf
+2026-09-03 14:27:17 [INFO]   Download PDF [ui_ocw_000070]: Diskusi_Minggu_11_File.pdf
+2026-09-03 14:27:23 [INFO]   Download PDF [ui_ocw_000071]: Slide_09_-_Project_Human_Resource_Management_File.pdf
+2026-09-03 14:27:28 [INFO]   Download PDF [ui_ocw_000072]: Schwalbe_8th_-_Chapter_09_File.pdf
+2026-09-03 14:27:45 [INFO]   Download PDF [ui_ocw_000075]: Diskusi_Minggu_12_File.pdf
+2026-09-03 14:27:49 [INFO]   Download PDF [ui_ocw_000076]: Slide_10_-_Project_Communication_Management_File.pdf
+2026-09-03 14:27:55 [INFO]   Download PDF [ui_ocw_000077]: Schwalbe_8th_-_Chapter_10_File.pdf
+2026-09-03 14:28:05 [INFO]   Download PDF [ui_ocw_000078]: Slide_11_Project_Stakeholder_Management_File.pdf
+2026-09-03 14:28:10 [INFO]   Download PDF [ui_ocw_000079]: Schwalbe_8th_-_Chapter_13_File.pdf
+2026-09-03 14:28:29 [INFO]   Download PDF [ui_ocw_000083]: Slide_12_-_Project_Risk_Management_File.pdf
+2026-09-03 14:28:35 [INFO]   Download PDF [ui_ocw_000084]: Schwalbe_8th_-_Chapter_11_File.pdf
+2026-09-03 14:28:49 [INFO]   Download PDF [ui_ocw_000087]: Diskusi_Minggu_14_File.pdf
+2026-09-03 14:28:54 [INFO]   Download PDF [ui_ocw_000088]: Slide_13_-_Project_Procurement_Management_File.pdf
+2026-09-03 14:28:58 [INFO]   Download PDF [ui_ocw_000089]: Schwalbe_8th_-_Chapter_12_File.pdf
+2026-09-03 14:29:00 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\Manajemen_Proyek_TI\metadata.json
+2026-09-03 14:29:00 [INFO] Scraping course: Analisis dan Perancangan Sistem Informasi (https://ocw.ui.ac.id/course/view.php?id=96)
+2026-09-03 14:29:03 [INFO]   → 16 section, 82 resource.
+2026-09-03 14:29:17 [INFO]   Download PDF [ui_ocw_000093]: Buku_Rancangan_Pengajaran_File.pdf
+2026-09-03 14:29:26 [INFO]   Download PDF [ui_ocw_000095]: Introduction_to_System_Analysis_and_Design_File.pdf
+2026-09-03 14:29:39 [INFO]   Download PDF [ui_ocw_000098]: Project_Identification_and_Selection_File.pdf
+2026-09-03 14:29:56 [INFO]   Download PDF [ui_ocw_000102]: Requirement_Analysis_File.pdf
+2026-09-03 14:30:05 [INFO]   Download PDF [ui_ocw_000104]: [GA_1]_Assignment_1_Problem_Analysis_&_Requirement_Identification_File.pdf
+2026-09-03 14:30:18 [INFO]   Download PDF [ui_ocw_000108]: Functional_Modelling_File.pdf
+2026-09-03 14:30:23 [INFO]   Download PDF [ui_ocw_000109]: Worksheet_1_File.pdf
+2026-09-03 14:30:30 [INFO]   Download PDF [ui_ocw_000111]: [GA_2]_Assignment_Description_File.pdf
+2026-09-03 14:30:34 [INFO]   Download PDF [ui_ocw_000112]: [GA_2]_Project_Description_File.pdf
+2026-09-03 14:30:49 [INFO]   Download PDF [ui_ocw_000116]: [GA_3]_Assignment_Description_File.pdf
+2026-09-03 14:31:04 [INFO]   Download PDF [ui_ocw_000120]: Structural_Modelling_File.pdf
+2026-09-03 14:31:10 [INFO]   Download PDF [ui_ocw_000121]: Worksheet_2_File.pdf
+2026-09-03 14:31:20 [INFO]   Download PDF [ui_ocw_000124]: [GA4]_Assignment_Description_File.pdf
+2026-09-03 14:31:28 [INFO]   Download PDF [ui_ocw_000127]: Structural_Modelling.pdf
+2026-09-03 14:31:34 [INFO]   Download PDF [ui_ocw_000128]: Ketentuan_UTS_File.pdf
+2026-09-03 14:31:43 [INFO]   Download PDF [ui_ocw_000130]: UTS_Bagian_2_File.pdf
+2026-09-03 14:31:55 [INFO]   Download PDF [ui_ocw_000133]: Behavioral_Modelling_File.pdf
+2026-09-03 14:32:02 [INFO]   Download PDF [ui_ocw_000134]: Worksheet_3_File.pdf
+2026-09-03 14:32:11 [INFO]   Download PDF [ui_ocw_000137]: [GA_5]_Assignment_Description_File.pdf
+2026-09-03 14:32:22 [INFO]   Download PDF [ui_ocw_000140]: [7]_Process_Modelling_File.pdf
+2026-09-03 14:32:29 [INFO]   Download PDF [ui_ocw_000141]: Worksheet_4_File.pdf
+2026-09-03 14:32:39 [INFO]   Download PDF [ui_ocw_000143]: [8]_Moving_on_to_Design_File.pdf
+2026-09-03 14:32:43 [INFO]   Download PDF [ui_ocw_000144]: [8]_User_Interface_Design_File.pdf
+2026-09-03 14:33:08 [INFO]   Download PDF [ui_ocw_000147]: Pemicu_FGD_UI_Design_File.pdf
+2026-09-03 14:33:16 [INFO]   Download PDF [ui_ocw_000149]: Pemicu_HGD_UI_Design_File.pdf
+2026-09-03 14:33:26 [INFO]   Download PDF [ui_ocw_000151]: [GA_6]_Assignment_Description_File.pdf
+2026-09-03 14:33:36 [INFO]   Download PDF [ui_ocw_000153]: [9]_Architecture_Design_File.pdf
+2026-09-03 14:34:05 [INFO]   Download PDF [ui_ocw_000156]: Pemicu_FGD_Architecture_Design_File.pdf
+2026-09-03 14:34:16 [INFO]   Download PDF [ui_ocw_000158]: Pemicu_HGD_Architecture_Design_File.pdf
+2026-09-03 14:34:28 [INFO]   Download PDF [ui_ocw_000159]: [10]_System_Construction_&_Installation_File.pdf
+2026-09-03 14:35:22 [INFO]   Download PDF [ui_ocw_000166]: Behavioral_Modelling.pdf
+2026-09-03 14:36:28 [INFO]   Download PDF [ui_ocw_000167]: S.pdf
+2026-09-03 14:36:50 [INFO]   Download PDF [ui_ocw_000169]: Ketentuan_UAS_File.pdf
+2026-09-03 14:36:56 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\Analisis_dan_Perancangan_Sistem_Informasi\metadata.json
+2026-09-03 14:36:56 [INFO] Scraping course: Dasar-dasar Pemrograman 1 (https://ocw.ui.ac.id/course/view.php?id=142)
+2026-09-03 14:36:59 [INFO]   → 21 section, 71 resource.
+2026-09-03 14:37:04 [INFO]   Download PDF [ui_ocw_000172]: BRP_(Silabus)_DDP_1_MOOC_File.pdf
+2026-09-03 14:37:16 [INFO]   Download PDF [ui_ocw_000175]: Midterm_Exam_Questions_and_Solutions_by_DDP_1_Teaching_Team_File.pdf
+2026-09-03 14:37:28 [INFO]   Download PDF [ui_ocw_000177]: TP01_-_Vicious_Labyrinth_File.pdf
+2026-09-03 14:37:33 [INFO]   Download PDF [ui_ocw_000178]: TP02_-_Taman_Melodi_File.pdf
+2026-09-03 14:37:39 [INFO]   Download PDF [ui_ocw_000179]: TP03_-_The_Great_Library_Part_1_File.pdf
+2026-09-03 14:37:45 [INFO]   Download PDF [ui_ocw_000180]: TP04_-_The_Great_Library_Part_2_File.pdf
+2026-09-03 14:42:11 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\Dasar-dasar_Pemrograman_1\metadata.json
+2026-09-03 14:42:11 [INFO] Scraping course: Pemrograman Fungsional (https://ocw.ui.ac.id/course/view.php?id=143)
+2026-09-03 14:42:14 [INFO]   → 19 section, 58 resource.
+2026-09-03 14:42:33 [INFO]   Download PDF [ui_ocw_000248]: BRP_Functional_Programming_File.pdf
+2026-09-03 14:43:00 [INFO]   Download PDF [ui_ocw_000256]: Slide_Pekan_02_Harap_pahami_ini_hanya_sebagian_dari_materi,_peserta_perlu_membac.pdf
+2026-09-03 14:44:14 [INFO]   Download PDF [ui_ocw_000279]: Slide_Pekan_06_Simply_Typed_Lambda_Calculus_File.pdf
+2026-09-03 14:44:22 [INFO]   Download PDF [ui_ocw_000280]: Rangkuman_(Lecture_Notes)_Lambda_Calculus_File.pdf
+2026-09-03 14:45:11 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\Pemrograman_Fungsional\metadata.json
+2026-09-03 14:45:11 [INFO] Scraping course: Sistem Interaksi (Human Computer Interaction) (https://ocw.ui.ac.id/course/view.php?id=55)
+2026-09-03 14:45:14 [INFO]   → 17 section, 87 resource.
+2026-09-03 14:45:18 [INFO]   Download PDF [ui_ocw_000301]: analisis_data.pdf
+2026-09-03 14:45:28 [INFO]   Download PDF [ui_ocw_000302]: proses_desain_interaksi.pdf
+2026-09-03 14:45:36 [INFO]   Download PDF [ui_ocw_000303]: desain_interaksi.pdf
+2026-09-03 14:45:46 [INFO]   Download PDF [ui_ocw_000305]: desain_interaksi.pdf
+2026-09-03 14:45:56 [INFO]   Download PDF [ui_ocw_000308]: Lembar_Kerja_(Worksheet)_Memahami_Kebutuhan_Pengguna_File.pdf
+2026-09-03 14:46:03 [INFO]   Download PDF [ui_ocw_000309]: Lembar_Kerja_(Worksheet)_Good_and_Bad_Designs_File.pdf
+2026-09-03 14:46:20 [INFO]   Download PDF [ui_ocw_000314]: Prinsip-prinsip_Dasar_Kognisi_File.pdf
+2026-09-03 14:46:31 [INFO]   Download PDF [ui_ocw_000315]: Lembar_Kerja_(Worksheet)_Kognisi_File.pdf
+2026-09-03 14:46:46 [INFO]   Download PDF [ui_ocw_000319]: interaksi_sosial.pdf
+2026-09-03 14:47:00 [INFO]   Download PDF [ui_ocw_000322]: Lembar_Kerja_(Worksheet)_Interaksi_Sosial_File.pdf
+2026-09-03 14:47:09 [INFO]   Download PDF [ui_ocw_000324]: antarmuka.pdf
+2026-09-03 14:47:20 [INFO]   Download PDF [ui_ocw_000327]: Lembar_Kerja_(Worksheet)_Shneiderman's_Eight_Golden_Rules_File.pdf
+2026-09-03 14:47:25 [INFO]   Download PDF [ui_ocw_000328]: Lembar_Kerja_(Worksheet)_Membuat_Sketsa_Icon_File.pdf
+2026-09-03 14:47:32 [INFO]   Download PDF [ui_ocw_000330]: Recommended_Reading_Preliminary_Study_of_JunoBlock_Marker-BasedAugmented_Reality.pdf
+2026-09-03 14:47:38 [INFO]   Download PDF [ui_ocw_000332]: desain_interaksi.pdf
+2026-09-03 14:47:44 [INFO]   Download PDF [ui_ocw_000333]: proses_desain_interaksi.pdf
+2026-09-03 14:47:51 [INFO]   Download PDF [ui_ocw_000334]: proses_desain_interaksi.pdf
+2026-09-03 14:48:01 [INFO]   Download PDF [ui_ocw_000337]: Lembar_Kerja_(Worksheet)_Proses_Desain_Interaksi_File.pdf
+2026-09-03 14:48:12 [INFO]   Download PDF [ui_ocw_000340]: pengumpulan_data.pdf
+2026-09-03 14:48:24 [INFO]   Download PDF [ui_ocw_000343]: Lembar_Kerja_(Worksheet)_Pengumpulan_Data_#1_File.pdf
+2026-09-03 14:48:29 [INFO]   Download PDF [ui_ocw_000344]: Lembar_Kerja_(Worksheet)_Pengumpulan_Data_#2_File.pdf
+2026-09-03 14:48:36 [INFO]   Download PDF [ui_ocw_000346]: analisis_data.pdf
+2026-09-03 14:48:44 [INFO]   Download PDF [ui_ocw_000347]: pengumpulan_data.pdf
+2026-09-03 14:48:58 [INFO]   Download PDF [ui_ocw_000350]: Lembar_Kerja_(Worksheet)_Analisis_Data_Kuantitatif_File.pdf
+2026-09-03 14:49:04 [INFO]   Download PDF [ui_ocw_000351]: Lembar_Kerja_(Worksheet)_Analisis_Data_Kualitatif_File.pdf
+2026-09-03 14:49:21 [INFO]   Download PDF [ui_ocw_000355]: Menentukan_Requirements_File.pdf
+2026-09-03 14:49:31 [INFO]   Download PDF [ui_ocw_000356]: Lembar_Kerja_(Worksheet)_Menentukan_Requirements_#1_File.pdf
+2026-09-03 14:49:38 [INFO]   Download PDF [ui_ocw_000357]: Lembar_Kerja_(Worksheet)_Menentukan_Requirements_#2_File.pdf
+2026-09-03 14:49:53 [INFO]   Download PDF [ui_ocw_000361]: Konstruksi_Persona,_Skenario,_dan_Storyboard_File.pdf
+2026-09-03 14:50:00 [INFO]   Download PDF [ui_ocw_000362]: Lembar_Kerja_(Worksheet)_Persona_File.pdf
+2026-09-03 14:50:06 [INFO]   Download PDF [ui_ocw_000363]: Lembar_Kerja_(Worksheet)_Scenario_&_Storyboard_File.pdf
+2026-09-03 14:50:21 [INFO]   Download PDF [ui_ocw_000367]: Arsitektur_Informasi_dan_Prototyping_File.pdf
+2026-09-03 14:50:54 [INFO]   Download PDF [ui_ocw_000377]: Evaluasi_Sistem_File.pdf
+2026-09-03 14:51:20 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\Sistem_Interaksi_(Human_Computer_Interaction)\metadata.json
+2026-09-03 14:51:20 [INFO] Scraping course: Pemrograman Logika (https://ocw.ui.ac.id/course/view.php?id=33)
+2026-09-03 14:51:23 [INFO]   → 11 section, 11 resource.
+2026-09-03 14:51:27 [INFO]   Download PDF [ui_ocw_000389]: slide01_-_Logic_Programming_Paradigm.pdf
+2026-09-03 14:51:30 [INFO]   Download PDF [ui_ocw_000390]: slide02_-_Syntactic_aspects_of_Prolog_programs.pdf
+2026-09-03 14:51:33 [INFO]   Download PDF [ui_ocw_000391]: slide03_-_Semantic_aspects_of_Prolog_programs.pdf
+2026-09-03 14:51:36 [INFO]   Download PDF [ui_ocw_000392]: slide04_-_Lists,_operators,_arithmetics.pdf
+2026-09-03 14:51:38 [INFO]   Download PDF [ui_ocw_000393]: slide05_-_Cut.pdf
+2026-09-03 14:51:41 [INFO]   Download PDF [ui_ocw_000394]: slide06_-_Negation_as_Failure.pdf
+2026-09-03 14:51:45 [INFO]   Download PDF [ui_ocw_000395]: slide07_-_Input_and_output,_term_manipulations.pdf
+2026-09-03 14:51:48 [INFO]   Download PDF [ui_ocw_000396]: slide08_-_Database_manipulation_and_collecting_solutions.pdf
+2026-09-03 14:51:52 [INFO]   Download PDF [ui_ocw_000397]: slide09_-_Programming_styles_and_techniques.pdf
+2026-09-03 14:51:55 [INFO]   Download PDF [ui_ocw_000398]: slide10_-_Operations_on_data_structures.pdf
+2026-09-03 14:51:56 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\Pemrograman_Logika\metadata.json
+2026-09-03 14:51:56 [INFO] Scraping course: Aljabar Linier (https://ocw.ui.ac.id/course/view.php?id=32)
+2026-09-03 14:51:58 [INFO]   → 7 section, 7 resource.
+2026-09-03 14:52:17 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\Aljabar_Linier\metadata.json
+2026-09-03 14:52:17 [INFO] Scraping course: IKI20230 : Sistem Operasi (https://ocw.ui.ac.id/course/view.php?id=31)
+2026-09-03 14:52:19 [INFO]   → 11 section, 11 resource.
+2026-09-03 14:52:25 [INFO]   Download PDF [ui_ocw_000407]: 01-SO0910-Konsep_Dasar_Memori.pdf
+2026-09-03 14:52:28 [INFO]   Download PDF [ui_ocw_000408]: 02-SO0910-Alokasi_Memori.pdf
+2026-09-03 14:52:30 [INFO]   Download PDF [ui_ocw_000409]: 03-SO0910-Paging.pdf
+2026-09-03 14:52:32 [INFO]   Download PDF [ui_ocw_000410]: 04-SO0910-Struktur_Page_Table.pdf
+2026-09-03 14:52:35 [INFO]   Download PDF [ui_ocw_000411]: 05-SO0910-Segmentasi_Paging_Intel_Pentium.pdf
+2026-09-03 14:52:38 [INFO]   Download PDF [ui_ocw_000412]: 06-SO0910-Memori_Virtual.pdf
+2026-09-03 14:52:42 [INFO]   Download PDF [ui_ocw_000413]: 07-SO0910-Algoritma_Pergantian_Page.pdf
+2026-09-03 14:52:44 [INFO]   Download PDF [ui_ocw_000414]: 09-SO0910-Alokasi-Memori-Kernel.pdf
+2026-09-03 14:52:46 [INFO]   Download PDF [ui_ocw_000415]: slide09_-_Programming_styles_and_techniques.pdf
+2026-09-03 14:52:50 [INFO]   Download PDF [ui_ocw_000416]: 10-SO0910-Memori-Pada-Sistem-Linux.pdf
+2026-09-03 14:52:50 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\IKI20230_Sistem_Operasi\metadata.json
+2026-09-03 14:52:50 [INFO] Scraping course: IKI10610 : Matematika Diskret 2 (https://ocw.ui.ac.id/course/view.php?id=30)
+2026-09-03 14:52:53 [INFO]   → 8 section, 8 resource.
+2026-09-03 14:53:12 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\IKI10610_Matematika_Diskret_2\metadata.json
+2026-09-03 14:53:12 [INFO] Scraping course: IKI10400 : Prinsip-Prinsip Sistem Informasi (https://ocw.ui.ac.id/course/view.php?id=29)
+2026-09-03 14:53:15 [INFO]   → 12 section, 10 resource.
+2026-09-03 14:53:20 [INFO]   Download PDF [ui_ocw_000426]: PPSI01-Konsep_Sistem.pdf
+2026-09-03 14:53:23 [INFO]   Download PDF [ui_ocw_000427]: PPSI02-Konsep_Informasi.pdf
+2026-09-03 14:53:25 [INFO]   Download PDF [ui_ocw_000428]: PPSI03-Pengantar_Teori_Organisasi_dan_Manajemen.pdf
+2026-09-03 14:53:28 [INFO]   Download PDF [ui_ocw_000429]: PPSI04-Sistem_Informasi_dan_Information_System_Modelling.pdf
+2026-09-03 14:53:31 [INFO]   Download PDF [ui_ocw_000430]: PPSI05-Teknologi_Informasi.pdf
+2026-09-03 14:53:35 [INFO]   Download PDF [ui_ocw_000431]: PPSI06-Internet,_Intranet_dan_Extranet.pdf
+2026-09-03 14:53:38 [INFO]   Download PDF [ui_ocw_000432]: PPSI07-Business_Information_Systems.pdf
+2026-09-03 14:53:41 [INFO]   Download PDF [ui_ocw_000433]: PPSI08-Pengembangan_dan_Pemeliharaan_Sistem_Informasi_(Bagian_1).pdf
+2026-09-03 14:53:44 [INFO]   Download PDF [ui_ocw_000434]: PPSI11-Knowledge_Management_dan_Learning_Organization.pdf
+2026-09-03 14:53:44 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\IKI10400_Prinsip-Prinsip_Sistem_Informasi\metadata.json
+2026-09-03 14:53:44 [INFO] Scraping course: IKI80050T : Metodologi Penelitian (https://ocw.ui.ac.id/course/view.php?id=28)
+2026-09-03 14:53:47 [INFO]   → 13 section, 15 resource.
+2026-09-03 14:53:51 [INFO]   Download PDF [ui_ocw_000436]: 01_-_What_is_Research.pdf
+2026-09-03 14:53:54 [INFO]   Download PDF [ui_ocw_000437]: 02_-_Model_of_Scientific_Inquiry.pdf
+2026-09-03 14:53:57 [INFO]   Download PDF [ui_ocw_000438]: 03_-_Problem_Identification_and_Hypothesis.pdf
+2026-09-03 14:54:01 [INFO]   Download PDF [ui_ocw_000439]: 04_-_Logical_Thinking.pdf
+2026-09-03 14:54:04 [INFO]   Download PDF [ui_ocw_000440]: 06_-_How_to_Review_Literatures.pdf
+2026-09-03 14:54:07 [INFO]   Download PDF [ui_ocw_000441]: 07_-_Policy_Action_Interpretive_Research.pdf
+2026-09-03 14:54:10 [INFO]   Download PDF [ui_ocw_000442]: 08_-_Research_Methods.pdf
+2026-09-03 14:54:12 [INFO]   Download PDF [ui_ocw_000443]: 09_-_Writing_Research_Proposal.pdf
+2026-09-03 14:54:16 [INFO]   Download PDF [ui_ocw_000444]: 09_-_Contoh_Proposal_Penelitian.pdf
+2026-09-03 14:54:19 [INFO]   Download PDF [ui_ocw_000445]: 10_-_Writing_Process.pdf
+2026-09-03 14:54:21 [INFO]   Download PDF [ui_ocw_000446]: 10_-_Penulisan_Daftar_Pustaka.pdf
+2026-09-03 14:54:25 [INFO]   Download PDF [ui_ocw_000447]: 11_-_Survey_Research.pdf
+2026-09-03 14:54:28 [INFO]   Download PDF [ui_ocw_000448]: 12_-_Experimental_Research_in_CS_IT_dan_IS.pdf
+2026-09-03 14:54:31 [INFO]   Download PDF [ui_ocw_000449]: 13_-_Research_Data_Management.pdf
+2026-09-03 14:54:31 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\IKI80050T_Metodologi_Penelitian\metadata.json
+2026-09-03 14:54:31 [INFO] Scraping course: IKI82406T : Perencanaan Strategis Sistem Informasi (https://ocw.ui.ac.id/course/view.php?id=27)
+2026-09-03 14:54:34 [INFO]   → 12 section, 12 resource.
+2026-09-03 14:54:39 [INFO]   Download PDF [ui_ocw_000451]: Sesi01_-_Basic_Terms_of_SPIS.pdf
+2026-09-03 14:54:43 [INFO]   Download PDF [ui_ocw_000452]: Sesi02_-_IS_and_IT_Roles_in_Organization_and_Business_Strategy.pdf
+2026-09-03 14:54:46 [INFO]   Download PDF [ui_ocw_000453]: Sesi03_-_Developing_IS_and_IT_Strategy.pdf
+2026-09-03 14:54:48 [INFO]   Download PDF [ui_ocw_000454]: Sesi04_-_Internal_IS_and_IT_Strategic_Analysis.pdf
+2026-09-03 14:54:51 [INFO]   Download PDF [ui_ocw_000455]: Sesi05_-_IS_and_IT_Strategic_Analysis_Future_Potential.pdf
+2026-09-03 14:54:54 [INFO]   Download PDF [ui_ocw_000456]: Sesi06_-_Managing_The_Application_Portfolio.pdf
+2026-09-03 14:54:56 [INFO]   Download PDF [ui_ocw_000457]: Sesi07_-_Strategic_Management_of_IS_and_IT_v2.pdf
+2026-09-03 14:55:00 [INFO]   Download PDF [ui_ocw_000458]: Sesi08_-_Various_Approaches_to_Develop_SPIS.pdf
+2026-09-03 14:55:04 [INFO]   Download PDF [ui_ocw_000459]: Sesi09_-_Strategies_for_Information_Management.pdf
+2026-09-03 14:55:06 [INFO]   Download PDF [ui_ocw_000460]: Sesi10_-_Managing_the_Supply_of_IT_Service.pdf
+2026-09-03 14:55:09 [INFO]   Download PDF [ui_ocw_000461]: Sesi11_-_Strategic_Planning_for_IS_Quo_Vadis.pdf
+2026-09-03 14:55:09 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\IKI82406T_Perencanaan_Strategis_Sistem_Informasi\metadata.json
+2026-09-03 14:55:09 [INFO] Scraping course: IKI83403T : Data Mining and Business Intelligence (https://ocw.ui.ac.id/course/view.php?id=26)
+2026-09-03 14:55:11 [INFO]   → 6 section, 6 resource.
+2026-09-03 14:55:16 [INFO]   Download PDF [ui_ocw_000463]: Lect1_-_Intro_to_DMBI.pdf
+2026-09-03 14:55:19 [INFO]   Download PDF [ui_ocw_000464]: Lect2_-_DW_and_OLAP.pdf
+2026-09-03 14:55:21 [INFO]   Download PDF [ui_ocw_000465]: Lect3_-_Data_Preprocessing.pdf
+2026-09-03 14:55:25 [INFO]   Download PDF [ui_ocw_000466]: Lect4_-_Association_Rules.pdf
+2026-09-03 14:55:27 [INFO]   Download PDF [ui_ocw_000467]: Lect5_-_Classification_and_Prediction.pdf
+2026-09-03 14:55:28 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\IKI83403T_Data_Mining_and_Business_Intelligence\metadata.json
+2026-09-03 14:55:28 [INFO] Scraping course: IKI81404T : Perancangan Sistem Informasi (https://ocw.ui.ac.id/course/view.php?id=25)
+2026-09-03 14:55:30 [INFO]   → 11 section, 11 resource.
+2026-09-03 14:55:35 [INFO]   Download PDF [ui_ocw_000469]: sesi01.pdf
+2026-09-03 14:55:39 [INFO]   Download PDF [ui_ocw_000470]: sesi02.pdf
+2026-09-03 14:55:41 [INFO]   Download PDF [ui_ocw_000471]: sesi03.pdf
+2026-09-03 14:55:44 [INFO]   Download PDF [ui_ocw_000472]: sesi04.pdf
+2026-09-03 14:55:47 [INFO]   Download PDF [ui_ocw_000473]: sesi05.pdf
+2026-09-03 14:55:51 [INFO]   Download PDF [ui_ocw_000474]: sesi06.pdf
+2026-09-03 14:55:54 [INFO]   Download PDF [ui_ocw_000475]: sesi07.pdf
+2026-09-03 14:55:57 [INFO]   Download PDF [ui_ocw_000476]: sesi08.pdf
+2026-09-03 14:56:01 [INFO]   Download PDF [ui_ocw_000477]: sesi09.pdf
+2026-09-03 14:56:04 [INFO]   Download PDF [ui_ocw_000478]: sesi10.pdf
+2026-09-03 14:56:05 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\IKI81404T_Perancangan_Sistem_Informasi\metadata.json
+2026-09-03 14:56:05 [INFO] Scraping course: Dasar-Dasar Pemrograman 2 (Java) (https://ocw.ui.ac.id/course/view.php?id=47)
+2026-09-03 14:56:07 [INFO]   → 21 section, 95 resource.
+2026-09-03 14:56:12 [INFO]   Download PDF [ui_ocw_000479]: 00-ddp2-silabus_File.pdf
+2026-09-03 14:56:23 [INFO]   Download PDF [ui_ocw_000481]: 01-ddp2-basics_File.pdf
+2026-09-03 14:56:35 [INFO]   Download PDF [ui_ocw_000483]: 02-ddp2-conditions-and-loops_File.pdf
+2026-09-03 14:56:51 [INFO]   Download PDF [ui_ocw_000485]: 03-ddp2-arrays-and-arraylist_File.pdf
+2026-09-03 14:57:03 [INFO]   Download PDF [ui_ocw_000487]: 04-ddp2-generics_File.pdf
+2026-09-03 14:57:16 [INFO]   Download PDF [ui_ocw_000489]: 05-ddp2-recursion_File.pdf
+2026-09-03 14:57:27 [INFO]   Download PDF [ui_ocw_000491]: 06-ddp2-oop_File.pdf
+2026-09-03 14:57:40 [INFO]   Download PDF [ui_ocw_000493]: 07-ddp2-oop-inheritance-and-polymorphism_File.pdf
+2026-09-03 14:57:52 [INFO]   Download PDF [ui_ocw_000495]: 08-fop2-oop-abstract-classes-and-interface_File.pdf
+2026-09-03 14:58:04 [INFO]   Download PDF [ui_ocw_000497]: 09-fop2-exceptions_File.pdf
+2026-09-03 14:58:15 [INFO]   Download PDF [ui_ocw_000499]: 10-fop2-text-io_File.pdf
+2026-09-03 14:58:34 [INFO]   Download PDF [ui_ocw_000503]: 11-fop2-javafx-basics_File.pdf
+2026-09-03 14:59:56 [INFO]   Download PDF [ui_ocw_000519]: 12-fop2-javafx-events_File.pdf
+2026-09-03 15:01:16 [INFO]   Download PDF [ui_ocw_000535]: Lab_01_Selasa_File.pdf
+2026-09-03 15:01:23 [INFO]   Download PDF [ui_ocw_000536]: Lab_01_Kamis_File.pdf
+2026-09-03 15:01:30 [INFO]   Download PDF [ui_ocw_000537]: Lab_02_Selasa_File.pdf
+2026-09-03 15:01:36 [INFO]   Download PDF [ui_ocw_000538]: Lab_02_Kamis_File.pdf
+2026-09-03 15:01:40 [INFO]   Download PDF [ui_ocw_000539]: Lab_03_Selasa_File.pdf
+2026-09-03 15:01:47 [INFO]   Download PDF [ui_ocw_000540]: Lab_03_Kamis_File.pdf
+2026-09-03 15:01:53 [INFO]   Download PDF [ui_ocw_000541]: Lab_04_Selasa_File.pdf
+2026-09-03 15:01:59 [INFO]   Download PDF [ui_ocw_000542]: Lab_04_Jumat_File.pdf
+2026-09-03 15:02:03 [INFO]   Download PDF [ui_ocw_000543]: Lab_05_Selasa_File.pdf
+2026-09-03 15:02:08 [INFO]   Download PDF [ui_ocw_000544]: Lab_05_Kamis_File.pdf
+2026-09-03 15:02:13 [INFO]   Download PDF [ui_ocw_000545]: Lab_06_Selasa_File.pdf
+2026-09-03 15:02:19 [INFO]   Download PDF [ui_ocw_000546]: Lab_06_Kamis_File.pdf
+2026-09-03 15:02:26 [INFO]   Download PDF [ui_ocw_000547]: Lab_07_Selasa_File.pdf
+2026-09-03 15:02:31 [INFO]   Download PDF [ui_ocw_000548]: Lab_07_Kamis_File.pdf
+2026-09-03 15:02:37 [INFO]   Download PDF [ui_ocw_000549]: Lab_08_Selasa_File.pdf
+2026-09-03 15:02:44 [INFO]   Download PDF [ui_ocw_000550]: Lab_08_Kamis_File.pdf
+2026-09-03 15:02:50 [INFO]   Download PDF [ui_ocw_000551]: Lab_09_Selasa_File.pdf
+2026-09-03 15:02:55 [INFO]   Download PDF [ui_ocw_000552]: Lab_09_Kamis_File.pdf
+2026-09-03 15:03:00 [INFO]   Download PDF [ui_ocw_000553]: Lab_10_Selasa_File.pdf
+2026-09-03 15:03:05 [INFO]   Download PDF [ui_ocw_000554]: Lab_10_Kamis_File.pdf
+2026-09-03 15:03:12 [INFO]   Download PDF [ui_ocw_000555]: TP-01_File.pdf
+2026-09-03 15:03:19 [INFO]   Download PDF [ui_ocw_000556]: TP-02_File.pdf
+2026-09-03 15:03:30 [INFO]   Download PDF [ui_ocw_000558]: TP-03_File.pdf
+2026-09-03 15:03:41 [INFO]   Download PDF [ui_ocw_000560]: TP-04_File.pdf
+2026-09-03 15:03:49 [INFO]   Download PDF [ui_ocw_000561]: Think_Java_2ed_-_How_to_Think_Like_a_Computer_Scientist_-_Allen_B_Downey_and_Chr.pdf
+2026-09-03 15:03:56 [INFO]   Download PDF [ui_ocw_000562]: Introduction_to_Programming_Using_Java_v8.1.2_-_David_J_Eck_File.pdf
+2026-09-03 15:04:07 [INFO]   Download PDF [ui_ocw_000563]: The_Java_Language_Specification_-_Java_SE_15_-_James_Gosling_et_al_File.pdf
+2026-09-03 15:04:14 [INFO]   Download PDF [ui_ocw_000564]: Java_Notes_for_Professionals_-_GoalKicker.com_File.pdf
+2026-09-03 15:04:25 [INFO]   Download PDF [ui_ocw_000565]: Poster_Project_Description_File.pdf
+2026-09-03 15:04:37 [INFO]   Download PDF [ui_ocw_000567]: Sample_Midterm_Exam_01_File.pdf
+2026-09-03 15:04:44 [INFO]   Download PDF [ui_ocw_000568]: Sample_Midterm_Exam_02_File.pdf
+2026-09-03 15:04:58 [INFO]   Download PDF [ui_ocw_000571]: 01-latihan_File.pdf
+2026-09-03 15:05:09 [INFO]   Download PDF [ui_ocw_000573]: 02-tryout-uts-2022.03.23_File.pdf
+2026-09-03 15:05:09 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\Dasar-Dasar_Pemrograman_2_(Java)\metadata.json
+2026-09-03 15:05:09 [INFO] Scraping course: Dasar-Dasar Arsitektur Komputer (https://ocw.ui.ac.id/course/view.php?id=97)
+2026-09-03 15:05:13 [INFO]   → 18 section, 161 resource.
+2026-09-03 15:05:32 [INFO]   Download PDF [ui_ocw_000579]: BRP_DDAK_2020_File.pdf
+2026-09-03 15:05:48 [INFO]   Download PDF [ui_ocw_000583]: 2.InformationRepresentations_File.pdf
+2026-09-03 15:06:18 [INFO]   Download PDF [ui_ocw_000591]: 3.BooleanAlgebra_File.pdf
+2026-09-03 15:06:25 [INFO]   Download PDF [ui_ocw_000592]: 4.StandardAndCanonicalForms_File.pdf
+2026-09-03 15:06:44 [INFO]   Download PDF [ui_ocw_000599]: 5.KarnoughMaps_File.pdf
+2026-09-03 15:07:06 [INFO]   Download PDF [ui_ocw_000605]: 6.LogicGatesAndCircuits_File.pdf
+2026-09-03 15:07:12 [INFO]   Download PDF [ui_ocw_000606]: 7.CombinationalCircuits_File.pdf
+2026-09-03 15:07:41 [INFO]   Download PDF [ui_ocw_000617]: 8.CombinationalCircuitsMSI_File.pdf
+2026-09-03 15:07:47 [INFO]   Download PDF [ui_ocw_000618]: 9.SequentialLogic_File.pdf
+2026-09-03 15:08:25 [INFO]   Download PDF [ui_ocw_000630]: 10.Registers_File.pdf
+2026-09-03 15:09:03 [INFO]   Download PDF [ui_ocw_000642]: 12.Performance_File.pdf
+2026-09-03 15:09:37 [INFO]   Download PDF [ui_ocw_000653]: Datapath.pdf
+2026-09-03 15:10:16 [INFO]   Download PDF [ui_ocw_000665]: Introduction_to_AVR_File.pdf
+2026-09-03 15:10:22 [INFO]   Download PDF [ui_ocw_000666]: AVR_Instruction_File.pdf
+2026-09-03 15:10:28 [INFO]   Download PDF [ui_ocw_000667]: ATMega8515_Datasheet_File.pdf
+2026-09-03 15:10:34 [INFO]   Download PDF [ui_ocw_000668]: AVR_Assembler_File.pdf
+2026-09-03 15:11:03 [INFO]   Download PDF [ui_ocw_000677]: AVR_Stack_and_Subroutine_File.pdf
+2026-09-03 15:11:08 [INFO]   Download PDF [ui_ocw_000678]: AVR_Memory_File.pdf
+2026-09-03 15:11:46 [INFO]   Download PDF [ui_ocw_000690]: AVR_-_I_O_File.pdf
+2026-09-03 15:12:15 [INFO]   Download PDF [ui_ocw_000696]: AVR_Interrupt_File.pdf
+2026-09-03 15:12:50 [INFO]   Download PDF [ui_ocw_000707]: AVR_Timer_Slide_File.pdf
+2026-09-03 15:14:05 [INFO]   Download PDF [ui_ocw_000726]: Latihan-AVR-Memory_File.pdf
+2026-09-03 15:14:11 [INFO]   Download PDF [ui_ocw_000727]: Latihan-AVR-Short-Essay_File.pdf
+2026-09-03 15:14:15 [INFO]   Download PDF [ui_ocw_000728]: Latihan-AVR-Multiple-Choice_File.pdf
+2026-09-03 15:14:20 [INFO]   Download PDF [ui_ocw_000729]: Latihan-AVR-IO_File.pdf
+2026-09-03 15:14:25 [INFO]   Download PDF [ui_ocw_000730]: Latihan-AVR-IO-Interrupt-Timer_File.pdf
+2026-09-03 15:14:31 [INFO]   Download PDF [ui_ocw_000731]: Latihan-Datapath1_File.pdf
+2026-09-03 15:14:41 [INFO]   Metadata disimpan: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\Dasar-Dasar_Arsitektur_Komputer\metadata.json
+2026-09-03 15:14:41 [INFO] 
+[JSONL] C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\documents.jsonl  (259 entri)
+2026-09-03 15:14:42 [INFO] [Meta]  C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui\all_metadata.json
+2026-09-03 15:14:42 [INFO] ============================================================
+2026-09-03 15:14:42 [INFO] SELESAI — Resource: 259 | Dokumen teks: 259
+2026-09-03 15:14:42 [INFO] Output: C:\Users\Monk\Downloads\TemuKembaliInformasi\dataset_ocw_ui

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 =============================================================================
-OCW UI Scraper — Dataset Builder untuk CBR/NLP
+OCW UI Scraper — Dataset Builder untuk CBR/NLP  (PDF-ONLY mode)
 =============================================================================
 Pipeline:
   Kategori Fasilkom (categoryid=12)
@@ -10,16 +10,18 @@ Pipeline:
   Daftar Mata Kuliah
     │
     ▼
-  course/view.php?id=X  ─────── topic section + judul
+  course/view.php?id=X  ─── discovery saja (tidak disimpan)
     │
     ▼
-  Resource Link (PDF / HTML / pluginfile / mod/resource)
+  Semua link di halaman course
     │
-    ├── PDF  → download → extract text (PyMuPDF)
-    └── HTML → extract text (BeautifulSoup)
-    │
+    ├── Mengarah ke PDF?  YA  → download → extract text (PyMuPDF)
+    │                    TIDAK → SKIP (forum, tugas, HTML, video, dll.)
     ▼
+  dataset_ocw_ui/<Nama_Matkul>/<nama_file>.pdf
   metadata.json  +  documents.jsonl
+
+Hanya file PDF yang didownload. HTML, forum, tugas, dan link lain DIABAIKAN.
 
 Lisensi sumber: Creative Commons BY-NC-SA (OCW UI)
 Atribusi: Universitas Indonesia, Fakultas Ilmu Komputer
@@ -378,25 +380,36 @@ def get_course_content(session: requests.Session, course: dict) -> dict:
 def resolve_resource_url(session: requests.Session, resource: dict) -> dict:
     """
     Untuk link mod/resource/view.php, ikuti redirect untuk temukan file asli.
+    Setelah resolve, set resolved_type = 'skip' jika bukan PDF.
     """
     url      = resource["url"]
     url_type = resource["type"]
 
-    if url_type not in ("resource", "folder"):
+    # Link yang jelas bukan PDF langsung ditandai skip
+    if url_type not in ("pdf", "pluginfile", "resource", "folder"):
         resource["resolved_url"]  = url
-        resource["resolved_type"] = url_type
+        resource["resolved_type"] = "skip"
         return resource
 
+    # Link PDF eksplisit tidak perlu HEAD request
+    if url_type == "pdf":
+        resource["resolved_url"]  = url
+        resource["resolved_type"] = "pdf"
+        return resource
+
+    # pluginfile / mod/resource / folder → cek via HEAD
     try:
         resp = session.head(url, allow_redirects=True, timeout=REQUEST_TIMEOUT)
         final_url    = resp.url
         content_type = resp.headers.get("Content-Type", "")
 
-        resolved_type = classify_url(final_url)
-        if "pdf" in content_type:
+        if "pdf" in content_type or final_url.lower().endswith(".pdf"):
             resolved_type = "pdf"
-        elif "html" in content_type:
-            resolved_type = "html_page"
+        elif "pdf" in classify_url(final_url):
+            resolved_type = "pdf"
+        else:
+            # Bukan PDF → skip
+            resolved_type = "skip"
 
         resource["resolved_url"]  = final_url
         resource["resolved_type"] = resolved_type
@@ -404,7 +417,7 @@ def resolve_resource_url(session: requests.Session, resource: dict) -> dict:
     except Exception as e:
         logger.debug(f"Resolve failed untuk {url}: {e}")
         resource["resolved_url"]  = url
-        resource["resolved_type"] = url_type
+        resource["resolved_type"] = "skip"  # aman: skip jika tidak bisa diverifikasi
 
     polite_sleep()
     return resource
@@ -604,8 +617,13 @@ def scrape_all(
                     "text_preview": "",
                 }
 
-                # ── Download PDF / pluginfile ──────────────────────────────
-                if res_type in ("pdf", "pluginfile") and not dry_run:
+                # ── SKIP: bukan PDF ────────────────────────────────────────
+                if res_type == "skip":
+                    logger.debug(f"  SKIP (bukan PDF): {res_title} → {final_url}")
+                    continue
+
+                # ── Download PDF ───────────────────────────────────────────
+                if res_type == "pdf" and not dry_run:
                     url_path  = urlparse(final_url).path
                     url_fname = os.path.basename(unquote(url_path))
 
@@ -613,22 +631,24 @@ def scrape_all(
                         url_fname = safe_filename(res_title) + ".pdf"
                     else:
                         stem = safe_filename(os.path.splitext(url_fname)[0])
-                        ext  = os.path.splitext(url_fname)[1].lower()
+                        ext  = os.path.splitext(url_fname)[1].lower() or ".pdf"
                         url_fname = stem + ext
+
+                    # Pastikan ekstensi .pdf
+                    if not url_fname.lower().endswith(".pdf"):
+                        url_fname += ".pdf"
 
                     file_path = course_dir / url_fname
                     if file_path.exists():
                         stem = file_path.stem
-                        ext  = file_path.suffix
-                        file_path = course_dir / f"{stem}_{doc_id}{ext}"
+                        file_path = course_dir / f"{stem}_{doc_id}.pdf"
 
-                    logger.info(f"  Download [{doc_id}]: {url_fname}")
-                    success, nbytes, content_type = download_file(session, final_url, file_path)
+                    logger.info(f"  Download PDF [{doc_id}]: {url_fname}")
+                    success, nbytes, ct = download_file(session, final_url, file_path)
 
                     if success:
-                        actual_type = "pdf" if "pdf" in content_type or url_fname.lower().endswith(".pdf") else res_type
-
-                        if actual_type == "pdf" and not str(file_path).lower().endswith(".pdf"):
+                        # Rename jika server mengirim .pdf tanpa ekstensi
+                        if not str(file_path).lower().endswith(".pdf"):
                             new_path = file_path.with_suffix(".pdf")
                             try:
                                 file_path.rename(new_path)
@@ -637,70 +657,28 @@ def scrape_all(
                                 pass
 
                         resource_meta["file"]       = str(file_path.relative_to(output_dir))
-                        resource_meta["type"]       = actual_type
+                        resource_meta["type"]       = "pdf"
                         resource_meta["size_bytes"] = nbytes
 
-                        if actual_type == "pdf":
-                            pages     = extract_pdf_text(file_path)
-                            full_text = clean_text("\n\n".join(p["text"] for p in pages if p.get("text")))
-                            resource_meta["pages"]        = pages
-                            resource_meta["text_preview"] = full_text[:300]
-
-                            if full_text:
-                                all_documents.append({
-                                    "id":         doc_id,
-                                    "course":     content["course_name"],
-                                    "course_id":  content["course_id"],
-                                    "section":    sec_title,
-                                    "title":      res_title,
-                                    "type":       actual_type,
-                                    "source_url": final_url,
-                                    "license":    LICENSE_INFO["license"],
-                                    "text":       full_text,
-                                })
-                    else:
-                        resource_meta["download_failed"] = True
-
-                # ── Scrape teks dari halaman HTML ──────────────────────────
-                elif res_type in ("resource", "html_page", "other") and not dry_run:
-                    try:
-                        resp = session.get(final_url, timeout=REQUEST_TIMEOUT)
-                        resp.raise_for_status()
-                        polite_sleep()
-
-                        content_type = resp.headers.get("Content-Type", "")
-
-                        if "pdf" in content_type:
-                            html_file_path = course_dir / f"{safe_filename(res_title)}_{doc_id}.pdf"
-                            html_file_path.write_bytes(resp.content)
-                            pages     = extract_pdf_text(html_file_path)
-                            full_text = clean_text("\n\n".join(p["text"] for p in pages if p.get("text")))
-                            resource_meta["file"]  = str(html_file_path.relative_to(output_dir))
-                            resource_meta["type"]  = "pdf"
-                            resource_meta["pages"] = pages
-                        else:
-                            full_text      = clean_text(extract_html_text(resp.text))
-                            html_file_path = course_dir / f"{safe_filename(res_title)}_{doc_id}.html"
-                            html_file_path.write_text(resp.text, encoding="utf-8")
-                            resource_meta["file"] = str(html_file_path.relative_to(output_dir))
-                            resource_meta["type"] = "html"
-
+                        pages     = extract_pdf_text(file_path)
+                        full_text = clean_text("\n\n".join(p["text"] for p in pages if p.get("text")))
+                        resource_meta["pages"]        = pages
                         resource_meta["text_preview"] = full_text[:300]
 
-                        if full_text and len(full_text) > 100:
+                        if full_text:
                             all_documents.append({
                                 "id":         doc_id,
                                 "course":     content["course_name"],
                                 "course_id":  content["course_id"],
                                 "section":    sec_title,
                                 "title":      res_title,
-                                "type":       resource_meta["type"],
+                                "type":       "pdf",
                                 "source_url": final_url,
                                 "license":    LICENSE_INFO["license"],
                                 "text":       full_text,
                             })
-                    except Exception as e:
-                        logger.debug(f"Gagal ambil HTML {final_url}: {e}")
+                    else:
+                        resource_meta["download_failed"] = True
 
                 elif dry_run:
                     logger.info(f"  [DRY RUN] {doc_id}: {res_title} ({res_type}) → {final_url}")
