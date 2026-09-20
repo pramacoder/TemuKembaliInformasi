@@ -1,0 +1,13 @@
+{
+  "chunk_count": 9684,
+  "vocab_size": 247509,
+  "matrix_shape": [
+    9684,
+    247509
+  ],
+  "ngram_range": [
+    1,
+    2
+  ],
+  "sublinear_tf": true
+}

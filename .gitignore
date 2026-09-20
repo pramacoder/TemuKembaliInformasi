@@ -1,0 +1,46 @@
+# =========================================================
+# Git Ignore — Academic IR System
+# =========================================================
+
+# Python Virtual Environments
+venv/
+env/
+academic-ir/venv/
+
+# Environment Variables & Secrets
+.env
+academic-ir/.env
+
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Large Document Data (PDF files)
+*.pdf
+*.PDF
+academic-ir/data/raw/
+academic-ir/data/extracted/
+dataset_ocw_ui/
+data/raw/
+data/extracted/
+
+# SQLite Database Files
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+academic-ir/database/*.db
+database/*.db
+
+# Serialized Model Artifacts (rebuilt via scripts/build_index.py)
+academic-ir/models/*.pkl
+academic-ir/models/*.npz
+
+# Logs & OS artifacts
+*.log
+scraper.log
+.DS_Store
+Thumbs.db

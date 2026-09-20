@@ -1,0 +1,78 @@
+# =========================================================
+# Academic IR System — Source Configuration
+# =========================================================
+
+sources:
+
+  ocw_ui:
+    enabled: true
+    type: material
+    base_url: "https://ocw.ui.ac.id/"
+    category_id: 12
+    rate_limit_seconds: 2
+    max_retries: 3
+    timeout: 30
+
+  core:
+    enabled: true
+    type: research
+    base_url: "https://api.core.ac.uk/v3/"
+    api_key_env: "CORE_API_KEY"
+    topics:
+      - "information retrieval"
+      - "natural language processing"
+      - "text mining"
+      - "machine learning"
+      - "document retrieval"
+      - "text classification"
+      - "document similarity"
+      - "academic information retrieval"
+    pilot_limit: 300
+    rate_limit_seconds: 3
+    timeout: 30
+
+  doaj:
+    enabled: true
+    type: research
+    oai_endpoint: "https://doaj.org/oai.article"
+    metadata_prefix: "oai_dc"
+    topics:
+      - "information retrieval"
+      - "natural language processing"
+      - "text mining"
+    pilot_limit: 100
+    rate_limit_seconds: 2
+    timeout: 30
+
+  repositories:
+    enabled: false
+    type: thesis
+    sources: []
+    pilot_limit: 100
+    rate_limit_seconds: 3
+    timeout: 60
+
+# =========================================================
+# Collection Settings
+# =========================================================
+collection:
+  output_dir: "data"
+  db_path: "database/academic_ir.db"
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+
+# =========================================================
+# Preprocessing Settings
+# =========================================================
+preprocessing:
+  min_word_count: 100
+  chunk_max_words: 500
+  chunk_overlap_words: 50
+
+# =========================================================
+# TF-IDF Settings
+# =========================================================
+tfidf:
+  ngram_range: [1, 2]
+  sublinear_tf: true
+  min_df: 2
+  max_df: 0.95

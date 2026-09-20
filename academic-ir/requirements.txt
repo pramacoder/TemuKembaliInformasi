@@ -1,0 +1,34 @@
+# HTTP & Parsing
+requests>=2.31
+beautifulsoup4>=4.12
+lxml>=4.9
+
+# PDF Extraction
+pymupdf>=1.24
+
+# NLP - Indonesian
+Sastrawi>=1.0.1
+
+# NLP - English
+nltk>=3.8
+
+# ML & Indexing
+scikit-learn>=1.3
+scipy>=1.11
+numpy>=1.24
+pandas>=1.5
+
+# Language Detection
+langdetect>=1.0.9
+
+# Utilities
+tqdm>=4.65
+python-dotenv>=1.0
+joblib>=1.3
+pyyaml>=6.0
+
+# Web UI
+streamlit>=1.28
+
+# OCR fallback (optional, uncomment if needed)
+# pytesseract>=0.3.10
