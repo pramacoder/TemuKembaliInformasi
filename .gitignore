@@ -6,10 +6,17 @@
 venv/
 env/
 academic-ir/venv/
+.venv/
 
 # Environment Variables & Secrets
 .env
+.env.*
 academic-ir/.env
+academic-ir/.env.*
+!academic-ir/.env.example
+academic-ir/academic-ir-frontend/.env.local
+academic-ir/academic-ir-frontend/.env.*.local
+!academic-ir/academic-ir-frontend/.env.example
 
 # Python Bytecode & Cache
 __pycache__/
@@ -17,7 +24,15 @@ __pycache__/
 *$py.class
 .pytest_cache/
 
-# Large Document Data (PDF files)
+# Frontend Build & Dependencies
+node_modules/
+academic-ir/academic-ir-frontend/node_modules/
+.next/
+academic-ir/academic-ir-frontend/.next/
+out/
+dist/
+
+# Large Document Data (PDF files & raw crawlers ~277MB)
 *.pdf
 *.PDF
 academic-ir/data/raw/
@@ -26,18 +41,9 @@ dataset_ocw_ui/
 data/raw/
 data/extracted/
 
-# SQLite Database Files
-*.db
-*.sqlite
-*.sqlite3
+# SQLite WAL & temporary files (keep main academic_ir.db)
 *.db-wal
 *.db-shm
-academic-ir/database/*.db
-database/*.db
-
-# Serialized Model Artifacts (rebuilt via scripts/build_index.py)
-academic-ir/models/*.pkl
-academic-ir/models/*.npz
 
 # Logs & OS artifacts
 *.log

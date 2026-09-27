@@ -1,59 +1,233 @@
-# Academic IR System
+# Academic IR — Information Retrieval System
 
-Sistem Information Retrieval untuk dokumen akademik menggunakan **TF-IDF + Vector Space Model + Cosine Similarity**.
+Sistem Information Retrieval (IR) untuk pencarian dokumen akademik multi-korpus menggunakan algoritma **TF-IDF + Vector Space Model (VSM) + Cosine Similarity**. Sistem ini dilengkapi dengan **Backend API modern (FastAPI)** dan **Antarmuka Web interaktif (Next.js 15, Tailwind CSS, & shadcn/ui)** serta opsi UI klasik via **Streamlit**.
 
-## Fitur
+---
 
-- **Unified Search** — Satu search bar untuk semua corpus (Material, Research, Thesis)
-- **Chunk-Level Retrieval** — Hasil menunjukkan halaman dan snippet yang relevan
-- **Language-Aware** — Preprocessing adaptif untuk English dan Indonesian
-- **Proposal Similarity** — Upload proposal PDF, temukan dokumen serupa
-- **Evaluasi** — Precision@K, Recall@K, MAP, NDCG
+## 🌟 Fitur Utama
 
-## Arsitektur
+- **Unified Multi-Corpus Search**: Mencari di seluruh korpus akademik (Bahan Kuliah OCW UI, Riset Ilmiah, & Skripsi/Thesis) dalam satu query.
+- **Chunk-Level Retrieval**: Menampilkan potongan dokumen (*chunks*) paling relevan lengkap dengan nomor halaman, tingkat kemiripan (*similarity score*), serta metadata dokumen.
+- **Bilingual / Language-Aware Preprocessing**: Preprocessing otomatis untuk dokumen berbahasa Indonesia (Sastrawi Stemmer) dan bahasa Inggris (NLTK Porter Stemmer).
+- **Modern Web Interface**: Dibangun dengan Next.js 15 (App Router), Tailwind CSS v3, dan komponen shadcn/ui lengkap dengan filter korpus, facet tahun, dan sorting relevansi.
+- **RESTful API Backend**: Endpoint cepat berbasis FastAPI (`/api/search`, `/api/stats`, `/api/health`) dengan CORS terkonfigurasi.
+- **Pre-indexed Database & Models**: Basis data SQLite (`academic_ir.db`) dan matriks TF-IDF sudah disertakan, sehingga aplikasi dapat langsung dijalankan tanpa perlu proses *crawling* atau pelatihan ulang.
 
+---
+
+## 🏗️ Arsitektur Sistem
+
+```text
+                                 [ Next.js 15 Frontend ]
+                                            │
+                                            │ HTTP / JSON (Port 3000 -> 8000)
+                                            ▼
+                                  [ FastAPI Backend ]
+                                            │
+               ┌────────────────────────────┴────────────────────────────┐
+               ▼                                                         ▼
+       [ TFIDFIndex (VSM) ]                                    [ SQLite Database ]
+  - tfidf_vectorizer.pkl (247k vocab)                     - 9,684 Document Chunks
+  - tfidf_matrix.npz (9.6k x 247k)                        - Metadata Dokumen & Korpus
+  - chunk_ids.pkl                                         - Path Dokumen & Halaman
 ```
-User Query → Preprocessing → TF-IDF Transform → Cosine Similarity → Ranking → Results
-                                                                        ↑
-Corpus PDFs → Extraction → Chunking → Preprocessing → TF-IDF Index ────┘
-```
 
-## Corpus Types
+---
 
-| Type | Source | ID Prefix |
-|---|---|---|
-| MATERIAL | OCW UI | MAT-XXXXXX |
-| RESEARCH | CORE, DOAJ | RES-XXXXXX |
-| THESIS | Institutional Repo | THS-XXXXXX |
+## 📋 Prasyarat Sistem (Prerequisites)
 
-## Quick Start
+Sebelum menjalankan aplikasi di perangkat baru, pastikan telah menginstal:
+
+1. **Git**: Untuk meng-clone repositori.
+2. **Python**: Versi `3.10` atau lebih baru (`python --version`).
+3. **Node.js**: Versi `18.x` atau `20.x` LTS (`node --version`) beserta `npm`.
+
+---
+
+## 🚀 Panduan Menjalankan di Perangkat Lain (Step-by-Step)
+
+### 1. Clone Repositori
+
+Buka terminal / PowerShell, kemudian jalankan:
 
 ```bash
-# 1. Setup
-python -m venv venv
-venv\Scripts\activate  # Windows
-pip install -r requirements.txt
-
-# 2. Initialize database
-python -c "from src.database.models import init_database; init_database()"
-
-# 3. Collect data (example: OCW UI)
-python scripts/collect_ocw.py
-
-# 4. Build index
-python scripts/build_index.py
-
-# 5. Run web UI
-streamlit run app/streamlit_app.py
+git clone https://github.com/pramacoder/TemuKembaliInformasi.git
+cd TemuKembaliInformasi
 ```
 
-## Tech Stack
+---
 
-- **Python 3.10+**
-- **PyMuPDF** — PDF extraction
-- **scikit-learn** — TF-IDF + cosine similarity
-- **Sastrawi** — Indonesian NLP
-- **NLTK** — English NLP
-- **langdetect** — Language detection
-- **SQLite** — Metadata storage
-- **Streamlit** — Web UI
+### 2. Setup & Jalankan Backend (FastAPI)
+
+Masuk ke direktori `academic-ir`:
+
+```bash
+cd academic-ir
+```
+
+#### A. Buat Virtual Environment & Install Dependensi
+
+**Di Windows (PowerShell / Command Prompt):**
+```powershell
+# Buat virtual environment
+python -m venv venv
+
+# Aktifkan virtual environment
+.\venv\Scripts\activate
+
+# Install dependensi
+pip install -r requirements.txt
+```
+
+**Di macOS / Linux:**
+```bash
+# Buat virtual environment
+python3 -m venv venv
+
+# Aktifkan virtual environment
+source venv/bin/activate
+
+# Install dependensi
+pip install -r requirements.txt
+```
+
+#### B. Setup Environment Variables (Opsional)
+Jika ingin menggunakan scraper CORE API untuk crawling tambahan:
+```bash
+# Windows
+copy .env.example .env
+
+# macOS / Linux
+cp .env.example .env
+```
+*(Catatan: Jika hanya untuk menjalankan pencarian dan web, langkah ini tidak wajib karena database dan model sudah tersedia).*
+
+#### C. Jalankan Server FastAPI
+
+Pastikan virtual environment masih aktif, lalu jalankan:
+
+```bash
+uvicorn app.api:app --host 0.0.0.0 --port 8000 --reload
+```
+
+Server backend akan berjalan di:
+- **API URL:** `http://localhost:8000`
+- **Swagger UI (Dokumentasi Interaktif):** `http://localhost:8000/docs`
+- **Kesehatan Sistem:** `http://localhost:8000/api/health`
+
+---
+
+### 3. Setup & Jalankan Frontend (Next.js 15)
+
+Buka jendela terminal / PowerShell **baru** (biarkan backend tetap menyala di terminal pertama).
+
+Navigasikan ke folder frontend:
+
+```bash
+cd academic-ir/academic-ir-frontend
+```
+
+#### A. Install Dependensi Frontend
+
+Jalankan perintah berikut:
+
+```bash
+npm install --legacy-peer-deps
+```
+
+*(Catatan: Menggunakan flag `--legacy-peer-deps` direkomendasikan untuk menghindari konflik peer dependensi React 19 / Next 15).*
+
+#### B. Jalankan Server Development Frontend
+
+```bash
+npm run dev
+```
+
+Aplikasi frontend sekarang dapat diakses melalui browser di:
+👉 **[http://localhost:3000](http://localhost:3000)**
+
+---
+
+### 4. (Alternatif) Menjalankan Streamlit UI
+
+Jika ingin mencoba antarmuka alternatif berbasis Streamlit:
+
+1. Buka terminal di folder `academic-ir/` dan aktifkan virtual environment.
+2. Jalankan perintah:
+   ```bash
+   streamlit run app/streamlit_app.py
+   ```
+3. Akses di browser pada `http://localhost:8501`.
+
+---
+
+## 📂 Struktur Direktori Proyek
+
+```text
+TemuKembaliInformasi/
+├── README.md                           # Dokumentasi utama proyek
+├── .gitignore                          # Konfigurasi ignore git
+├── academic-ir/
+│   ├── app/
+│   │   ├── api.py                      # FastAPI Backend Server (Endpoint /api/search, /api/stats)
+│   │   └── streamlit_app.py            # Aplikasi antarmuka Streamlit alternatif
+│   ├── database/
+│   │   └── academic_ir.db              # Database SQLite (9,600+ chunks terindeks)
+│   ├── models/                         # Serialized TF-IDF Index & Vocabulary
+│   │   ├── chunk_ids.pkl               # Mapping ID chunk
+│   │   ├── tfidf_matrix.npz            # Matriks sparse TF-IDF (Scipy)
+│   │   ├── tfidf_vectorizer.pkl        # Fitted Scikit-Learn Vectorizer
+│   │   └── index_metadata.json         # Info versi, vocab size, & parameter
+│   ├── data/
+│   │   ├── manifests/                  # CSV manifest metadata dokumen
+│   │   ├── reports/                    # Laporan evaluasi retrieval (JSON)
+│   │   └── raw/                        # File PDF mentah (diabaikan dari Git karena ukuran besar)
+│   ├── src/
+│   │   ├── database/                   # Model ORM / SQLite schema & queries
+│   │   ├── indexing/                   # Modul pembangunan indeks TF-IDF
+│   │   ├── preprocessing/              # Stemmer, tokenisasi, stopword Sastrawi/NLTK
+│   │   └── retrieval/                  # Mesin ranking Cosine Similarity & Search Engine
+│   ├── scripts/
+│   │   ├── build_index.py              # Script membangun indeks dari database
+│   │   ├── collect_ocw.py              # Scraper materi OCW UI
+│   │   └── evaluate.py                 # Evaluasi metriks MAP, MRR, Precision@K
+│   ├── requirements.txt                # Dependensi Python
+│   └── academic-ir-frontend/           # Frontend Next.js 15
+│       ├── src/
+│       │   ├── app/                    # Next.js App Router (layout, globals.css, page.tsx)
+│       │   ├── components/             # UI Components (ResultCard, FilterSidebar, SearchBar)
+│       │   │   └── ui/                 # shadcn/ui components (Card, Button, Badge, Dialog, dll)
+│       │   └── lib/                    # API client (`api.ts`), tipe data, utilities
+│       ├── package.json                # Dependensi Node.js
+│       └── tailwind.config.ts          # Konfigurasi Tailwind CSS v3
+```
+
+---
+
+## 🔄 Membangun Ulang Indeks (Opsional)
+
+Jika Anda menambahkan dokumen baru atau ingin mengubah parameter TF-IDF (seperti ukuran n-gram atau min_df), Anda dapat melatih ulang indeks:
+
+```bash
+cd academic-ir
+python scripts/build_index.py
+```
+
+Script ini akan membaca ulang semua data dari `database/academic_ir.db` dan memperbarui berkas di dalam folder `models/`.
+
+---
+
+## 🛠️ Panduan Penyelesaian Masalah (Troubleshooting)
+
+1. **Error: `fetch failed` atau hasil pencarian tidak keluar di Frontend:**
+   - Pastikan backend FastAPI sedang aktif di `http://localhost:8000`.
+   - Cek `http://localhost:8000/api/health` di browser untuk memastikan statusnya `"healthy"`.
+2. **Error `EADDRINUSE: address already in use`:**
+   - Port 3000 atau 8000 sedang digunakan oleh proses lain. Matikan proses sebelumnya atau ubah port saat menjalankan (`uvicorn app.api:app --port 8001` atau `npm run dev -- -p 3001`).
+3. **NLTK Data Missing:**
+   - Jika muncul peringatan punkt/stopwords dari NLTK, jalankan di Python:
+     ```python
+     import nltk
+     nltk.download('punkt')
+     nltk.download('stopwords')
+     ```

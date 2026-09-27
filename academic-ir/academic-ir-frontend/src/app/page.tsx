@@ -1,0 +1,274 @@
+"use client";
+
+import { FilterSidebar } from "@/components/filter-sidebar";
+import { ResultCard } from "@/components/result-card";
+import { AppHeader, SearchBar } from "@/components/search-bar";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  type DocumentType,
+  type SearchResult,
+  searchDocuments,
+} from "@/lib/api";
+import { AlertCircle, BookOpen, SearchX } from "lucide-react";
+import { useState } from "react";
+
+const RESULTS_PER_PAGE = 5;
+
+function ResultSkeleton() {
+  return (
+    <div className="space-y-3 p-4 border rounded-lg">
+      <div className="flex gap-3">
+        <Skeleton className="h-6 w-6 rounded-full shrink-0" />
+        <div className="space-y-2 flex-1">
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-3/4" />
+        </div>
+        <Skeleton className="h-10 w-10 shrink-0" />
+      </div>
+      <div className="ml-9 space-y-2">
+        <Skeleton className="h-3 w-1/3" />
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-3 w-1/2" />
+      </div>
+    </div>
+  );
+}
+
+export default function Home() {
+  const [query, setQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [searchedQuery, setSearchedQuery] = useState("");
+  const [hasSearched, setHasSearched] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Filters
+  const [selectedType, setSelectedType] = useState<DocumentType | null>(null);
+  const [yearFrom, setYearFrom] = useState("");
+  const [yearTo, setYearTo] = useState("");
+  const [language, setLanguage] = useState("");
+
+  const handleSearch = async (q?: string) => {
+    const searchQuery = q ?? query;
+    if (!searchQuery.trim()) return;
+
+    setIsLoading(true);
+    setError(null);
+    setHasSearched(false);
+    setCurrentPage(1);
+
+    try {
+      const data = await searchDocuments(
+        searchQuery.trim(),
+        { documentType: selectedType, yearFrom, yearTo, language },
+        20
+      );
+      setResults(data.results);
+      setSearchedQuery(data.query);
+      setHasSearched(true);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Search failed. Is the API server running on port 8000?"
+      );
+      setResults([]);
+      setHasSearched(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleFilterChange = () => {
+    if (hasSearched && searchedQuery) {
+      handleSearch(searchedQuery);
+    }
+  };
+
+  const handleReset = () => {
+    setSelectedType(null);
+    setYearFrom("");
+    setYearTo("");
+    setLanguage("");
+    setCurrentPage(1);
+    if (hasSearched && searchedQuery) {
+      setTimeout(() => handleSearch(searchedQuery), 0);
+    }
+  };
+
+  const totalPages = Math.max(1, Math.ceil(results.length / RESULTS_PER_PAGE));
+  const paginatedResults = results.slice(
+    (currentPage - 1) * RESULTS_PER_PAGE,
+    currentPage * RESULTS_PER_PAGE
+  );
+
+  return (
+    <div className="min-h-screen bg-background">
+      <AppHeader />
+
+      {/* Hero search */}
+      <div className="bg-gradient-to-b from-muted/50 to-background border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="flex flex-col items-center gap-4">
+            {!hasSearched && !isLoading && (
+              <div className="text-center mb-2">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <BookOpen className="h-6 w-6 text-primary" />
+                  <h1 className="text-2xl font-bold">Academic Information Retrieval</h1>
+                </div>
+                <p className="text-sm text-muted-foreground max-w-md">
+                  Search through 9,684 indexed chunks from Course Materials, Research Papers, and Theses
+                  using TF-IDF and cosine similarity
+                </p>
+              </div>
+            )}
+            <SearchBar
+              query={query}
+              onChange={setQuery}
+              onSearch={() => handleSearch()}
+              isLoading={isLoading}
+            />
+            {hasSearched && !isLoading && (
+              <p className="text-sm text-muted-foreground">
+                {results.length} result{results.length !== 1 ? "s" : ""} for{" "}
+                <span className="font-medium text-foreground">&quot;{searchedQuery}&quot;</span>
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Main content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {isLoading ? (
+          <div className="flex gap-8">
+            <div className="w-60 shrink-0 space-y-4">
+              <Skeleton className="h-6 w-24" />
+              <Skeleton className="h-px w-full" />
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-4 w-full" />
+              ))}
+            </div>
+            <div className="flex-1 space-y-4">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <ResultSkeleton key={i} />
+              ))}
+            </div>
+          </div>
+        ) : hasSearched ? (
+          <div className="flex gap-8">
+            {/* Sidebar */}
+            <FilterSidebar
+              selectedType={selectedType}
+              yearFrom={yearFrom}
+              yearTo={yearTo}
+              language={language}
+              onTypeChange={(t) => {
+                setSelectedType(t);
+                setCurrentPage(1);
+                // re-search client-side not needed — API handles filtering
+              }}
+              onYearFromChange={(v) => { setYearFrom(v); setCurrentPage(1); }}
+              onYearToChange={(v) => { setYearTo(v); setCurrentPage(1); }}
+              onLanguageChange={(v) => { setLanguage(v); setCurrentPage(1); }}
+              onReset={handleReset}
+              totalResults={results.length}
+            />
+
+            {/* Results */}
+            <div className="flex-1 min-w-0 space-y-4">
+              {error ? (
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <AlertCircle className="h-10 w-10 text-destructive mb-3" />
+                  <p className="text-base font-medium text-destructive">Search Error</p>
+                  <p className="text-sm text-muted-foreground mt-1 max-w-sm">{error}</p>
+                </div>
+              ) : paginatedResults.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <SearchX className="h-10 w-10 text-muted-foreground mb-3" />
+                  <p className="text-base font-medium">No results found</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Try a different query or adjust your filters
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {paginatedResults.map((result) => (
+                    <ResultCard key={result.id} result={result} />
+                  ))}
+
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div className="pt-4">
+                      <Pagination>
+                        <PaginationContent>
+                          <PaginationItem>
+                            <PaginationPrevious
+                              href="#"
+                              onClick={(e) => { e.preventDefault(); setCurrentPage((p) => Math.max(1, p - 1)); }}
+                              aria-disabled={currentPage === 1}
+                              className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                            />
+                          </PaginationItem>
+                          {Array.from({ length: totalPages }).map((_, i) => {
+                            const page = i + 1;
+                            if (page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1) {
+                              return (
+                                <PaginationItem key={page}>
+                                  <PaginationLink
+                                    href="#"
+                                    isActive={currentPage === page}
+                                    onClick={(e) => { e.preventDefault(); setCurrentPage(page); }}
+                                  >
+                                    {page}
+                                  </PaginationLink>
+                                </PaginationItem>
+                              );
+                            }
+                            if (Math.abs(page - currentPage) === 2) {
+                              return (
+                                <PaginationItem key={page}>
+                                  <PaginationEllipsis />
+                                </PaginationItem>
+                              );
+                            }
+                            return null;
+                          })}
+                          <PaginationItem>
+                            <PaginationNext
+                              href="#"
+                              onClick={(e) => { e.preventDefault(); setCurrentPage((p) => Math.min(totalPages, p + 1)); }}
+                              aria-disabled={currentPage === totalPages}
+                              className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                            />
+                          </PaginationItem>
+                        </PaginationContent>
+                      </Pagination>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        ) : (
+          /* Empty state */
+          <div className="flex flex-col items-center justify-center py-24 text-center">
+            <BookOpen className="h-12 w-12 text-muted-foreground/40 mb-4" />
+            <h2 className="text-lg font-semibold text-muted-foreground">Start your search</h2>
+            <p className="text-sm text-muted-foreground mt-1 max-w-xs">
+              Enter a query to search across course materials, research papers, and theses
+            </p>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
