@@ -1,0 +1,354 @@
+{
+  "test_configuration": {
+    "method": "Wilcoxon signed-rank test (two-tailed)",
+    "primary_metric": "NDCG@10",
+    "n_queries": 33,
+    "alpha": 0.05,
+    "effect_size_measure": "Rank-biserial correlation r",
+    "ci_method": "Bootstrap (5000 samples, 95% CI)"
+  },
+  "primary_test_result": {
+    "metric": "NDCG@10",
+    "tfidf_mean": 0.249,
+    "bm25_mean": 0.2992,
+    "mean_difference": 0.0502,
+    "relative_improvement_pct": 20.18,
+    "wilcoxon_statistic": 38.0,
+    "p_value": 0.068377,
+    "p_interpretation": "p < 0.10 -- Terdapat indikasi perbedaan, namun tidak signifikan pada alpha=0.05.",
+    "effect_size_r": -0.5033,
+    "effect_interpretation": "Effect size: large (|r| >= 0.5)",
+    "ci_95_difference": [
+      0.0057,
+      0.1036
+    ],
+    "claim_guidance": "BM25 memperoleh nilai NDCG@10 yang lebih tinggi daripada TF-IDF (BM25=0.2992, TF-IDF=0.2490), namun perbedaan ini tidak mencapai signifikansi statistik pada alpha=0.05 (Wilcoxon p=0.0684). Klaim 'signifikan' tidak boleh digunakan."
+  },
+  "all_metric_tests": {
+    "NDCG@10": {
+      "tfidf_mean": 0.249,
+      "bm25_mean": 0.2992,
+      "mean_difference": 0.0502,
+      "relative_improvement_pct": 20.18,
+      "wilcoxon_statistic": 38.0,
+      "p_value": 0.068377,
+      "p_interpretation": "p < 0.10 -- Terdapat indikasi perbedaan, namun tidak signifikan pada alpha=0.05.",
+      "effect_size_r": -0.5033,
+      "effect_interpretation": "Effect size: large (|r| >= 0.5)",
+      "ci_95_difference": [
+        0.0057,
+        0.1036
+      ],
+      "claim_guidance": "BM25 memperoleh nilai NDCG@10 yang lebih tinggi daripada TF-IDF (BM25=0.2992, TF-IDF=0.2490), namun perbedaan ini tidak mencapai signifikansi statistik pada alpha=0.05 (Wilcoxon p=0.0684). Klaim 'signifikan' tidak boleh digunakan."
+    },
+    "AP (MAP component)": {
+      "tfidf_mean": 0.0832,
+      "bm25_mean": 0.1235,
+      "mean_difference": 0.0403,
+      "relative_improvement_pct": 48.47,
+      "wilcoxon_statistic": 75.0,
+      "p_value": 0.159224,
+      "p_interpretation": "p >= 0.10 -- Tidak terdapat bukti statistik yang cukup untuk menyatakan perbedaan.",
+      "effect_size_r": -0.3506,
+      "effect_interpretation": "Effect size: medium (0.3 <= |r| < 0.5)",
+      "ci_95_difference": [
+        -0.0031,
+        0.1025
+      ],
+      "claim_guidance": "BM25 memperoleh nilai AP (MAP component) yang lebih tinggi daripada TF-IDF (BM25=0.1235, TF-IDF=0.0832), namun perbedaan ini tidak mencapai signifikansi statistik pada alpha=0.05 (Wilcoxon p=0.1592). Klaim 'signifikan' tidak boleh digunakan."
+    },
+    "P@10": {
+      "tfidf_mean": 0.2182,
+      "bm25_mean": 0.2364,
+      "mean_difference": 0.0182,
+      "relative_improvement_pct": 8.33,
+      "wilcoxon_statistic": 11.0,
+      "p_value": 0.325204,
+      "p_interpretation": "p >= 0.10 -- Tidak terdapat bukti statistik yang cukup untuk menyatakan perbedaan.",
+      "effect_size_r": -0.3889,
+      "effect_interpretation": "Effect size: medium (0.3 <= |r| < 0.5)",
+      "ci_95_difference": [
+        -0.0121,
+        0.0515
+      ],
+      "claim_guidance": "BM25 memperoleh nilai P@10 yang lebih tinggi daripada TF-IDF (BM25=0.2364, TF-IDF=0.2182), namun perbedaan ini tidak mencapai signifikansi statistik pada alpha=0.05 (Wilcoxon p=0.3252). Klaim 'signifikan' tidak boleh digunakan."
+    },
+    "RR (MRR component)": {
+      "tfidf_mean": 0.399,
+      "bm25_mean": 0.427,
+      "mean_difference": 0.028,
+      "relative_improvement_pct": 7.01,
+      "wilcoxon_statistic": 29.5,
+      "p_value": 0.455779,
+      "p_interpretation": "p >= 0.10 -- Tidak terdapat bukti statistik yang cukup untuk menyatakan perbedaan.",
+      "effect_size_r": -0.2436,
+      "effect_interpretation": "Effect size: small (0.1 <= |r| < 0.3)",
+      "ci_95_difference": [
+        -0.0705,
+        0.1246
+      ],
+      "claim_guidance": "BM25 memperoleh nilai RR (MRR component) yang lebih tinggi daripada TF-IDF (BM25=0.4270, TF-IDF=0.3990), namun perbedaan ini tidak mencapai signifikansi statistik pada alpha=0.05 (Wilcoxon p=0.4558). Klaim 'signifikan' tidak boleh digunakan."
+    }
+  },
+  "per_query_summary": {
+    "bm25_wins": 11,
+    "tfidf_wins": 6,
+    "ties": 16,
+    "per_query_detail": [
+      {
+        "query_id": "Q01",
+        "tfidf_NDCG@10": 0.7215,
+        "bm25_NDCG@10": 1.0,
+        "difference": 0.2785,
+        "winner": "BM25"
+      },
+      {
+        "query_id": "Q02",
+        "tfidf_NDCG@10": 0.8482,
+        "bm25_NDCG@10": 0.6746,
+        "difference": -0.1736,
+        "winner": "TF-IDF"
+      },
+      {
+        "query_id": "Q03",
+        "tfidf_NDCG@10": 0.7059,
+        "bm25_NDCG@10": 0.702,
+        "difference": -0.0039,
+        "winner": "TF-IDF"
+      },
+      {
+        "query_id": "Q04",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q05",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q06",
+        "tfidf_NDCG@10": 0.42,
+        "bm25_NDCG@10": 0.42,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q07",
+        "tfidf_NDCG@10": 0.1467,
+        "bm25_NDCG@10": 0.0632,
+        "difference": -0.0835,
+        "winner": "TF-IDF"
+      },
+      {
+        "query_id": "Q08",
+        "tfidf_NDCG@10": 0.858,
+        "bm25_NDCG@10": 0.9306,
+        "difference": 0.0726,
+        "winner": "BM25"
+      },
+      {
+        "query_id": "Q09",
+        "tfidf_NDCG@10": 0.0734,
+        "bm25_NDCG@10": 0.0,
+        "difference": -0.0734,
+        "winner": "TF-IDF"
+      },
+      {
+        "query_id": "Q10",
+        "tfidf_NDCG@10": 0.5104,
+        "bm25_NDCG@10": 0.5353,
+        "difference": 0.0249,
+        "winner": "BM25"
+      },
+      {
+        "query_id": "Q11",
+        "tfidf_NDCG@10": 0.7662,
+        "bm25_NDCG@10": 0.8405,
+        "difference": 0.0743,
+        "winner": "BM25"
+      },
+      {
+        "query_id": "Q12",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q13",
+        "tfidf_NDCG@10": 0.2398,
+        "bm25_NDCG@10": 0.3801,
+        "difference": 0.1403,
+        "winner": "BM25"
+      },
+      {
+        "query_id": "Q14",
+        "tfidf_NDCG@10": 0.274,
+        "bm25_NDCG@10": 0.274,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q15",
+        "tfidf_NDCG@10": 0.5583,
+        "bm25_NDCG@10": 0.4624,
+        "difference": -0.0959,
+        "winner": "TF-IDF"
+      },
+      {
+        "query_id": "Q16",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q17",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q18",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.3155,
+        "difference": 0.3155,
+        "winner": "BM25"
+      },
+      {
+        "query_id": "Q19",
+        "tfidf_NDCG@10": 0.3116,
+        "bm25_NDCG@10": 0.5104,
+        "difference": 0.1988,
+        "winner": "BM25"
+      },
+      {
+        "query_id": "Q20",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q21",
+        "tfidf_NDCG@10": 0.4252,
+        "bm25_NDCG@10": 0.4202,
+        "difference": -0.005,
+        "winner": "TF-IDF"
+      },
+      {
+        "query_id": "Q22",
+        "tfidf_NDCG@10": 0.0636,
+        "bm25_NDCG@10": 0.0851,
+        "difference": 0.0215,
+        "winner": "BM25"
+      },
+      {
+        "query_id": "Q23",
+        "tfidf_NDCG@10": 0.8007,
+        "bm25_NDCG@10": 1.0,
+        "difference": 0.1993,
+        "winner": "BM25"
+      },
+      {
+        "query_id": "Q24",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q25",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q26",
+        "tfidf_NDCG@10": 0.3333,
+        "bm25_NDCG@10": 1.0,
+        "difference": 0.6667,
+        "winner": "BM25"
+      },
+      {
+        "query_id": "Q27",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q28",
+        "tfidf_NDCG@10": 0.16,
+        "bm25_NDCG@10": 0.2609,
+        "difference": 0.1009,
+        "winner": "BM25"
+      },
+      {
+        "query_id": "Q29",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q30",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q31",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q32",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      },
+      {
+        "query_id": "Q33",
+        "tfidf_NDCG@10": 0.0,
+        "bm25_NDCG@10": 0.0,
+        "difference": 0.0,
+        "winner": "TIE"
+      }
+    ]
+  },
+  "mrr_rank_distribution": {
+    "tfidf": {
+      "rank_1": "11/33 (33.3%)",
+      "rank_2": "2/33 (6.1%)",
+      "rank_3": "0/33 (0.0%)",
+      "rank_gt3": "6/33 (18.2%)",
+      "not_found": "14/33 (42.4%)"
+    },
+    "bm25": {
+      "rank_1": "12/33 (36.4%)",
+      "rank_2": "2/33 (6.1%)",
+      "rank_3": "0/33 (0.0%)",
+      "rank_gt3": "7/33 (21.2%)",
+      "not_found": "12/33 (36.4%)"
+    },
+    "interpretation": "Distribusi ini menunjukkan posisi dokumen relevan pertama yang ditemukan. MRR tidak dapat diinterpretasikan langsung sebagai rata-rata rank karena E[1/R] ≠ 1/E[R]. Gunakan distribusi ini untuk menyatakan posisi dokumen relevan pertama secara deskriptif."
+  },
+  "report_writing_guidance": {
+    "RULE_1": "Jika p >= 0.05: JANGAN gunakan kata 'signifikan'. Gunakan: 'BM25 memperoleh nilai evaluasi yang lebih tinggi daripada TF-IDF.'",
+    "RULE_2": "Jika p < 0.05: Boleh menyatakan 'perbedaan ini signifikan secara statistik (Wilcoxon p=...)'.",
+    "RULE_3": "MRR TIDAK boleh diinterpretasikan sebagai rata-rata rank. Gunakan mrr_rank_distribution untuk menjelaskan posisi dokumen relevan.",
+    "RULE_4": "Selalu laporkan: mean kedua model, p-value, effect size r, dan 95% CI."
+  }
+}

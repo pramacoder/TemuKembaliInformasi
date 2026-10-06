@@ -107,12 +107,43 @@ class SearchResultItem(BaseModel):
     aggregation_strategy: Optional[str]
 
 
+class TolerantCorrectionItem(BaseModel):
+    source: str
+    target: str
+    type: str
+    confidence: float
+    note: str = ""
+
+
+class TolerantMetadataResponse(BaseModel):
+    applied: bool
+    mode: str
+    original_query: str
+    effective_query: str
+    did_you_mean: Optional[str] = None
+    corrections: list[TolerantCorrectionItem] = []
+    expanded_terms: list[str] = []
+    fallback_triggered: bool = False
+    confidence: float = 1.0
+    explanation: str = ""
+
+
 class SearchResponse(BaseModel):
     query: str
     retrieval_mode: str
     aggregation_strategy: str
     total: int
     results: list[SearchResultItem]
+    tolerant_metadata: Optional[TolerantMetadataResponse] = None
+
+
+class SuggestionResponse(BaseModel):
+    query: str
+    did_you_mean: Optional[str] = None
+    suggestions: list[str] = []
+    corrections: list[TolerantCorrectionItem] = []
+    expanded_terms: list[str] = []
+    confidence: float = 1.0
 
 
 class HealthResponse(BaseModel):
@@ -151,49 +182,74 @@ def search(
     retrieval_mode: str = Query("tfidf", description="tfidf | bm25"),
     aggregation_strategy: str = Query("max+2nd", description="max | max+2nd | topN_avg"),
     candidate_k: int = Query(500, ge=20, le=5000, description="Candidate pool size before filtering"),
+    tolerant_mode: str = Query("auto", description="auto (fallback) | always | off"),
 ):
     if not index_loaded or search_engine is None:
         raise HTTPException(status_code=503, detail="Search index not loaded. Try again later.")
 
-    # BM25 mode: attempt to use BM25 retriever if available
-    if retrieval_mode == "bm25":
-        from .bm25_loader import get_bm25_retriever
-        bm25 = get_bm25_retriever()
-        if bm25 is not None:
-            raw_results = bm25.search(
-                query=q,
-                top_k=top_k,
-                document_type=document_type,
-                language=language,
-                source=source,
-                year_from=year_from,
-                year_to=year_to,
-                course=course,
-                aggregation_strategy=aggregation_strategy,
-                candidate_k=candidate_k,
-            )
-        else:
-            logger.warning("BM25 retriever not available, falling back to TF-IDF.")
-            retrieval_mode = "tfidf"
+    # Safely resolve defaults if invoked directly as Python function
+    k = top_k if isinstance(top_k, int) else 10
+    cand_k = candidate_k if isinstance(candidate_k, int) else 500
+    ret_mode = retrieval_mode if isinstance(retrieval_mode, str) else "tfidf"
+    agg_strat = aggregation_strategy if isinstance(aggregation_strategy, str) else "max+2nd"
+    tol_mode = tolerant_mode if isinstance(tolerant_mode, str) else "auto"
+    doc_type = document_type if isinstance(document_type, str) else None
+    lang = language if isinstance(language, str) else None
+    src = source if isinstance(source, str) else None
+    y_from = year_from if isinstance(year_from, int) else None
+    y_to = year_to if isinstance(year_to, int) else None
+    crs = course if isinstance(course, str) else None
 
-    if retrieval_mode == "tfidf":
-        raw_results = search_engine.search(
-            query=q,
-            top_k=top_k,
-            language=language,
-            document_type=document_type,
-            source=source,
-            year_from=year_from,
-            year_to=year_to,
-            course=course,
-            aggregation_strategy=aggregation_strategy,
-            candidate_k=candidate_k,
+    from src.retrieval.tolerant import get_tolerant_service
+    tolerant_svc = get_tolerant_service()
+
+    # Inner retrieval function that executes search on given query string
+    def execute_retrieval(query_text: str):
+        actual_mode = ret_mode
+        if actual_mode == "bm25":
+            from .bm25_loader import get_bm25_retriever
+            bm25 = get_bm25_retriever()
+            if bm25 is not None:
+                return bm25.search(
+                    query=query_text,
+                    top_k=k,
+                    document_type=doc_type,
+                    language=lang,
+                    source=src,
+                    year_from=y_from,
+                    year_to=y_to,
+                    course=crs,
+                    aggregation_strategy=agg_strat,
+                    candidate_k=cand_k,
+                )
+            else:
+                logger.warning("BM25 retriever not available, falling back to TF-IDF.")
+                actual_mode = "tfidf"
+
+        return search_engine.search(
+            query=query_text,
+            top_k=k,
+            language=lang,
+            document_type=doc_type,
+            source=src,
+            year_from=y_from,
+            year_to=y_to,
+            course=crs,
+            aggregation_strategy=agg_strat,
+            candidate_k=cand_k,
         )
+
+    # Execute search with exact-first priority & tolerant fallback
+    raw_results, tolerant_meta = tolerant_svc.search(
+        query=q,
+        search_fn=execute_retrieval,
+        mode=tol_mode,
+        retrieval_mode=ret_mode,
+    )
 
     items = []
     for r in raw_results:
         # Parse authors from JSON string if needed
-        authors_raw = r.get("title", "")  # placeholder
         try:
             doc_authors = json.loads(r.get("authors", "[]")) if r.get("authors") else []
         except (json.JSONDecodeError, TypeError):
@@ -232,10 +288,30 @@ def search(
 
     return SearchResponse(
         query=q,
-        retrieval_mode=retrieval_mode,
-        aggregation_strategy=aggregation_strategy,
+        retrieval_mode=ret_mode,
+        aggregation_strategy=agg_strat,
         total=len(items),
-        results=items
+        results=items,
+        tolerant_metadata=TolerantMetadataResponse(**tolerant_meta.to_dict()) if tolerant_meta else None,
+    )
+
+
+@app.get("/api/tolerant/suggest", response_model=SuggestionResponse)
+def get_suggestions(
+    q: str = Query(..., min_length=1, description="Search query prefix or keyword"),
+    limit: int = Query(5, ge=1, le=10),
+):
+    from src.retrieval.tolerant import get_tolerant_service
+    tolerant_svc = get_tolerant_service()
+    lim = 5 if not isinstance(limit, int) else limit
+    data = tolerant_svc.get_suggestions(q, limit=lim)
+    return SuggestionResponse(
+        query=data["query"],
+        did_you_mean=data.get("did_you_mean"),
+        suggestions=data.get("suggestions", []),
+        corrections=[TolerantCorrectionItem(**c) for c in data.get("corrections", [])],
+        expanded_terms=data.get("expanded_terms", []),
+        confidence=data.get("confidence", 1.0),
     )
 
 

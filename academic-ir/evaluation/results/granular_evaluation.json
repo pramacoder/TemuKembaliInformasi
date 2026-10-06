@@ -1,0 +1,426 @@
+{
+  "tfidf": {
+    "per_category": {
+      "A": {
+        "label": "Known-item",
+        "n_queries": 5,
+        "query_ids": [
+          "Q01",
+          "Q02",
+          "Q03",
+          "Q04",
+          "Q05"
+        ],
+        "MAP": 0.1393,
+        "MRR": 0.6,
+        "P@10": 0.42,
+        "NDCG@10": 0.4551,
+        "R@10": 0.1059
+      },
+      "B": {
+        "label": "Topical",
+        "n_queries": 9,
+        "query_ids": [
+          "Q06",
+          "Q07",
+          "Q08",
+          "Q09",
+          "Q10",
+          "Q11",
+          "Q12",
+          "Q13",
+          "Q14"
+        ],
+        "MAP": 0.1342,
+        "MRR": 0.7037,
+        "P@10": 0.3111,
+        "NDCG@10": 0.3654,
+        "R@10": 0.1617
+      },
+      "C": {
+        "label": "Methodological",
+        "n_queries": 5,
+        "query_ids": [
+          "Q15",
+          "Q16",
+          "Q17",
+          "Q18",
+          "Q19"
+        ],
+        "MAP": 0.0804,
+        "MRR": 0.2667,
+        "P@10": 0.2,
+        "NDCG@10": 0.174,
+        "R@10": 0.1083
+      },
+      "D": {
+        "label": "Learning Material",
+        "n_queries": 5,
+        "query_ids": [
+          "Q20",
+          "Q21",
+          "Q22",
+          "Q23",
+          "Q24"
+        ],
+        "MAP": 0.0422,
+        "MRR": 0.4318,
+        "P@10": 0.22,
+        "NDCG@10": 0.2579,
+        "R@10": 0.0275
+      },
+      "E": {
+        "label": "Cross-lingual",
+        "n_queries": 5,
+        "query_ids": [
+          "Q25",
+          "Q26",
+          "Q27",
+          "Q28",
+          "Q29"
+        ],
+        "MAP": 0.0457,
+        "MRR": 0.0686,
+        "P@10": 0.04,
+        "NDCG@10": 0.0987,
+        "R@10": 0.25
+      },
+      "F": {
+        "label": "Constrained",
+        "n_queries": 4,
+        "query_ids": [
+          "Q30",
+          "Q31",
+          "Q32",
+          "Q33"
+        ],
+        "MAP": 0.0,
+        "MRR": 0.0,
+        "P@10": 0.0,
+        "NDCG@10": 0.0,
+        "R@10": 0.0
+      }
+    },
+    "per_corpus": {
+      "MATERIAL": {
+        "n_queries": 21,
+        "query_ids": [
+          "Q01",
+          "Q02",
+          "Q03",
+          "Q04",
+          "Q05",
+          "Q06",
+          "Q07",
+          "Q08",
+          "Q09",
+          "Q10",
+          "Q11",
+          "Q12",
+          "Q13",
+          "Q14",
+          "Q20",
+          "Q21",
+          "Q22",
+          "Q23",
+          "Q24",
+          "Q28",
+          "Q33"
+        ],
+        "MAP": 0.1048,
+        "MRR": 0.5568,
+        "P@10": 0.2905,
+        "NDCG@10": 0.334,
+        "R@10": 0.113
+      },
+      "RESEARCH": {
+        "n_queries": 10,
+        "query_ids": [
+          "Q15",
+          "Q16",
+          "Q17",
+          "Q18",
+          "Q19",
+          "Q25",
+          "Q26",
+          "Q27",
+          "Q29",
+          "Q32"
+        ],
+        "MAP": 0.0545,
+        "MRR": 0.1476,
+        "P@10": 0.11,
+        "NDCG@10": 0.1203,
+        "R@10": 0.1542
+      },
+      "THESIS": {
+        "n_queries": 2,
+        "query_ids": [
+          "Q30",
+          "Q31"
+        ],
+        "MAP": 0.0,
+        "MRR": 0.0,
+        "P@10": 0.0,
+        "NDCG@10": 0.0,
+        "R@10": 0.0
+      }
+    },
+    "mrr_rank_distribution": {
+      "rank_1": "11/33 (33.3%)",
+      "rank_2": "2/33 (6.1%)",
+      "rank_3": "0/33 (0.0%)",
+      "rank_gt3": "6/33 (18.2%)",
+      "not_found": "14/33 (42.4%)"
+    },
+    "mrr_interpretation": "MRR menunjukkan kualitas posisi dokumen relevan pertama. Nilai MRR TIDAK dapat diinterpretasikan sebagai rata-rata rank karena E[1/R] ≠ 1/E[R]. Gunakan distribusi di atas untuk menyatakan posisi dokumen relevan pertama secara deskriptif.",
+    "cross_lingual_audit": {
+      "Q25": {
+        "query_lang": "en",
+        "doc_lang": "en+id",
+        "true_crosslingual": false,
+        "note": "'data clustering' is English; docs may also be English → monolingual"
+      },
+      "Q26": {
+        "query_lang": "en",
+        "doc_lang": "en+id",
+        "true_crosslingual": false,
+        "note": "'sentiment analysis' is English; docs may also be English → monolingual"
+      },
+      "Q27": {
+        "query_lang": "en",
+        "doc_lang": "en+id",
+        "true_crosslingual": false,
+        "note": "'information retrieval ranking' is English → likely monolingual"
+      },
+      "Q28": {
+        "query_lang": "en",
+        "doc_lang": "en+id",
+        "true_crosslingual": false,
+        "note": "'machine learning classification' is English → likely monolingual"
+      },
+      "Q29": {
+        "query_lang": "en",
+        "doc_lang": "en+id",
+        "true_crosslingual": false,
+        "note": "'natural language processing text mining' is English → likely monolingual"
+      }
+    },
+    "cross_lingual_summary": "Semua 5 query kategori E menggunakan bahasa Inggris. Jika dokumen relevan juga dalam bahasa Inggris, ini adalah retrieval monolingual, bukan cross-lingual. Klaim cross-lingual sebaiknya tidak dibuat berdasarkan query-set ini."
+  },
+  "bm25": {
+    "per_category": {
+      "A": {
+        "label": "Known-item",
+        "n_queries": 5,
+        "query_ids": [
+          "Q01",
+          "Q02",
+          "Q03",
+          "Q04",
+          "Q05"
+        ],
+        "MAP": 0.1319,
+        "MRR": 0.6,
+        "P@10": 0.44,
+        "NDCG@10": 0.4753,
+        "R@10": 0.1113
+      },
+      "B": {
+        "label": "Topical",
+        "n_queries": 9,
+        "query_ids": [
+          "Q06",
+          "Q07",
+          "Q08",
+          "Q09",
+          "Q10",
+          "Q11",
+          "Q12",
+          "Q13",
+          "Q14"
+        ],
+        "MAP": 0.152,
+        "MRR": 0.6537,
+        "P@10": 0.3111,
+        "NDCG@10": 0.3826,
+        "R@10": 0.1607
+      },
+      "C": {
+        "label": "Methodological",
+        "n_queries": 5,
+        "query_ids": [
+          "Q15",
+          "Q16",
+          "Q17",
+          "Q18",
+          "Q19"
+        ],
+        "MAP": 0.1236,
+        "MRR": 0.425,
+        "P@10": 0.2,
+        "NDCG@10": 0.2577,
+        "R@10": 0.3036
+      },
+      "D": {
+        "label": "Learning Material",
+        "n_queries": 5,
+        "query_ids": [
+          "Q20",
+          "Q21",
+          "Q22",
+          "Q23",
+          "Q24"
+        ],
+        "MAP": 0.0521,
+        "MRR": 0.3167,
+        "P@10": 0.32,
+        "NDCG@10": 0.3011,
+        "R@10": 0.0399
+      },
+      "E": {
+        "label": "Cross-lingual",
+        "n_queries": 5,
+        "query_ids": [
+          "Q25",
+          "Q26",
+          "Q27",
+          "Q28",
+          "Q29"
+        ],
+        "MAP": 0.2341,
+        "MRR": 0.3,
+        "P@10": 0.04,
+        "NDCG@10": 0.2522,
+        "R@10": 0.25
+      },
+      "F": {
+        "label": "Constrained",
+        "n_queries": 4,
+        "query_ids": [
+          "Q30",
+          "Q31",
+          "Q32",
+          "Q33"
+        ],
+        "MAP": 0.0,
+        "MRR": 0.0,
+        "P@10": 0.0,
+        "NDCG@10": 0.0,
+        "R@10": 0.0
+      }
+    },
+    "per_corpus": {
+      "MATERIAL": {
+        "n_queries": 21,
+        "query_ids": [
+          "Q01",
+          "Q02",
+          "Q03",
+          "Q04",
+          "Q05",
+          "Q06",
+          "Q07",
+          "Q08",
+          "Q09",
+          "Q10",
+          "Q11",
+          "Q12",
+          "Q13",
+          "Q14",
+          "Q20",
+          "Q21",
+          "Q22",
+          "Q23",
+          "Q24",
+          "Q28",
+          "Q33"
+        ],
+        "MAP": 0.1171,
+        "MRR": 0.5222,
+        "P@10": 0.319,
+        "NDCG@10": 0.3613,
+        "R@10": 0.1168
+      },
+      "RESEARCH": {
+        "n_queries": 10,
+        "query_ids": [
+          "Q15",
+          "Q16",
+          "Q17",
+          "Q18",
+          "Q19",
+          "Q25",
+          "Q26",
+          "Q27",
+          "Q29",
+          "Q32"
+        ],
+        "MAP": 0.1618,
+        "MRR": 0.3125,
+        "P@10": 0.11,
+        "NDCG@10": 0.2288,
+        "R@10": 0.2518
+      },
+      "THESIS": {
+        "n_queries": 2,
+        "query_ids": [
+          "Q30",
+          "Q31"
+        ],
+        "MAP": 0.0,
+        "MRR": 0.0,
+        "P@10": 0.0,
+        "NDCG@10": 0.0,
+        "R@10": 0.0
+      }
+    },
+    "mrr_rank_distribution": {
+      "rank_1": "12/33 (36.4%)",
+      "rank_2": "2/33 (6.1%)",
+      "rank_3": "0/33 (0.0%)",
+      "rank_gt3": "7/33 (21.2%)",
+      "not_found": "12/33 (36.4%)"
+    },
+    "mrr_interpretation": "MRR menunjukkan kualitas posisi dokumen relevan pertama. Nilai MRR TIDAK dapat diinterpretasikan sebagai rata-rata rank karena E[1/R] ≠ 1/E[R]. Gunakan distribusi di atas untuk menyatakan posisi dokumen relevan pertama secara deskriptif.",
+    "cross_lingual_audit": {
+      "Q25": {
+        "query_lang": "en",
+        "doc_lang": "en+id",
+        "true_crosslingual": false,
+        "note": "'data clustering' is English; docs may also be English → monolingual"
+      },
+      "Q26": {
+        "query_lang": "en",
+        "doc_lang": "en+id",
+        "true_crosslingual": false,
+        "note": "'sentiment analysis' is English; docs may also be English → monolingual"
+      },
+      "Q27": {
+        "query_lang": "en",
+        "doc_lang": "en+id",
+        "true_crosslingual": false,
+        "note": "'information retrieval ranking' is English → likely monolingual"
+      },
+      "Q28": {
+        "query_lang": "en",
+        "doc_lang": "en+id",
+        "true_crosslingual": false,
+        "note": "'machine learning classification' is English → likely monolingual"
+      },
+      "Q29": {
+        "query_lang": "en",
+        "doc_lang": "en+id",
+        "true_crosslingual": false,
+        "note": "'natural language processing text mining' is English → likely monolingual"
+      }
+    },
+    "cross_lingual_summary": "Semua 5 query kategori E menggunakan bahasa Inggris. Jika dokumen relevan juga dalam bahasa Inggris, ini adalah retrieval monolingual, bukan cross-lingual. Klaim cross-lingual sebaiknya tidak dibuat berdasarkan query-set ini."
+  },
+  "audit_fixes": {
+    "A3_per_category": "Breakdown by query category (Known-item, Topical, etc.) added.",
+    "A3_per_corpus": "Breakdown by corpus (MATERIAL, RESEARCH, THESIS) added.",
+    "A4_mrr_dist": "MRR rank distribution added to prevent incorrect interpretation.",
+    "A5_crosslingual": "Cross-lingual query audit annotations added."
+  }
+}

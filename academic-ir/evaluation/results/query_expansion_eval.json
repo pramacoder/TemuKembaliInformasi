@@ -1,0 +1,311 @@
+{
+  "method": "BM25 vs BM25 + Synonym Query Expansion (bilingual dictionary)",
+  "n_queries": 33,
+  "n_synonyms_dict": 64,
+  "metric_comparison": {
+    "MAP": {
+      "bm25": 0.1235,
+      "bm25_qe": 0.0911,
+      "delta": -0.0324,
+      "improved": false
+    },
+    "MRR": {
+      "bm25": 0.427,
+      "bm25_qe": 0.3253,
+      "delta": -0.1017,
+      "improved": false
+    },
+    "Avg_P@5": {
+      "bm25": 0.2848,
+      "bm25_qe": 0.2364,
+      "delta": -0.0484,
+      "improved": false
+    },
+    "Avg_P@10": {
+      "bm25": 0.2364,
+      "bm25_qe": 0.2152,
+      "delta": -0.0212,
+      "improved": false
+    },
+    "Avg_NDCG@10": {
+      "bm25": 0.2992,
+      "bm25_qe": 0.2415,
+      "delta": -0.0577,
+      "improved": false
+    },
+    "Avg_R@10": {
+      "bm25": 0.1506,
+      "bm25_qe": 0.097,
+      "delta": -0.0536,
+      "improved": false
+    }
+  },
+  "per_query": {
+    "Q01": {
+      "original_query": "analisis perancangan sistem informasi use case diagram",
+      "expanded_query": "analisis perancangan sistem informasi use case diagram design system design architecture",
+      "expanded": true,
+      "bm25_NDCG@10": 1.0,
+      "bm25qe_NDCG@10": 1.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q02": {
+      "original_query": "work breakdown structure manajemen proyek teknologi informasi",
+      "expanded_query": "work breakdown structure manajemen proyek teknologi informasi",
+      "expanded": false,
+      "bm25_NDCG@10": 0.6746,
+      "bm25qe_NDCG@10": 0.6746,
+      "delta_NDCG@10": 0.0
+    },
+    "Q03": {
+      "original_query": "critical path method network diagram activity durasi",
+      "expanded_query": "critical path method network diagram activity durasi",
+      "expanded": false,
+      "bm25_NDCG@10": 0.702,
+      "bm25qe_NDCG@10": 0.702,
+      "delta_NDCG@10": 0.0
+    },
+    "Q04": {
+      "original_query": "data mining business intelligence clustering classification",
+      "expanded_query": "data mining business intelligence clustering classification",
+      "expanded": false,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q05": {
+      "original_query": "aljabar linier matriks transformasi linier",
+      "expanded_query": "aljabar linier matriks transformasi linier linear algebra matrix operations vector operations",
+      "expanded": true,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q06": {
+      "original_query": "pemrograman fungsional higher order function recursi",
+      "expanded_query": "pemrograman fungsional higher order function recursi",
+      "expanded": false,
+      "bm25_NDCG@10": 0.42,
+      "bm25qe_NDCG@10": 0.42,
+      "delta_NDCG@10": 0.0
+    },
+    "Q07": {
+      "original_query": "sistem operasi proses thread scheduling virtual memory",
+      "expanded_query": "sistem operasi proses thread scheduling virtual memory",
+      "expanded": false,
+      "bm25_NDCG@10": 0.0632,
+      "bm25qe_NDCG@10": 0.0632,
+      "delta_NDCG@10": 0.0
+    },
+    "Q08": {
+      "original_query": "human computer interaction evaluasi usability antarmuka pengguna",
+      "expanded_query": "human computer interaction evaluasi usability antarmuka pengguna interface user interface UI evaluation assessment benchmarking",
+      "expanded": true,
+      "bm25_NDCG@10": 0.9306,
+      "bm25qe_NDCG@10": 0.3471,
+      "delta_NDCG@10": -0.5835
+    },
+    "Q09": {
+      "original_query": "metodologi penelitian rumusan masalah tinjauan pustaka",
+      "expanded_query": "metodologi penelitian rumusan masalah tinjauan pustaka research study investigation",
+      "expanded": true,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q10": {
+      "original_query": "arsitektur komputer instruction set pipeline cache memory",
+      "expanded_query": "arsitektur komputer instruction set pipeline cache memory",
+      "expanded": false,
+      "bm25_NDCG@10": 0.5353,
+      "bm25qe_NDCG@10": 0.5353,
+      "delta_NDCG@10": 0.0
+    },
+    "Q11": {
+      "original_query": "pembelajaran mesin supervised unsupervised neural network",
+      "expanded_query": "pembelajaran mesin supervised unsupervised neural network machine learning statistical learning predictive modeling",
+      "expanded": true,
+      "bm25_NDCG@10": 0.8405,
+      "bm25qe_NDCG@10": 0.8945,
+      "delta_NDCG@10": 0.054
+    },
+    "Q12": {
+      "original_query": "pengolahan citra digital segmentasi deteksi tepi",
+      "expanded_query": "pengolahan citra digital segmentasi deteksi tepi image processing computer vision digital image processing",
+      "expanded": true,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q13": {
+      "original_query": "analisis sentimen opini publik media sosial",
+      "expanded_query": "analisis sentimen opini publik media sosial sentiment analysis opinion mining sentiment classification",
+      "expanded": true,
+      "bm25_NDCG@10": 0.3801,
+      "bm25qe_NDCG@10": 0.7338,
+      "delta_NDCG@10": 0.3537
+    },
+    "Q14": {
+      "original_query": "jaringan komputer TCP IP routing switching",
+      "expanded_query": "jaringan komputer TCP IP routing switching computer network networking TCP/IP",
+      "expanded": true,
+      "bm25_NDCG@10": 0.274,
+      "bm25qe_NDCG@10": 0.2108,
+      "delta_NDCG@10": -0.0632
+    },
+    "Q15": {
+      "original_query": "TF-IDF vector space model cosine similarity temu kembali informasi",
+      "expanded_query": "TF-IDF vector space model cosine similarity temu kembali informasi information retrieval IR system search engine",
+      "expanded": true,
+      "bm25_NDCG@10": 0.4624,
+      "bm25qe_NDCG@10": 0.187,
+      "delta_NDCG@10": -0.2754
+    },
+    "Q16": {
+      "original_query": "naive bayes support vector machine klasifikasi teks",
+      "expanded_query": "naive bayes support vector machine klasifikasi teks text classification document classification naive bayes classifier probabilistic classifier Bayes classifier",
+      "expanded": true,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q17": {
+      "original_query": "K-means hierarchical clustering silhouette index",
+      "expanded_query": "K-means hierarchical clustering silhouette index",
+      "expanded": false,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q18": {
+      "original_query": "backpropagation gradient descent optimasi deep learning",
+      "expanded_query": "backpropagation gradient descent optimasi deep learning pembelajaran mendalam jaringan saraf dalam optimization parameter tuning hyperparameter optimization",
+      "expanded": true,
+      "bm25_NDCG@10": 0.3155,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": -0.3155
+    },
+    "Q19": {
+      "original_query": "random forest decision tree ensemble method akurasi",
+      "expanded_query": "random forest decision tree ensemble method akurasi accuracy precision performance metric",
+      "expanded": true,
+      "bm25_NDCG@10": 0.5104,
+      "bm25qe_NDCG@10": 0.4353,
+      "delta_NDCG@10": -0.0751
+    },
+    "Q20": {
+      "original_query": "materi kuliah sistem operasi proses manajemen",
+      "expanded_query": "materi kuliah sistem operasi proses manajemen",
+      "expanded": false,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q21": {
+      "original_query": "bahan ajar pemrograman web HTML CSS JavaScript",
+      "expanded_query": "bahan ajar pemrograman web HTML CSS JavaScript",
+      "expanded": false,
+      "bm25_NDCG@10": 0.4202,
+      "bm25qe_NDCG@10": 0.4202,
+      "delta_NDCG@10": 0.0
+    },
+    "Q22": {
+      "original_query": "slide kuliah struktur data linked list tree graph",
+      "expanded_query": "slide kuliah struktur data linked list tree graph",
+      "expanded": false,
+      "bm25_NDCG@10": 0.0851,
+      "bm25qe_NDCG@10": 0.0851,
+      "delta_NDCG@10": 0.0
+    },
+    "Q23": {
+      "original_query": "silabus mata kuliah kalkulus integral diferensial",
+      "expanded_query": "silabus mata kuliah kalkulus integral diferensial",
+      "expanded": false,
+      "bm25_NDCG@10": 1.0,
+      "bm25qe_NDCG@10": 1.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q24": {
+      "original_query": "buku rancangan pengajaran basis data relasional SQL",
+      "expanded_query": "buku rancangan pengajaran basis data relasional SQL database relational database",
+      "expanded": true,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q25": {
+      "original_query": "data clustering",
+      "expanded_query": "data clustering pengelompokan data klasterisasi",
+      "expanded": true,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q26": {
+      "original_query": "sentiment analysis",
+      "expanded_query": "sentiment analysis analisis sentimen opini publik",
+      "expanded": true,
+      "bm25_NDCG@10": 1.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": -1.0
+    },
+    "Q27": {
+      "original_query": "information retrieval ranking",
+      "expanded_query": "information retrieval ranking temu kembali informasi pencarian informasi",
+      "expanded": true,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q28": {
+      "original_query": "machine learning classification",
+      "expanded_query": "machine learning classification pembelajaran mesin kecerdasan buatan",
+      "expanded": true,
+      "bm25_NDCG@10": 0.2609,
+      "bm25qe_NDCG@10": 0.2609,
+      "delta_NDCG@10": 0.0
+    },
+    "Q29": {
+      "original_query": "natural language processing text mining",
+      "expanded_query": "natural language processing text mining pemrosesan bahasa alami analisis teks",
+      "expanded": true,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q30": {
+      "original_query": "skripsi analisis sentimen media sosial 2023",
+      "expanded_query": "skripsi analisis sentimen media sosial 2023 sentiment analysis opinion mining sentiment classification undergraduate thesis final project bachelor thesis",
+      "expanded": true,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q31": {
+      "original_query": "tesis machine learning prediksi penyakit",
+      "expanded_query": "tesis machine learning prediksi penyakit pembelajaran mesin kecerdasan buatan prediction forecasting classification thesis graduate thesis dissertation",
+      "expanded": true,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q32": {
+      "original_query": "jurnal penelitian deep learning image recognition 2024",
+      "expanded_query": "jurnal penelitian deep learning image recognition 2024 pembelajaran mendalam jaringan saraf dalam research study investigation journal research paper academic paper",
+      "expanded": true,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    },
+    "Q33": {
+      "original_query": "materi kuliah kedokteran bioengineering",
+      "expanded_query": "materi kuliah kedokteran bioengineering",
+      "expanded": false,
+      "bm25_NDCG@10": 0.0,
+      "bm25qe_NDCG@10": 0.0,
+      "delta_NDCG@10": 0.0
+    }
+  },
+  "queries_expanded": 21,
+  "conclusion": "Positive delta indicates that query expansion improved retrieval. Focus on queries where 'expanded=True' and check if delta is positive. Negative deltas may indicate over-expansion (noisy synonyms)."
+}

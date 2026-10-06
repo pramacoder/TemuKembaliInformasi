@@ -10,11 +10,19 @@ Produces:
   - evaluation/results/bm25_report.json
   - evaluation/results/comparison_table.csv
   - evaluation/results/error_analysis.jsonl
+  - evaluation/results/granular_evaluation.json  ← NEW (per-category + per-corpus)
+
+Revision (Fase A.3, A.4):
+  - Added per-query-category breakdown (A, B, C, D, E, F)
+  - Added per-corpus breakdown (MATERIAL, RESEARCH, THESIS)
+  - Added MRR rank distribution (audit §4 fix)
+  - Cross-lingual query language audit annotations (audit §11)
 
 Reference:
-  - Expert plan §21 (Evaluation Protocol)
-  - Expert plan §27 (Error Analysis Taxonomy)
-  - Expert plan §33 (Research Questions RQ1 & RQ2)
+  - Audit §3.1 (Statistical significance)
+  - Audit §9  (Evaluasi per kategori)
+  - Audit §10 (Evaluasi per corpus)
+  - Audit §4  (Interpretasi MRR)
 """
 
 import sys
@@ -24,6 +32,8 @@ import json
 import logging
 import argparse
 from pathlib import Path
+from collections import defaultdict
+from typing import Dict, List, Any
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
@@ -95,6 +105,169 @@ def analyze_query_errors(qid: str, qtext: str, retrieved_docs: list, relevant_do
     }
 
 
+# ─── Query Metadata Helpers ──────────────────────────────────────────────────
+
+CATEGORY_LABELS = {
+    "A": "Known-item",
+    "B": "Topical",
+    "C": "Methodological",
+    "D": "Learning Material",
+    "E": "Cross-lingual",
+    "F": "Constrained",
+}
+
+# Cross-lingual audit: map each E-category query to its actual language pair
+CROSS_LINGUAL_AUDIT = {
+    "Q25": {"query_lang": "en", "doc_lang": "en+id", "true_crosslingual": False,
+             "note": "'data clustering' is English; docs may also be English → monolingual"},
+    "Q26": {"query_lang": "en", "doc_lang": "en+id", "true_crosslingual": False,
+             "note": "'sentiment analysis' is English; docs may also be English → monolingual"},
+    "Q27": {"query_lang": "en", "doc_lang": "en+id", "true_crosslingual": False,
+             "note": "'information retrieval ranking' is English → likely monolingual"},
+    "Q28": {"query_lang": "en", "doc_lang": "en+id", "true_crosslingual": False,
+             "note": "'machine learning classification' is English → likely monolingual"},
+    "Q29": {"query_lang": "en", "doc_lang": "en+id", "true_crosslingual": False,
+             "note": "'natural language processing text mining' is English → likely monolingual"},
+}
+
+
+def load_queries_full(queries_path: str) -> Dict[str, Dict[str, str]]:
+    """
+    Load queries with full metadata (query_id, query, category, note).
+    Returns: {query_id: {"query": str, "category": str, "note": str}}
+    """
+    queries_meta = {}
+    with open(queries_path, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            queries_meta[row["query_id"]] = {
+                "query":    row["query"],
+                "category": row.get("category", "?"),
+                "note":     row.get("note", ""),
+            }
+    return queries_meta
+
+
+def get_corpus_from_doc_id(doc_id: str) -> str:
+    """
+    Infer corpus type from document ID prefix.
+    MAT-* → MATERIAL, RES-* → RESEARCH, THX-* → THESIS
+    """
+    if doc_id.startswith("MAT"):
+        return "MATERIAL"
+    elif doc_id.startswith("RES"):
+        return "RESEARCH"
+    elif doc_id.startswith("THX") or doc_id.startswith("THS"):
+        return "THESIS"
+    return "UNKNOWN"
+
+
+def mrr_rank_distribution(rr_values: List[float]) -> Dict[str, str]:
+    """
+    Compute distribution of position of first relevant document from RR values.
+    Correctly interprets MRR without conflating E[1/R] with 1/E[R].
+    """
+    n = len(rr_values)
+    dist = {"rank_1": 0, "rank_2": 0, "rank_3": 0, "rank_gt3": 0, "not_found": 0}
+    for rr in rr_values:
+        if rr == 0.0:
+            dist["not_found"] += 1
+        elif rr >= 1.0:
+            dist["rank_1"] += 1
+        elif rr >= 0.5:
+            dist["rank_2"] += 1
+        elif rr >= 1/3:
+            dist["rank_3"] += 1
+        else:
+            dist["rank_gt3"] += 1
+    return {k: f"{v}/{n} ({100*v/n:.1f}%)" for k, v in dist.items()}
+
+
+def compute_granular_metrics(
+        eval_report: Dict[str, Any],
+        queries_meta: Dict[str, Dict[str, str]],
+        qrels: Dict[str, Dict[str, int]],
+) -> Dict[str, Any]:
+    """
+    Break down per-query results by category and corpus.
+    Produces both per-category and per-corpus aggregate metrics.
+    """
+    per_q = eval_report.get("per_query", {})
+
+    # ── Per-Category ────────────────────────────────────────────────────────
+    cat_buckets: Dict[str, List[Dict]] = defaultdict(list)
+    for qid, metrics in per_q.items():
+        meta = queries_meta.get(qid, {})
+        cat = meta.get("category", "?")
+        cat_buckets[cat].append({"qid": qid, **metrics})
+
+    per_category = {}
+    for cat, items in sorted(cat_buckets.items()):
+        label = CATEGORY_LABELS.get(cat, cat)
+        n = len(items)
+        per_category[cat] = {
+            "label": label,
+            "n_queries": n,
+            "query_ids": [i["qid"] for i in items],
+            "MAP":     round(sum(i.get("AP", 0) for i in items) / n, 4) if n else 0,
+            "MRR":     round(sum(i.get("RR", 0) for i in items) / n, 4) if n else 0,
+            "P@10":    round(sum(i.get("P@10", 0) for i in items) / n, 4) if n else 0,
+            "NDCG@10": round(sum(i.get("NDCG@10", 0) for i in items) / n, 4) if n else 0,
+            "R@10":    round(sum(i.get("R@10", 0) for i in items) / n, 4) if n else 0,
+        }
+
+    # ── Per-Corpus ──────────────────────────────────────────────────────────
+    # For each query, look at what corpora the relevant documents come from
+    corpus_buckets: Dict[str, List[Dict]] = defaultdict(list)
+    for qid, metrics in per_q.items():
+        if qid not in qrels:
+            continue
+        corpora_in_query = set(
+            get_corpus_from_doc_id(did)
+            for did in qrels[qid]
+            if qrels[qid][did] > 0
+        )
+        # Assign query to the dominant corpus (first alphabetically if tied)
+        primary_corpus = sorted(corpora_in_query)[0] if corpora_in_query else "UNKNOWN"
+        corpus_buckets[primary_corpus].append({"qid": qid, **metrics})
+
+    per_corpus = {}
+    for corpus, items in sorted(corpus_buckets.items()):
+        n = len(items)
+        per_corpus[corpus] = {
+            "n_queries": n,
+            "query_ids": [i["qid"] for i in items],
+            "MAP":     round(sum(i.get("AP", 0) for i in items) / n, 4) if n else 0,
+            "MRR":     round(sum(i.get("RR", 0) for i in items) / n, 4) if n else 0,
+            "P@10":    round(sum(i.get("P@10", 0) for i in items) / n, 4) if n else 0,
+            "NDCG@10": round(sum(i.get("NDCG@10", 0) for i in items) / n, 4) if n else 0,
+            "R@10":    round(sum(i.get("R@10", 0) for i in items) / n, 4) if n else 0,
+        }
+
+    # ── MRR Rank Distribution ───────────────────────────────────────────────
+    rr_values = [per_q[q].get("RR", 0.0) for q in per_q]
+    mrr_dist = mrr_rank_distribution(rr_values)
+
+    return {
+        "per_category": per_category,
+        "per_corpus":   per_corpus,
+        "mrr_rank_distribution": mrr_dist,
+        "mrr_interpretation": (
+            "MRR menunjukkan kualitas posisi dokumen relevan pertama. "
+            "Nilai MRR TIDAK dapat diinterpretasikan sebagai rata-rata rank "
+            "karena E[1/R] ≠ 1/E[R]. Gunakan distribusi di atas untuk "
+            "menyatakan posisi dokumen relevan pertama secara deskriptif."
+        ),
+        "cross_lingual_audit": CROSS_LINGUAL_AUDIT,
+        "cross_lingual_summary": (
+            "Semua 5 query kategori E menggunakan bahasa Inggris. "
+            "Jika dokumen relevan juga dalam bahasa Inggris, ini adalah "
+            "retrieval monolingual, bukan cross-lingual. "
+            "Klaim cross-lingual sebaiknya tidak dibuat berdasarkan query-set ini."
+        ),
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="Run Full Academic IR Benchmark")
     parser.add_argument("--models-dir", type=str, default="models", help="TF-IDF models dir")
@@ -113,7 +286,8 @@ def main():
     queries_path = PROJECT_ROOT / args.queries
     qrels_path = PROJECT_ROOT / args.qrels
 
-    queries = load_queries(str(queries_path))
+    queries_meta = load_queries_full(str(queries_path))
+    queries = {qid: meta["query"] for qid, meta in queries_meta.items()}
     qrels = load_qrels(str(qrels_path))
     logger.info(f"Loaded {len(queries)} queries and {sum(len(v) for v in qrels.values())} qrel judgements.")
 
@@ -203,7 +377,26 @@ def main():
             b_analysis["model"] = "BM25"
             f.write(json.dumps(b_analysis) + "\n")
 
-    # 8. Print Executive Summary
+    # 8. Granular Evaluation (per-category, per-corpus, MRR distribution)
+    logger.info("\n>>> Generating Granular Evaluation (per-category, per-corpus)...")
+    tfidf_granular = compute_granular_metrics(tfidf_eval, queries_meta, qrels)
+    bm25_granular  = compute_granular_metrics(bm25_eval, queries_meta, qrels)
+
+    granular_report = {
+        "tfidf": tfidf_granular,
+        "bm25":  bm25_granular,
+        "audit_fixes": {
+            "A3_per_category": "Breakdown by query category (Known-item, Topical, etc.) added.",
+            "A3_per_corpus":   "Breakdown by corpus (MATERIAL, RESEARCH, THESIS) added.",
+            "A4_mrr_dist":     "MRR rank distribution added to prevent incorrect interpretation.",
+            "A5_crosslingual": "Cross-lingual query audit annotations added.",
+        }
+    }
+    granular_path = out_dir / "granular_evaluation.json"
+    with open(granular_path, "w", encoding="utf-8") as f:
+        json.dump(granular_report, f, indent=2, ensure_ascii=False)
+
+    # 9. Print Executive Summary
     t_agg = tfidf_eval.get("aggregate", {})
     b_agg = bm25_eval.get("aggregate", {})
 
@@ -230,11 +423,35 @@ def main():
         print(f"{label:<24} {t_val:<22.4f} {b_val:<22.4f} {delta_str:<12}")
 
     print("=" * 84)
-    print(f"Results saved to:")
+
+    # Per-category summary (BM25)
+    print("\n  BM25 Performance by Query Category:")
+    print(f"  {'Category':<22} {'N':>3} {'P@10':>7} {'NDCG@10':>9} {'MAP':>7}")
+    print(f"  {'-'*22} {'-'*3} {'-'*7} {'-'*9} {'-'*7}")
+    for cat, data in bm25_granular["per_category"].items():
+        print(f"  {data['label']:<22} {data['n_queries']:>3} "
+              f"{data['P@10']:>7.4f} {data['NDCG@10']:>9.4f} {data['MAP']:>7.4f}")
+
+    # Per-corpus summary (BM25)
+    print("\n  BM25 Performance by Corpus:")
+    print(f"  {'Corpus':<12} {'N':>3} {'P@10':>7} {'NDCG@10':>9} {'MAP':>7}")
+    print(f"  {'-'*12} {'-'*3} {'-'*7} {'-'*9} {'-'*7}")
+    for corpus, data in bm25_granular["per_corpus"].items():
+        print(f"  {corpus:<12} {data['n_queries']:>3} "
+              f"{data['P@10']:>7.4f} {data['NDCG@10']:>9.4f} {data['MAP']:>7.4f}")
+
+    # MRR distribution
+    print("\n  BM25 MRR Rank Distribution (first relevant document position):")
+    for k, v in bm25_granular["mrr_rank_distribution"].items():
+        print(f"    {k:12s}: {v}")
+    print("  Note: MRR != 1/E[rank]. See granular_evaluation.json for interpretation.")
+
+    print(f"\nResults saved to:")
     print(f"  - TF-IDF Report:       {out_dir / 'baseline_tfidf_report.json'}")
     print(f"  - BM25 Report:         {out_dir / 'bm25_report.json'}")
     print(f"  - Comparison Table:    {comparison_csv}")
-    print(f"  - Error Analysis:      {error_analysis_file}\n")
+    print(f"  - Error Analysis:      {error_analysis_file}")
+    print(f"  - Granular Evaluation: {granular_path}\n")
 
 
 if __name__ == "__main__":

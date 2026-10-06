@@ -9,9 +9,10 @@ import {
   type DocumentType,
   type RetrievalMode,
   type AggregationStrategy,
+  type TolerantMode,
   DOCUMENT_TYPE_LABELS,
 } from "@/lib/api";
-import { Cpu, Filter, Layers, RotateCcw } from "lucide-react";
+import { Cpu, Filter, Layers, RotateCcw, Sparkles } from "lucide-react";
 
 interface FilterSidebarProps {
   selectedType: DocumentType | null;
@@ -20,12 +21,14 @@ interface FilterSidebarProps {
   language: string;
   retrievalMode: RetrievalMode;
   aggregationStrategy: AggregationStrategy;
+  tolerantMode: TolerantMode;
   onTypeChange: (type: DocumentType | null) => void;
   onYearFromChange: (value: string) => void;
   onYearToChange: (value: string) => void;
   onLanguageChange: (value: string) => void;
   onRetrievalModeChange: (mode: RetrievalMode) => void;
   onAggregationStrategyChange: (strategy: AggregationStrategy) => void;
+  onTolerantModeChange: (mode: TolerantMode) => void;
   onReset: () => void;
   totalResults: number;
 }
@@ -39,12 +42,14 @@ export function FilterSidebar({
   language,
   retrievalMode,
   aggregationStrategy,
+  tolerantMode,
   onTypeChange,
   onYearFromChange,
   onYearToChange,
   onLanguageChange,
   onRetrievalModeChange,
   onAggregationStrategyChange,
+  onTolerantModeChange,
   onReset,
   totalResults,
 }: FilterSidebarProps) {
@@ -72,6 +77,38 @@ export function FilterSidebar({
 
       <Separator />
 
+      {/* Tolerant Retrieval Mode (Tahap 2) */}
+      <div className="space-y-3">
+        <div className="flex items-center gap-1.5">
+          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Tolerant Retrieval
+          </p>
+        </div>
+        <div className="space-y-1.5">
+          {[
+            { id: "auto", label: "Otomatis (Fallback)", desc: "Exact-first, fallback bila nihil" },
+            { id: "always", label: "Selalu Aktif", desc: "Koreksi typo & singkatan aktif" },
+            { id: "off", label: "Nonaktif", desc: "Pencarian eksak murni" },
+          ].map((item) => (
+            <div
+              key={item.id}
+              onClick={() => onTolerantModeChange(item.id as TolerantMode)}
+              className={`p-1.5 px-2 rounded border text-xs cursor-pointer transition-all ${
+                tolerantMode === item.id
+                  ? "border-primary bg-primary/10 font-medium text-foreground"
+                  : "border-border hover:bg-muted/50 text-muted-foreground"
+              }`}
+            >
+              <div className="font-semibold">{item.label}</div>
+              <div className="text-[10px] text-muted-foreground">{item.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
       {/* Model Retrieval Selection (TF-IDF vs BM25) */}
       <div className="space-y-3">
         <div className="flex items-center gap-1.5">
@@ -82,8 +119,8 @@ export function FilterSidebar({
         </div>
         <div className="space-y-2">
           {[
+            { id: "bm25", label: "BM25 (Baseline B)", desc: "Okapi BM25 (Primary)" },
             { id: "tfidf", label: "TF-IDF (Baseline A)", desc: "Vector Space Model" },
-            { id: "bm25", label: "BM25 (Baseline B)", desc: "Okapi BM25" },
           ].map((m) => (
             <div
               key={m.id}

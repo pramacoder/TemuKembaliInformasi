@@ -4,6 +4,7 @@ export type DocumentType = "MATERIAL" | "RESEARCH" | "THESIS";
 export type SourceType = "OCW_UI" | "CORE" | "DOAJ" | "REPOSITORY";
 export type RetrievalMode = "tfidf" | "bm25";
 export type AggregationStrategy = "max+2nd" | "max" | "topN_avg";
+export type TolerantMode = "auto" | "always" | "off";
 
 export interface SearchResult {
   id: string;
@@ -29,12 +30,43 @@ export interface SearchResult {
   keywords: string[];
 }
 
+export interface TolerantCorrection {
+  source: string;
+  target: string;
+  type: string;
+  confidence: number;
+  note?: string;
+}
+
+export interface TolerantMetadata {
+  applied: boolean;
+  mode: TolerantMode;
+  original_query: string;
+  effective_query: string;
+  did_you_mean?: string | null;
+  corrections: TolerantCorrection[];
+  expanded_terms: string[];
+  fallback_triggered: boolean;
+  confidence: number;
+  explanation?: string;
+}
+
 export interface SearchResponse {
   query: string;
   retrieval_mode: string;
   aggregation_strategy: string;
   total: number;
   results: SearchResult[];
+  tolerant_metadata?: TolerantMetadata | null;
+}
+
+export interface SuggestionResponse {
+  query: string;
+  did_you_mean?: string | null;
+  suggestions: string[];
+  corrections: TolerantCorrection[];
+  expanded_terms: string[];
+  confidence: number;
 }
 
 export interface SearchFilters {
@@ -44,6 +76,7 @@ export interface SearchFilters {
   language: string;
   retrievalMode?: RetrievalMode;
   aggregationStrategy?: AggregationStrategy;
+  tolerantMode?: TolerantMode;
 }
 
 // ─── Labels & styling ─────────────────────────────────────────────────────────
@@ -76,11 +109,24 @@ export async function searchDocuments(
   if (filters.language) params.set("language", filters.language);
   if (filters.retrievalMode) params.set("retrieval_mode", filters.retrievalMode);
   if (filters.aggregationStrategy) params.set("aggregation_strategy", filters.aggregationStrategy);
+  if (filters.tolerantMode) params.set("tolerant_mode", filters.tolerantMode);
 
   const res = await fetch(`${API_BASE}/api/search?${params.toString()}`);
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
     throw new Error(err.detail ?? "Search failed");
+  }
+  return res.json();
+}
+
+export async function fetchSuggestions(
+  query: string,
+  limit = 5
+): Promise<SuggestionResponse> {
+  const params = new URLSearchParams({ q: query, limit: String(limit) });
+  const res = await fetch(`${API_BASE}/api/tolerant/suggest?${params.toString()}`);
+  if (!res.ok) {
+    throw new Error("Failed to fetch suggestions");
   }
   return res.json();
 }

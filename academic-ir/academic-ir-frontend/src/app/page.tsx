@@ -3,6 +3,7 @@
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { ResultCard } from "@/components/result-card";
 import { AppHeader, SearchBar } from "@/components/search-bar";
+import { TolerantBanner } from "@/components/tolerant-banner";
 import {
   Pagination,
   PaginationContent,
@@ -17,6 +18,8 @@ import {
   type DocumentType,
   type RetrievalMode,
   type AggregationStrategy,
+  type TolerantMode,
+  type TolerantMetadata,
   type SearchResult,
   searchDocuments,
 } from "@/lib/api";
@@ -53,14 +56,16 @@ export default function Home() {
   const [hasSearched, setHasSearched] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [tolerantMetadata, setTolerantMetadata] = useState<TolerantMetadata | null>(null);
 
   // Filters & IR Model Configuration
   const [selectedType, setSelectedType] = useState<DocumentType | null>(null);
   const [yearFrom, setYearFrom] = useState("");
   const [yearTo, setYearTo] = useState("");
   const [language, setLanguage] = useState("");
-  const [retrievalMode, setRetrievalMode] = useState<RetrievalMode>("tfidf");
+  const [retrievalMode, setRetrievalMode] = useState<RetrievalMode>("bm25");
   const [aggregationStrategy, setAggregationStrategy] = useState<AggregationStrategy>("max+2nd");
+  const [tolerantMode, setTolerantMode] = useState<TolerantMode>("auto");
 
   const executeSearch = async (
     rawQuery?: unknown,
@@ -71,6 +76,7 @@ export default function Home() {
       lang?: string;
       mode?: RetrievalMode;
       strategy?: AggregationStrategy;
+      tolMode?: TolerantMode;
     } = {}
   ) => {
     const text = typeof rawQuery === "string" ? rawQuery : query;
@@ -91,26 +97,46 @@ export default function Home() {
           language: opts.lang !== undefined ? opts.lang : language,
           retrievalMode: opts.mode !== undefined ? opts.mode : retrievalMode,
           aggregationStrategy: opts.strategy !== undefined ? opts.strategy : aggregationStrategy,
+          tolerantMode: opts.tolMode !== undefined ? opts.tolMode : tolerantMode,
         },
         20
       );
       setResults(data.results);
       setSearchedQuery(data.query);
+      setTolerantMetadata(data.tolerant_metadata || null);
       setHasSearched(true);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Search failed. Is the API server running on port 8000?"
       );
       setResults([]);
+      setTolerantMetadata(null);
       setHasSearched(true);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSearch = (q?: unknown) => {
+  const handleSearch = (q?: unknown, overrideMode?: TolerantMode) => {
     const targetQuery = typeof q === "string" ? q : query;
-    executeSearch(targetQuery);
+    executeSearch(targetQuery, overrideMode ? { tolMode: overrideMode } : {});
+  };
+
+  const handleTolerantModeChange = (mode: TolerantMode) => {
+    setTolerantMode(mode);
+    if (hasSearched && searchedQuery) {
+      executeSearch(searchedQuery, { tolMode: mode });
+    }
+  };
+
+  const handleSearchOriginal = (origQuery: string) => {
+    setTolerantMode("off");
+    executeSearch(origQuery, { tolMode: "off" });
+  };
+
+  const handleApplySuggested = (suggested: string) => {
+    setQuery(suggested);
+    executeSearch(suggested);
   };
 
   const handleRetrievalModeChange = (mode: RetrievalMode) => {
@@ -146,8 +172,10 @@ export default function Home() {
     setYearFrom("");
     setYearTo("");
     setLanguage("");
-    setRetrievalMode("tfidf");
+    setRetrievalMode("bm25");
     setAggregationStrategy("max+2nd");
+    setTolerantMode("auto");
+    setTolerantMetadata(null);
     setCurrentPage(1);
     if (hasSearched && searchedQuery) {
       executeSearch(searchedQuery, {
@@ -155,8 +183,9 @@ export default function Home() {
         yFrom: "",
         yTo: "",
         lang: "",
-        mode: "tfidf",
+        mode: "bm25",
         strategy: "max+2nd",
+        tolMode: "auto",
       });
     }
   };
@@ -190,6 +219,8 @@ export default function Home() {
                 onChange={setQuery}
                 onSearch={handleSearch}
                 isLoading={isLoading}
+                tolerantMode={tolerantMode}
+                onTolerantModeChange={handleTolerantModeChange}
               />
             </div>
           </div>
@@ -223,6 +254,7 @@ export default function Home() {
               language={language}
               retrievalMode={retrievalMode}
               aggregationStrategy={aggregationStrategy}
+              tolerantMode={tolerantMode}
               onTypeChange={handleTypeChange}
               onYearFromChange={(v) => {
                 setYearFrom(v);
@@ -235,12 +267,20 @@ export default function Home() {
               onLanguageChange={handleLanguageChange}
               onRetrievalModeChange={handleRetrievalModeChange}
               onAggregationStrategyChange={handleAggregationStrategyChange}
+              onTolerantModeChange={handleTolerantModeChange}
               onReset={handleReset}
               totalResults={results.length}
             />
 
             {/* Results */}
             <div className="flex-1 min-w-0 space-y-4">
+              {/* Tolerant Retrieval Alert / Recovery Banner */}
+              <TolerantBanner
+                metadata={tolerantMetadata}
+                onSearchOriginal={handleSearchOriginal}
+                onApplySuggested={handleApplySuggested}
+              />
+
               {error ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
                   <AlertCircle className="h-10 w-10 text-destructive mb-3" />
@@ -257,13 +297,16 @@ export default function Home() {
                 </div>
               ) : (
                 <>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground pb-1">
+                  <div className="flex flex-wrap items-center justify-between text-xs text-muted-foreground pb-1 gap-2">
                     <span>
                       Menampilkan hasil untuk: <strong>&ldquo;{searchedQuery}&rdquo;</strong>
                     </span>
-                    <span>
-                      Model: <strong>{retrievalMode.toUpperCase()}</strong> | Agregasi:{" "}
-                      <strong>{aggregationStrategy}</strong>
+                    <span className="flex items-center gap-2">
+                      <span>Model: <strong>{retrievalMode.toUpperCase()}</strong></span>
+                      <span>|</span>
+                      <span>Agregasi: <strong>{aggregationStrategy}</strong></span>
+                      <span>|</span>
+                      <span>Toleransi: <strong className="uppercase">{tolerantMode}</strong></span>
                     </span>
                   </div>
 

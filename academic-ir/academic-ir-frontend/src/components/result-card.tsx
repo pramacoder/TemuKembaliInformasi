@@ -11,7 +11,7 @@ import {
   type SearchResult,
 } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { BookOpen, Calendar, ExternalLink, FileText, Globe, Layers, Tag, Users } from "lucide-react";
+import { Calendar, ExternalLink, FileText, Globe, Layers, Tag, Users } from "lucide-react";
 
 interface ResultCardProps {
   result: SearchResult;

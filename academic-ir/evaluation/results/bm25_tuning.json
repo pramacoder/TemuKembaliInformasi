@@ -1,0 +1,273 @@
+{
+  "configuration": {
+    "primary_metric": "NDCG@10",
+    "dev_set": {
+      "query_ids": [
+        "Q01",
+        "Q02",
+        "Q03",
+        "Q04",
+        "Q05",
+        "Q06",
+        "Q07",
+        "Q08",
+        "Q09",
+        "Q10",
+        "Q11",
+        "Q12",
+        "Q13",
+        "Q14",
+        "Q15",
+        "Q16",
+        "Q17",
+        "Q18",
+        "Q19",
+        "Q20",
+        "Q21",
+        "Q22"
+      ],
+      "n": 22
+    },
+    "test_set": {
+      "query_ids": [
+        "Q23",
+        "Q24",
+        "Q25",
+        "Q26",
+        "Q27",
+        "Q28",
+        "Q29",
+        "Q30",
+        "Q31",
+        "Q32",
+        "Q33"
+      ],
+      "n": 11
+    },
+    "k1_search_space": [
+      0.5,
+      1.0,
+      1.5,
+      2.0
+    ],
+    "b_search_space": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "total_combinations": 20
+  },
+  "best_params": {
+    "k1": 2.0,
+    "b": 0.75,
+    "dev_NDCG@10": 0.3485,
+    "test_metrics": {
+      "NDCG@10": 0.2164,
+      "MAP": 0.1257,
+      "MRR": 0.2273,
+      "P@10": 0.1182
+    }
+  },
+  "default_params_comparison": {
+    "k1": 1.5,
+    "b": 0.75,
+    "test_metrics": {
+      "NDCG@10": 0.2164,
+      "MAP": 0.1258,
+      "MRR": 0.233,
+      "P@10": 0.1182
+    },
+    "note": "These are the commonly used default values (k1=1.5, b=0.75)."
+  },
+  "improvement_over_default": {
+    "NDCG@10": 0.0,
+    "MAP": -0.0001,
+    "MRR": -0.0057,
+    "P@10": 0.0
+  },
+  "grid_search_results_dev_set": [
+    {
+      "k1": 2.0,
+      "b": 0.75,
+      "NDCG@10": 0.3485,
+      "MAP": 0.1231,
+      "MRR": 0.5303,
+      "P@10": 0.3,
+      "is_default": false
+    },
+    {
+      "k1": 2.0,
+      "b": 0.5,
+      "NDCG@10": 0.3454,
+      "MAP": 0.123,
+      "MRR": 0.5237,
+      "P@10": 0.3,
+      "is_default": false
+    },
+    {
+      "k1": 1.0,
+      "b": 0.5,
+      "NDCG@10": 0.3422,
+      "MAP": 0.1177,
+      "MRR": 0.4939,
+      "P@10": 0.3091,
+      "is_default": false
+    },
+    {
+      "k1": 1.0,
+      "b": 0.75,
+      "NDCG@10": 0.341,
+      "MAP": 0.1176,
+      "MRR": 0.5013,
+      "P@10": 0.3091,
+      "is_default": false
+    },
+    {
+      "k1": 1.5,
+      "b": 0.75,
+      "NDCG@10": 0.3388,
+      "MAP": 0.1125,
+      "MRR": 0.4994,
+      "P@10": 0.3045,
+      "is_default": true
+    },
+    {
+      "k1": 1.5,
+      "b": 0.5,
+      "NDCG@10": 0.3357,
+      "MAP": 0.115,
+      "MRR": 0.4974,
+      "P@10": 0.2955,
+      "is_default": false
+    },
+    {
+      "k1": 1.5,
+      "b": 1.0,
+      "NDCG@10": 0.3348,
+      "MAP": 0.1189,
+      "MRR": 0.5221,
+      "P@10": 0.2909,
+      "is_default": false
+    },
+    {
+      "k1": 1.0,
+      "b": 1.0,
+      "NDCG@10": 0.3343,
+      "MAP": 0.1223,
+      "MRR": 0.5229,
+      "P@10": 0.2909,
+      "is_default": false
+    },
+    {
+      "k1": 2.0,
+      "b": 0.25,
+      "NDCG@10": 0.3321,
+      "MAP": 0.1091,
+      "MRR": 0.4861,
+      "P@10": 0.2909,
+      "is_default": false
+    },
+    {
+      "k1": 0.5,
+      "b": 1.0,
+      "NDCG@10": 0.3295,
+      "MAP": 0.1223,
+      "MRR": 0.4831,
+      "P@10": 0.2955,
+      "is_default": false
+    },
+    {
+      "k1": 0.5,
+      "b": 0.75,
+      "NDCG@10": 0.3284,
+      "MAP": 0.1168,
+      "MRR": 0.4827,
+      "P@10": 0.3091,
+      "is_default": false
+    },
+    {
+      "k1": 1.0,
+      "b": 0.25,
+      "NDCG@10": 0.3262,
+      "MAP": 0.1093,
+      "MRR": 0.4717,
+      "P@10": 0.2955,
+      "is_default": false
+    },
+    {
+      "k1": 1.5,
+      "b": 0.25,
+      "NDCG@10": 0.3252,
+      "MAP": 0.1106,
+      "MRR": 0.4775,
+      "P@10": 0.2864,
+      "is_default": false
+    },
+    {
+      "k1": 2.0,
+      "b": 1.0,
+      "NDCG@10": 0.3247,
+      "MAP": 0.1113,
+      "MRR": 0.5235,
+      "P@10": 0.2909,
+      "is_default": false
+    },
+    {
+      "k1": 0.5,
+      "b": 0.5,
+      "NDCG@10": 0.3213,
+      "MAP": 0.1131,
+      "MRR": 0.4733,
+      "P@10": 0.3045,
+      "is_default": false
+    },
+    {
+      "k1": 0.5,
+      "b": 0.25,
+      "NDCG@10": 0.3148,
+      "MAP": 0.1106,
+      "MRR": 0.4707,
+      "P@10": 0.2909,
+      "is_default": false
+    },
+    {
+      "k1": 1.5,
+      "b": 0.0,
+      "NDCG@10": 0.3143,
+      "MAP": 0.1008,
+      "MRR": 0.4711,
+      "P@10": 0.2818,
+      "is_default": false
+    },
+    {
+      "k1": 2.0,
+      "b": 0.0,
+      "NDCG@10": 0.3089,
+      "MAP": 0.0959,
+      "MRR": 0.4531,
+      "P@10": 0.2818,
+      "is_default": false
+    },
+    {
+      "k1": 1.0,
+      "b": 0.0,
+      "NDCG@10": 0.3054,
+      "MAP": 0.1043,
+      "MRR": 0.4699,
+      "P@10": 0.2818,
+      "is_default": false
+    },
+    {
+      "k1": 0.5,
+      "b": 0.0,
+      "NDCG@10": 0.304,
+      "MAP": 0.1073,
+      "MRR": 0.4628,
+      "P@10": 0.2773,
+      "is_default": false
+    }
+  ],
+  "audit_note": "Parameter tuning was performed exclusively on the development set. Test set was only evaluated ONCE with the best parameters to prevent test-set leakage. This addresses audit finding §13."
+}

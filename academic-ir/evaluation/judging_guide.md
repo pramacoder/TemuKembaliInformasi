@@ -55,8 +55,7 @@ Dokumen berbahasa Inggris tetap dinilai relevan jika isinya membahas topik yang 
 
 Format CSV: `query_id,document_id,relevance`
 
-Hanya cantumkan dokumen yang **bukan 0** (non-relevant). Dokumen yang tidak ada dalam qrels dianggap 0.
-
+Format qrels memuat pasangan kueri dan dokumen dengan skor graded relevance:
 ```csv
 query_id,document_id,relevance
 Q01,MAT-000001,3
@@ -68,23 +67,40 @@ Q02,MAT-000015,3
 
 ---
 
+## Metodologi Sampling & Independensi Pool (Audit §7)
+
+Untuk menghindari **pooling bias** (bias di mana qrels hanya berisi dokumen yang ditemukan oleh salah satu retriever tertentu seperti BM25 Top-50):
+1. **Full-Corpus Predicate Scan:** Judgement dibangun melalui pemindaian independen seluruh koleksi (4.498 dokumen SQLite) menggunakan kriteria silabus, metadata kurikulum, judul modul, dan abstrak topik yang telah ditentukan secara apriori (lihat [`scripts/build_comprehensive_qrels.py`](file:///c:/Users/Monk/Downloads/TemuKembaliInformasi/academic-ir/scripts/build_comprehensive_qrels.py)).
+2. **Independensi Model:** Kandidat tidak diambil semata-mata dari output retriever yang diuji (TF-IDF maupun BM25), sehingga kedua sistem dinilai secara adil terhadap standar eksternal yang sama.
+3. **Total Judgements:** Terkumpul 942 pasangan relevance judgements terdistribusi pada 33 kueri evaluasi (rata-rata 28.5 judgement per kueri).
+
+---
+
+## Penanganan Dokumen yang Belum Dinilai (Unjudged Documents)
+
+Dalam kalkulasi metrik IR standar (MAP, NDCG@K, P@K):
+- **Asumsi Cranfield:** Dokumen yang tidak tercantum dalam `qrels.csv` diperlakukan sebagai **skor 0 (non-relevan)** selama perhitungan otomatis.
+- **Batasan Metodologis (PENTING):** Secara ontologis, *unjudged ≠ non-relevan*. Perlakuan ini merupakan estimasi batas bawah konservatif (*conservative lower bound*). Dokumen berkualitas tinggi yang berada di luar 942 pasangan terdaftar akan diberi penalti jika terambil di peringkat atas, yang berkontribusi pada nilai MAP dan P@10 absolut yang tampak rendah (P@10 ~0.23, MAP ~0.12).
+
+---
+
 ## Prosedur Penilaian
 
 1. **Baca teks kueri** dan pahami kebutuhan informasi di baliknya.
 2. **Buka dokumen** via `local_path` atau `source_url` yang tersedia di database.
 3. **Baca setidaknya abstrak/judul/bagian pertama** dokumen.
 4. **Nilai relevansi** menggunakan skala 0–3.
-5. **Catat dokumen dengan relevansi 1, 2, atau 3** saja ke dalam qrels.csv.
+5. **Catat dokumen dengan relevansi 1, 2, atau 3** ke dalam qrels.csv.
 
 ---
 
 ## Catatan Khusus untuk Evaluasi Ini
 
 - **Corpus ini adalah benchmark publik**, bukan OASE Udayana. Nilai relevansi berdasarkan kebutuhan informasi akademik umum mahasiswa perguruan tinggi.
-- **Kueri lintas bahasa (Q25-Q29)**: Nilai relevansi dokumen Bahasa Inggris yang membahas konsep yang sama dengan kueri Bahasa Indonesia sebagai **relevan (2 atau 3)**.
+- **Kueri lintas bahasa (Q25-Q29)**: Nilai relevansi dokumen Bahasa Inggris yang membahas konsep yang sama dengan kueri Bahasa Indonesia sebagai **relevan (2 atau 3)**. Perhatikan audit: jika dokumen target juga berbahasa Inggris, pencarian ini bersifat monolingual di ranah leksikal.
 - **Kueri dengan constraint (Q30-Q33)**: Dokumen harus memenuhi constraint (tahun, tipe, topik) untuk mendapat nilai > 0.
 - Jika ragu antara dua nilai, pilih nilai yang **lebih rendah** (konservatif).
 
 ---
 
-*Panduan ini disiapkan untuk Academic IR System Evaluation — Kelompok [Nama]*
+*Panduan ini disiapkan untuk Academic IR System Evaluation — Standar Evaluasi Cranfield*

@@ -211,9 +211,48 @@ Jika Anda menambahkan dokumen baru atau ingin mengubah parameter TF-IDF (seperti
 ```bash
 cd academic-ir
 python scripts/build_index.py
+python scripts/build_bm25_index.py
 ```
 
-Script ini akan membaca ulang semua data dari `database/academic_ir.db` dan memperbarui berkas di dalam folder `models/`.
+---
+
+## 📊 Eksperimen Benchmark & Evaluasi Lanjutan (Revisi Tahap 2)
+
+Sistem telah dilengkapi dengan *evaluation suite* komprehensif berstandar Cranfield yang menguji 33 kueri akademik terstruktur:
+
+1. **Full Benchmark (TF-IDF vs BM25 + Granular Breakdown):**
+   ```bash
+   python scripts/run_full_benchmark.py
+   ```
+   Menghasilkan laporan perbandingan lengkap, analisis galat (`error_analysis.jsonl`), serta rincian metrik per kategori kueri dan per korpus (`granular_evaluation.json`).
+
+2. **Uji Signifikansi Statistik (Wilcoxon Signed-Rank Test):**
+   ```bash
+   python scripts/statistical_significance.py
+   ```
+   Menghitung signifikansi berpasangan, ukuran efek (*rank-biserial correlation*), dan selang kepercayaan bootstrap 95%.
+
+3. **Studi Ablasi Komponen (*Ablation Ladder* E0–E5):**
+   ```bash
+   python scripts/run_ablation.py
+   ```
+   Menguji kontribusi bertingkat dari TF-IDF, BM25, Title Boost, hingga Query Expansion.
+
+4. **Penyetelan Hyperparameter BM25 (Grid Search Dev/Test Split):**
+   ```bash
+   python scripts/tune_bm25_params.py
+   ```
+   Mencari parameter $k_1$ dan $b$ optimal pada Development Set (Q01–Q22) dan mengujinya secara independen pada Test Set (Q23–Q33).
+
+5. **Pengujian Efek Query Drift pada Query Expansion:**
+   ```bash
+   python src/retrieval/query_expansion.py eval
+   ```
+
+6. **Benchmark Latensi Komparatif (*Apple-to-Apple*):**
+   ```bash
+   python scripts/benchmark_latency.py
+   ```
 
 ---
 

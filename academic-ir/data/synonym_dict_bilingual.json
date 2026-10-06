@@ -1,0 +1,304 @@
+{
+  "analisis sentimen": [
+    "sentiment analysis",
+    "opinion mining",
+    "sentiment classification"
+  ],
+  "penambangan teks": [
+    "text mining",
+    "information extraction"
+  ],
+  "pemrosesan bahasa alami": [
+    "natural language processing",
+    "NLP",
+    "computational linguistics"
+  ],
+  "klasifikasi teks": [
+    "text classification",
+    "document classification"
+  ],
+  "pengenalan entitas": [
+    "named entity recognition",
+    "NER"
+  ],
+  "pembelajaran mesin": [
+    "machine learning",
+    "statistical learning",
+    "predictive modeling"
+  ],
+  "jaringan saraf": [
+    "neural network",
+    "artificial neural network",
+    "ANN"
+  ],
+  "pembelajaran mendalam": [
+    "deep learning",
+    "deep neural network",
+    "DNN"
+  ],
+  "pohon keputusan": [
+    "decision tree",
+    "classification tree"
+  ],
+  "hutan acak": [
+    "random forest",
+    "ensemble learning"
+  ],
+  "mesin vektor pendukung": [
+    "support vector machine",
+    "SVM"
+  ],
+  "regresi linier": [
+    "linear regression",
+    "regression analysis"
+  ],
+  "klasterisasi": [
+    "clustering",
+    "cluster analysis",
+    "unsupervised learning"
+  ],
+  "pengelompokan data": [
+    "data clustering",
+    "k-means",
+    "hierarchical clustering"
+  ],
+  "naive bayes": [
+    "naive bayes classifier",
+    "probabilistic classifier",
+    "Bayes classifier"
+  ],
+  "pengolahan citra": [
+    "image processing",
+    "computer vision",
+    "digital image processing"
+  ],
+  "deteksi objek": [
+    "object detection",
+    "object recognition"
+  ],
+  "segmentasi gambar": [
+    "image segmentation",
+    "semantic segmentation"
+  ],
+  "pengenalan wajah": [
+    "face recognition",
+    "facial recognition"
+  ],
+  "temu kembali informasi": [
+    "information retrieval",
+    "IR system",
+    "search engine"
+  ],
+  "pencarian informasi": [
+    "information retrieval",
+    "document retrieval",
+    "search"
+  ],
+  "peringkat dokumen": [
+    "document ranking",
+    "relevance ranking",
+    "ranked retrieval"
+  ],
+  "model ruang vektor": [
+    "vector space model",
+    "VSM",
+    "TF-IDF"
+  ],
+  "basis data": [
+    "database",
+    "relational database",
+    "SQL"
+  ],
+  "penambangan data": [
+    "data mining",
+    "knowledge discovery"
+  ],
+  "gudang data": [
+    "data warehouse",
+    "OLAP",
+    "business intelligence"
+  ],
+  "kualitas data": [
+    "data quality",
+    "data cleaning",
+    "data preprocessing"
+  ],
+  "rekayasa perangkat lunak": [
+    "software engineering",
+    "software development"
+  ],
+  "pengembangan perangkat lunak": [
+    "software development",
+    "SDLC",
+    "agile"
+  ],
+  "pengujian perangkat lunak": [
+    "software testing",
+    "unit testing",
+    "quality assurance"
+  ],
+  "desain sistem": [
+    "system design",
+    "system architecture",
+    "software design"
+  ],
+  "analisis sistem": [
+    "systems analysis",
+    "requirements analysis"
+  ],
+  "diagram kelas": [
+    "class diagram",
+    "UML",
+    "object-oriented design"
+  ],
+  "jaringan komputer": [
+    "computer network",
+    "networking",
+    "TCP/IP"
+  ],
+  "keamanan jaringan": [
+    "network security",
+    "cybersecurity",
+    "information security"
+  ],
+  "keamanan informasi": [
+    "information security",
+    "cybersecurity",
+    "data security"
+  ],
+  "kriptografi": [
+    "cryptography",
+    "encryption",
+    "cryptographic protocol"
+  ],
+  "sistem tertanam": [
+    "embedded system",
+    "embedded computing",
+    "microcontroller"
+  ],
+  "internet of things": [
+    "IoT",
+    "connected devices",
+    "smart devices"
+  ],
+  "aljabar linier": [
+    "linear algebra",
+    "matrix operations",
+    "vector operations"
+  ],
+  "statistika": [
+    "statistics",
+    "statistical analysis",
+    "probability"
+  ],
+  "probabilitas": [
+    "probability",
+    "probability theory",
+    "stochastic"
+  ],
+  "penelitian": [
+    "research",
+    "study",
+    "investigation"
+  ],
+  "skripsi": [
+    "undergraduate thesis",
+    "final project",
+    "bachelor thesis"
+  ],
+  "tesis": [
+    "thesis",
+    "graduate thesis",
+    "dissertation"
+  ],
+  "jurnal": [
+    "journal",
+    "research paper",
+    "academic paper"
+  ],
+  "metode": [
+    "method",
+    "methodology",
+    "approach",
+    "technique"
+  ],
+  "algoritma": [
+    "algorithm",
+    "computational method"
+  ],
+  "evaluasi": [
+    "evaluation",
+    "assessment",
+    "benchmarking"
+  ],
+  "optimasi": [
+    "optimization",
+    "parameter tuning",
+    "hyperparameter optimization"
+  ],
+  "implementasi": [
+    "implementation",
+    "development",
+    "system development"
+  ],
+  "perancangan": [
+    "design",
+    "system design",
+    "architecture"
+  ],
+  "antarmuka": [
+    "interface",
+    "user interface",
+    "UI",
+    "GUI"
+  ],
+  "aplikasi": [
+    "application",
+    "software application",
+    "system"
+  ],
+  "kinerja": [
+    "performance",
+    "efficiency",
+    "accuracy"
+  ],
+  "akurasi": [
+    "accuracy",
+    "precision",
+    "performance metric"
+  ],
+  "prediksi": [
+    "prediction",
+    "forecasting",
+    "classification"
+  ],
+  "klasifikasi": [
+    "classification",
+    "categorization",
+    "labeling"
+  ],
+  "sentiment analysis": [
+    "analisis sentimen",
+    "opini publik"
+  ],
+  "data clustering": [
+    "pengelompokan data",
+    "klasterisasi"
+  ],
+  "machine learning": [
+    "pembelajaran mesin",
+    "kecerdasan buatan"
+  ],
+  "information retrieval": [
+    "temu kembali informasi",
+    "pencarian informasi"
+  ],
+  "deep learning": [
+    "pembelajaran mendalam",
+    "jaringan saraf dalam"
+  ],
+  "natural language processing": [
+    "pemrosesan bahasa alami",
+    "analisis teks"
+  ]
+}
