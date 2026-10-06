@@ -15,6 +15,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   type DocumentType,
+  type RetrievalMode,
+  type AggregationStrategy,
   type SearchResult,
   searchDocuments,
 } from "@/lib/api";
@@ -52,25 +54,44 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Filters
+  // Filters & IR Model Configuration
   const [selectedType, setSelectedType] = useState<DocumentType | null>(null);
   const [yearFrom, setYearFrom] = useState("");
   const [yearTo, setYearTo] = useState("");
   const [language, setLanguage] = useState("");
+  const [retrievalMode, setRetrievalMode] = useState<RetrievalMode>("tfidf");
+  const [aggregationStrategy, setAggregationStrategy] = useState<AggregationStrategy>("max+2nd");
 
-  const handleSearch = async (q?: string) => {
-    const searchQuery = q ?? query;
-    if (!searchQuery.trim()) return;
+  const executeSearch = async (
+    rawQuery?: unknown,
+    opts: {
+      type?: DocumentType | null;
+      yFrom?: string;
+      yTo?: string;
+      lang?: string;
+      mode?: RetrievalMode;
+      strategy?: AggregationStrategy;
+    } = {}
+  ) => {
+    const text = typeof rawQuery === "string" ? rawQuery : query;
+    const searchQuery = (text || "").trim();
+    if (!searchQuery) return;
 
     setIsLoading(true);
     setError(null);
-    setHasSearched(false);
     setCurrentPage(1);
 
     try {
       const data = await searchDocuments(
-        searchQuery.trim(),
-        { documentType: selectedType, yearFrom, yearTo, language },
+        searchQuery,
+        {
+          documentType: opts.type !== undefined ? opts.type : selectedType,
+          yearFrom: opts.yFrom !== undefined ? opts.yFrom : yearFrom,
+          yearTo: opts.yTo !== undefined ? opts.yTo : yearTo,
+          language: opts.lang !== undefined ? opts.lang : language,
+          retrievalMode: opts.mode !== undefined ? opts.mode : retrievalMode,
+          aggregationStrategy: opts.strategy !== undefined ? opts.strategy : aggregationStrategy,
+        },
         20
       );
       setResults(data.results);
@@ -87,9 +108,36 @@ export default function Home() {
     }
   };
 
-  const handleFilterChange = () => {
+  const handleSearch = (q?: unknown) => {
+    const targetQuery = typeof q === "string" ? q : query;
+    executeSearch(targetQuery);
+  };
+
+  const handleRetrievalModeChange = (mode: RetrievalMode) => {
+    setRetrievalMode(mode);
     if (hasSearched && searchedQuery) {
-      handleSearch(searchedQuery);
+      executeSearch(searchedQuery, { mode });
+    }
+  };
+
+  const handleAggregationStrategyChange = (strategy: AggregationStrategy) => {
+    setAggregationStrategy(strategy);
+    if (hasSearched && searchedQuery) {
+      executeSearch(searchedQuery, { strategy });
+    }
+  };
+
+  const handleTypeChange = (type: DocumentType | null) => {
+    setSelectedType(type);
+    if (hasSearched && searchedQuery) {
+      executeSearch(searchedQuery, { type });
+    }
+  };
+
+  const handleLanguageChange = (lang: string) => {
+    setLanguage(lang);
+    if (hasSearched && searchedQuery) {
+      executeSearch(searchedQuery, { lang });
     }
   };
 
@@ -98,9 +146,18 @@ export default function Home() {
     setYearFrom("");
     setYearTo("");
     setLanguage("");
+    setRetrievalMode("tfidf");
+    setAggregationStrategy("max+2nd");
     setCurrentPage(1);
     if (hasSearched && searchedQuery) {
-      setTimeout(() => handleSearch(searchedQuery), 0);
+      executeSearch(searchedQuery, {
+        type: null,
+        yFrom: "",
+        yTo: "",
+        lang: "",
+        mode: "tfidf",
+        strategy: "max+2nd",
+      });
     }
   };
 
@@ -118,30 +175,23 @@ export default function Home() {
       <div className="bg-gradient-to-b from-muted/50 to-background border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="flex flex-col items-center gap-4">
-            {!hasSearched && !isLoading && (
-              <div className="text-center mb-2">
-                <div className="flex items-center justify-center gap-2 mb-2">
-                  <BookOpen className="h-6 w-6 text-primary" />
-                  <h1 className="text-2xl font-bold">Academic Information Retrieval</h1>
-                </div>
-                <p className="text-sm text-muted-foreground max-w-md">
-                  Search through 9,684 indexed chunks from Course Materials, Research Papers, and Theses
-                  using TF-IDF and cosine similarity
-                </p>
-              </div>
-            )}
-            <SearchBar
-              query={query}
-              onChange={setQuery}
-              onSearch={() => handleSearch()}
-              isLoading={isLoading}
-            />
-            {hasSearched && !isLoading && (
-              <p className="text-sm text-muted-foreground">
-                {results.length} result{results.length !== 1 ? "s" : ""} for{" "}
-                <span className="font-medium text-foreground">&quot;{searchedQuery}&quot;</span>
+            <div className="text-center space-y-1.5">
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+                Sistem Temu Kembali Informasi Akademik
+              </h1>
+              <p className="text-sm text-muted-foreground max-w-lg">
+                Pencarian multi-sumber: Bahan Ajar OCW, Artikel Riset Open Access, dan Tugas Akhir
               </p>
-            )}
+            </div>
+
+            <div className="w-full max-w-2xl">
+              <SearchBar
+                query={query}
+                onChange={setQuery}
+                onSearch={handleSearch}
+                isLoading={isLoading}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -171,14 +221,20 @@ export default function Home() {
               yearFrom={yearFrom}
               yearTo={yearTo}
               language={language}
-              onTypeChange={(t) => {
-                setSelectedType(t);
+              retrievalMode={retrievalMode}
+              aggregationStrategy={aggregationStrategy}
+              onTypeChange={handleTypeChange}
+              onYearFromChange={(v) => {
+                setYearFrom(v);
                 setCurrentPage(1);
-                // re-search client-side not needed — API handles filtering
               }}
-              onYearFromChange={(v) => { setYearFrom(v); setCurrentPage(1); }}
-              onYearToChange={(v) => { setYearTo(v); setCurrentPage(1); }}
-              onLanguageChange={(v) => { setLanguage(v); setCurrentPage(1); }}
+              onYearToChange={(v) => {
+                setYearTo(v);
+                setCurrentPage(1);
+              }}
+              onLanguageChange={handleLanguageChange}
+              onRetrievalModeChange={handleRetrievalModeChange}
+              onAggregationStrategyChange={handleAggregationStrategyChange}
               onReset={handleReset}
               totalResults={results.length}
             />
@@ -194,13 +250,23 @@ export default function Home() {
               ) : paginatedResults.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
                   <SearchX className="h-10 w-10 text-muted-foreground mb-3" />
-                  <p className="text-base font-medium">No results found</p>
+                  <p className="text-base font-medium">Tidak ada dokumen yang ditemukan</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Try a different query or adjust your filters
+                    Coba kata kunci lain atau sesuaikan filter pencarian
                   </p>
                 </div>
               ) : (
                 <>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground pb-1">
+                    <span>
+                      Menampilkan hasil untuk: <strong>&ldquo;{searchedQuery}&rdquo;</strong>
+                    </span>
+                    <span>
+                      Model: <strong>{retrievalMode.toUpperCase()}</strong> | Agregasi:{" "}
+                      <strong>{aggregationStrategy}</strong>
+                    </span>
+                  </div>
+
                   {paginatedResults.map((result) => (
                     <ResultCard key={result.id} result={result} />
                   ))}
@@ -213,20 +279,30 @@ export default function Home() {
                           <PaginationItem>
                             <PaginationPrevious
                               href="#"
-                              onClick={(e) => { e.preventDefault(); setCurrentPage((p) => Math.max(1, p - 1)); }}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setCurrentPage((p) => Math.max(1, p - 1));
+                              }}
                               aria-disabled={currentPage === 1}
                               className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
                             />
                           </PaginationItem>
                           {Array.from({ length: totalPages }).map((_, i) => {
                             const page = i + 1;
-                            if (page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1) {
+                            if (
+                              page === 1 ||
+                              page === totalPages ||
+                              Math.abs(page - currentPage) <= 1
+                            ) {
                               return (
                                 <PaginationItem key={page}>
                                   <PaginationLink
                                     href="#"
                                     isActive={currentPage === page}
-                                    onClick={(e) => { e.preventDefault(); setCurrentPage(page); }}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      setCurrentPage(page);
+                                    }}
                                   >
                                     {page}
                                   </PaginationLink>
@@ -245,9 +321,14 @@ export default function Home() {
                           <PaginationItem>
                             <PaginationNext
                               href="#"
-                              onClick={(e) => { e.preventDefault(); setCurrentPage((p) => Math.min(totalPages, p + 1)); }}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setCurrentPage((p) => Math.min(totalPages, p + 1));
+                              }}
                               aria-disabled={currentPage === totalPages}
-                              className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                              className={
+                                currentPage === totalPages ? "pointer-events-none opacity-50" : ""
+                              }
                             />
                           </PaginationItem>
                         </PaginationContent>
@@ -262,9 +343,9 @@ export default function Home() {
           /* Empty state */
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <BookOpen className="h-12 w-12 text-muted-foreground/40 mb-4" />
-            <h2 className="text-lg font-semibold text-muted-foreground">Start your search</h2>
+            <h2 className="text-lg font-semibold text-muted-foreground">Mulai Pencarian Dokumen</h2>
             <p className="text-sm text-muted-foreground mt-1 max-w-xs">
-              Enter a query to search across course materials, research papers, and theses
+              Ketikkan kata kunci untuk mencari di koleksi bahan kuliah, artikel penelitian, dan skripsi
             </p>
           </div>
         )}

@@ -2,6 +2,8 @@
 
 export type DocumentType = "MATERIAL" | "RESEARCH" | "THESIS";
 export type SourceType = "OCW_UI" | "CORE" | "DOAJ" | "REPOSITORY";
+export type RetrievalMode = "tfidf" | "bm25";
+export type AggregationStrategy = "max+2nd" | "max" | "topN_avg";
 
 export interface SearchResult {
   id: string;
@@ -18,6 +20,10 @@ export interface SearchResult {
   rank: number;
   snippet: string;
   page: number | null;
+  best_page_start?: number | null;
+  best_page_end?: number | null;
+  chunk_count?: number | null;
+  aggregation_strategy?: string;
   source_url: string | null;
   doi: string | null;
   keywords: string[];
@@ -25,6 +31,8 @@ export interface SearchResult {
 
 export interface SearchResponse {
   query: string;
+  retrieval_mode: string;
+  aggregation_strategy: string;
   total: number;
   results: SearchResult[];
 }
@@ -34,6 +42,8 @@ export interface SearchFilters {
   yearFrom: string;
   yearTo: string;
   language: string;
+  retrievalMode?: RetrievalMode;
+  aggregationStrategy?: AggregationStrategy;
 }
 
 // ─── Labels & styling ─────────────────────────────────────────────────────────
@@ -64,6 +74,8 @@ export async function searchDocuments(
   if (filters.yearFrom) params.set("year_from", filters.yearFrom);
   if (filters.yearTo) params.set("year_to", filters.yearTo);
   if (filters.language) params.set("language", filters.language);
+  if (filters.retrievalMode) params.set("retrieval_mode", filters.retrievalMode);
+  if (filters.aggregationStrategy) params.set("aggregation_strategy", filters.aggregationStrategy);
 
   const res = await fetch(`${API_BASE}/api/search?${params.toString()}`);
   if (!res.ok) {
@@ -80,5 +92,10 @@ export async function fetchHealth() {
 
 export async function fetchStats() {
   const res = await fetch(`${API_BASE}/api/stats`);
+  return res.json();
+}
+
+export async function fetchProvenance() {
+  const res = await fetch(`${API_BASE}/api/provenance`);
   return res.json();
 }

@@ -100,10 +100,17 @@ class SearchResultItem(BaseModel):
     source_url: Optional[str]
     doi: Optional[str]
     keywords: list[str]
+    # Document aggregation info
+    best_page_start: Optional[int]
+    best_page_end: Optional[int]
+    chunk_count: Optional[int]
+    aggregation_strategy: Optional[str]
 
 
 class SearchResponse(BaseModel):
     query: str
+    retrieval_mode: str
+    aggregation_strategy: str
     total: int
     results: list[SearchResultItem]
 
@@ -141,20 +148,47 @@ def search(
     year_from: Optional[int] = Query(None),
     year_to: Optional[int] = Query(None),
     course: Optional[str] = Query(None),
+    retrieval_mode: str = Query("tfidf", description="tfidf | bm25"),
+    aggregation_strategy: str = Query("max+2nd", description="max | max+2nd | topN_avg"),
+    candidate_k: int = Query(500, ge=20, le=5000, description="Candidate pool size before filtering"),
 ):
     if not index_loaded or search_engine is None:
         raise HTTPException(status_code=503, detail="Search index not loaded. Try again later.")
 
-    raw_results = search_engine.search(
-        query=q,
-        top_k=top_k,
-        language=language,
-        document_type=document_type,
-        source=source,
-        year_from=year_from,
-        year_to=year_to,
-        course=course,
-    )
+    # BM25 mode: attempt to use BM25 retriever if available
+    if retrieval_mode == "bm25":
+        from .bm25_loader import get_bm25_retriever
+        bm25 = get_bm25_retriever()
+        if bm25 is not None:
+            raw_results = bm25.search(
+                query=q,
+                top_k=top_k,
+                document_type=document_type,
+                language=language,
+                source=source,
+                year_from=year_from,
+                year_to=year_to,
+                course=course,
+                aggregation_strategy=aggregation_strategy,
+                candidate_k=candidate_k,
+            )
+        else:
+            logger.warning("BM25 retriever not available, falling back to TF-IDF.")
+            retrieval_mode = "tfidf"
+
+    if retrieval_mode == "tfidf":
+        raw_results = search_engine.search(
+            query=q,
+            top_k=top_k,
+            language=language,
+            document_type=document_type,
+            source=source,
+            year_from=year_from,
+            year_to=year_to,
+            course=course,
+            aggregation_strategy=aggregation_strategy,
+            candidate_k=candidate_k,
+        )
 
     items = []
     for r in raw_results:
@@ -173,7 +207,7 @@ def search(
             keywords = []
 
         items.append(SearchResultItem(
-            id=str(r["chunk_id"]),
+            id=str(r.get("best_chunk_id") or r.get("chunk_id", "")),
             document_id=str(r["document_id"]),
             document_type=r.get("document_type", "RESEARCH"),
             title=r.get("title") or "Untitled",
@@ -183,16 +217,26 @@ def search(
             institution=r.get("institution"),
             course=r.get("course"),
             language=r.get("language"),
-            relevance_score=round(r["score"], 6),
+            relevance_score=round(r.get("document_score", r.get("score", 0.0)), 6),
             rank=r["rank"],
             snippet=r.get("snippet", ""),
-            page=r.get("page"),
+            page=r.get("best_page_start", r.get("page")),
             source_url=r.get("source_url"),
             doi=r.get("doi"),
             keywords=keywords,
+            best_page_start=r.get("best_page_start"),
+            best_page_end=r.get("best_page_end"),
+            chunk_count=r.get("chunk_count"),
+            aggregation_strategy=r.get("aggregation_strategy"),
         ))
 
-    return SearchResponse(query=q, total=len(items), results=items)
+    return SearchResponse(
+        query=q,
+        retrieval_mode=retrieval_mode,
+        aggregation_strategy=aggregation_strategy,
+        total=len(items),
+        results=items
+    )
 
 
 @app.get("/api/stats")
@@ -217,6 +261,20 @@ def stats():
         }
     finally:
         conn.close()
+
+@app.get("/api/provenance")
+def provenance():
+    """Return corpus provenance metadata (sources, access types, licenses)."""
+    import json as _json
+    from pathlib import Path
+    provenance_path = PROJECT_ROOT / "data" / "provenance" / "corpus_sources.json"
+    if provenance_path.exists():
+        with open(provenance_path, "r", encoding="utf-8") as f:
+            return _json.load(f)
+    return {
+        "note": "Provenance file not found. Run: create data/provenance/corpus_sources.json",
+        "project_context": "Benchmark corpus for OASE-like academic IR prototype",
+    }
 
 
 if __name__ == "__main__":

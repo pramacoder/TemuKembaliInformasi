@@ -1,55 +1,94 @@
-# Academic IR — Information Retrieval System
+# Academic IR — Unified Multi-Corpus Academic Search Engine
 
-Sistem Information Retrieval (IR) untuk pencarian dokumen akademik multi-korpus menggunakan algoritma **TF-IDF + Vector Space Model (VSM) + Cosine Similarity**. Sistem ini dilengkapi dengan **Backend API modern (FastAPI)** dan **Antarmuka Web interaktif (Next.js 15, Tailwind CSS, & shadcn/ui)** serta opsi UI klasik via **Streamlit**.
-
----
-
-## 🌟 Fitur Utama
-
-- **Unified Multi-Corpus Search**: Mencari di seluruh korpus akademik (Bahan Kuliah OCW UI, Riset Ilmiah, & Skripsi/Thesis) dalam satu query.
-- **Chunk-Level Retrieval**: Menampilkan potongan dokumen (*chunks*) paling relevan lengkap dengan nomor halaman, tingkat kemiripan (*similarity score*), serta metadata dokumen.
-- **Bilingual / Language-Aware Preprocessing**: Preprocessing otomatis untuk dokumen berbahasa Indonesia (Sastrawi Stemmer) dan bahasa Inggris (NLTK Porter Stemmer).
-- **Modern Web Interface**: Dibangun dengan Next.js 15 (App Router), Tailwind CSS v3, dan komponen shadcn/ui lengkap dengan filter korpus, facet tahun, dan sorting relevansi.
-- **RESTful API Backend**: Endpoint cepat berbasis FastAPI (`/api/search`, `/api/stats`, `/api/health`) dengan CORS terkonfigurasi.
-- **Pre-indexed Database & Models**: Basis data SQLite (`academic_ir.db`) dan matriks TF-IDF sudah disertakan, sehingga aplikasi dapat langsung dijalankan tanpa perlu proses *crawling* atau pelatihan ulang.
+> **Sistem Temu Kembali Informasi Dokumen Akademik Lintas Disiplin Ilmu Berbasis Machine Learning**  
+> Mengimplementasikan pendekatan **Dual-Baseline: TF-IDF Vector Space Model (VSM)** dan **Okapi BM25** dengan **Document-Level Aggregation** (`max`, `max+2nd`, `topN_avg`) serta integrasi antarmuka modern **Next.js 15 (React 19)** dan backend berkecepatan tinggi **FastAPI**.
 
 ---
 
-## 🏗️ Arsitektur Sistem
+## 📌 Ringkasan Sistem (*Executive Summary*)
+
+**Academic IR** dirancang untuk menyelesaikan masalah *information silo* dan *fragment redundancy* pada repositori akademik. Sistem ini menyatukan pencarian terhadap tiga pilar dokumen ilmiah:
+1. **Bahan Kuliah (*Course Materials / OpenCourseWare*)**: Slide, silabus, dan Buku Rancangan Pengajaran (BRP) dari 14 fakultas OCW UI.
+2. **Artikel Jurnal Ilmiah (*Research Papers*)**: Publikasi ilmiah mutakhir dari arXiv dan Directory of Open Access Journals (DOAJ).
+3. **Karya Ilmiah Mahasiswa (*Theses / Dissertations*)**: Skripsi dan tugas akhir komputasi & sistem informasi.
+
+### Karakteristik Korpus & Indeks Terkini
+- **Total Dokumen:** 1.364 dokumen akademik.
+- **Total Chunks Terindeks:** 57.202 potongan teks granular (jendela geser 200–400 kata, *overlap* 50 kata).
+- **Ruang Kosakata (*Vocabulary Space*):** 1.969.538 term (kombinasi unigram dan bigram).
+- **Dual Retrieval Engine:**
+  - **Baseline A:** TF-IDF (Sublinear TF, Smooth IDF) + Cosine Similarity.
+  - **Baseline B:** Okapi BM25 ($k_1=1.5, b=0.75$) dengan *inverted index* in-memory.
+- **Document-Level Aggregation:** Mencegah satu skripsi tebal memonopoli hasil pencarian dengan mengagregasi skor potongan ke tingkat dokumen utuh via strategi `max+2nd` ($\lambda=0.3$).
+- **Provenance Transparency:** Mendokumentasikan status akses korpus publik sebagai *benchmark proxy* melalui endpoint `/api/provenance`.
+
+---
+
+## 📊 Hasil Evaluasi & Benchmark Ilmiah
+
+Berdasarkan pengujian otomatis pada **33 kueri akademik terstruktur** (mencakup 6 taksonomi kueri IREval) dengan **942 penilaian relevansi bergradasi (*qrels*)**:
+
+| Metrik Evaluasi | Baseline A: TF-IDF (VSM) | Baseline B: BM25 Okapi | Selisih ($\Delta$) | Peningkatan Relatif |
+| :--- | :---: | :---: | :---: | :---: |
+| **Mean Average Precision (MAP)** | **0.0832** | **0.1235** | **+0.0403** | **+48.4%** |
+| **Mean Reciprocal Rank (MRR)** | **0.3990** | **0.4270** | **+0.0280** | **+7.0%** |
+| **Precision@5 (P@5)** | **0.2667** | **0.2848** | **+0.0181** | **+6.8%** |
+| **Precision@10 (P@10)** | **0.2182** | **0.2364** | **+0.0182** | **+8.3%** |
+| **Recall@10 (R@10)** | **0.1186** | **0.1506** | **+0.0320** | **+27.0%** |
+| **NDCG@10** | **0.2490** | **0.2992** | **+0.0502** | **+20.2%** |
+
+### Benchmark Latensi Operasional (pada 56.881 chunks)
+- **BM25 Okapi:** **P50 = 85,95 ms** | **P95 = 104,89 ms** (hampir 10x lebih cepat daripada TF-IDF VSM: P50 = 766,92 ms).
+- Memenuhi target Service Level Agreement sistem ($\le 250$ ms) dengan margin yang aman.
+
+---
+
+## 🏗️ Arsitektur Perangkat Lunak
 
 ```text
-                                 [ Next.js 15 Frontend ]
-                                            │
-                                            │ HTTP / JSON (Port 3000 -> 8000)
-                                            ▼
-                                  [ FastAPI Backend ]
-                                            │
-               ┌────────────────────────────┴────────────────────────────┐
-               ▼                                                         ▼
-       [ TFIDFIndex (VSM) ]                                    [ SQLite Database ]
-  - tfidf_vectorizer.pkl (247k vocab)                     - 9,684 Document Chunks
-  - tfidf_matrix.npz (9.6k x 247k)                        - Metadata Dokumen & Korpus
-  - chunk_ids.pkl                                         - Path Dokumen & Halaman
+[ Pengguna / Browser ]
+         │
+         │ HTTP / JSON (Port 3000)
+         ▼
+[ Presentation Tier: Next.js 15 + Tailwind CSS + shadcn/ui ]
+  - Search Bar dengan Debounce & Sanitasi Event
+  - Filter Sidebar: Model Switcher (TF-IDF vs BM25) & Agregasi (max, max+2nd, topN_avg)
+  - Result Cards: Label Kualitatif (Sangat Relevan/Relevan), Bukti Halaman, & Provenance
+         │
+         │ REST API (Port 8000)
+         ▼
+[ Application Tier: FastAPI Backend Server ]
+  - /api/search      : Parameter retrieval_mode, aggregation_strategy, candidate_k
+  - /api/provenance  : Metadata legalitas & sumber korpus
+  - /api/health      : Health check status indeks
+  - /api/stats       : Statistik agregat korpus
+         │
+         ├── Preprocessing Pipeline (Case folding, Stopwords Tala/NLTK, Stemming Sastrawi/Snowball)
+         ├── Candidate Pool Selection (candidate_k = 500)
+         ├── Document-Level Aggregation (src/retrieval/aggregation.py)
+         │
+         ▼
+[ Persistence & Model Tier ]
+  ├── SQLite Database (academic_ir.db) -> Metadata Dokumen, Halaman & Chunks
+  ├── TF-IDF Vector Space Index        -> tfidf_vectorizer.pkl & tfidf_matrix.npz
+  └── BM25 Okapi Index                 -> bm25_v1/bm25_index.pkl
 ```
 
 ---
 
-## 📋 Prasyarat Sistem (Prerequisites)
+## 🚀 Panduan Menjalankan Sistem Dari Nol (*Setup From Scratch*)
 
-Sebelum menjalankan aplikasi di perangkat baru, pastikan telah menginstal:
+Berikut adalah instruksi lengkap untuk menyiapkan dan menjalankan seluruh sistem dari awal pada mesin atau perangkat baru.
 
-1. **Git**: Untuk meng-clone repositori.
-2. **Python**: Versi `3.10` atau lebih baru (`python --version`).
-3. **Node.js**: Versi `18.x` atau `20.x` LTS (`node --version`) beserta `npm`.
+### 1. Prasyarat Lingkungan (*Prerequisites*)
+Pastikan perangkat Anda telah terinstal:
+- **Git** (`git --version`)
+- **Python 3.10+** (`python --version`)
+- **Node.js 18+ atau 20+ LTS** (`node --version`) dan **npm**
 
 ---
 
-## 🚀 Panduan Menjalankan di Perangkat Lain (Step-by-Step)
-
-### 1. Clone Repositori
-
-Buka terminal / PowerShell, kemudian jalankan:
-
+### 2. Clone Repositori
 ```bash
 git clone https://github.com/pramacoder/TemuKembaliInformasi.git
 cd TemuKembaliInformasi
@@ -57,107 +96,102 @@ cd TemuKembaliInformasi
 
 ---
 
-### 2. Setup & Jalankan Backend (FastAPI)
-
-Masuk ke direktori `academic-ir`:
-
+### 3. Setup Lingkungan Python & Dependensi Backend
+Masuk ke direktori backend `academic-ir`:
 ```bash
 cd academic-ir
 ```
 
-#### A. Buat Virtual Environment & Install Dependensi
-
-**Di Windows (PowerShell / Command Prompt):**
+Buat dan aktifkan virtual environment:
 ```powershell
-# Buat virtual environment
+# Di Windows (PowerShell):
 python -m venv venv
-
-# Aktifkan virtual environment
 .\venv\Scripts\activate
 
-# Install dependensi
-pip install -r requirements.txt
-```
-
-**Di macOS / Linux:**
-```bash
-# Buat virtual environment
+# Di macOS / Linux:
 python3 -m venv venv
-
-# Aktifkan virtual environment
 source venv/bin/activate
+```
 
-# Install dependensi
+Install seluruh dependensi backend:
+```bash
 pip install -r requirements.txt
+pip install rank-bm25
 ```
-
-#### B. Setup Environment Variables (Opsional)
-Jika ingin menggunakan scraper CORE API untuk crawling tambahan:
-```bash
-# Windows
-copy .env.example .env
-
-# macOS / Linux
-cp .env.example .env
-```
-*(Catatan: Jika hanya untuk menjalankan pencarian dan web, langkah ini tidak wajib karena database dan model sudah tersedia).*
-
-#### C. Jalankan Server FastAPI
-
-Pastikan virtual environment masih aktif, lalu jalankan:
-
-```bash
-uvicorn app.api:app --host 0.0.0.0 --port 8000 --reload
-```
-
-Server backend akan berjalan di:
-- **API URL:** `http://localhost:8000`
-- **Swagger UI (Dokumentasi Interaktif):** `http://localhost:8000/docs`
-- **Kesehatan Sistem:** `http://localhost:8000/api/health`
 
 ---
 
-### 3. Setup & Jalankan Frontend (Next.js 15)
+### 4. Pembangunan Basis Data & Indeks Model (*Build From Scratch*)
 
-Buka jendela terminal / PowerShell **baru** (biarkan backend tetap menyala di terminal pertama).
+Jika Anda menjalankan dari nol (database belum ada):
 
-Navigasikan ke folder frontend:
+#### A. Pengumpulan / Ingestion Data Korpus
+Jalankan skrip panen data untuk mengisi database SQLite:
+```bash
+# Opsi 1: Panen korpus multi-sumber (OCW UI, arXiv, Repositori)
+python scripts/harvest_large_corpus.py
 
+# Opsi 2: Atau jalankan kolektor spesifik (misal OCW UI semua fakultas)
+python scripts/collect_materials_all_prodi.py
+```
+
+#### B. Pembangunan Indeks TF-IDF
+Latih dan bentuk representasi ruang vektor (*Vector Space Model*):
+```bash
+python scripts/build_index.py
+```
+*Output: Menghasilkan `models/tfidf_vectorizer.pkl`, `models/tfidf_matrix.npz`, dan `models/chunk_ids.pkl`.*
+
+#### C. Pembangunan Indeks BM25
+Bentuk indeks terbalik (*inverted index*) Okapi BM25:
+```bash
+python scripts/build_bm25_index.py
+```
+*Output: Menghasilkan `models/bm25_v1/bm25_index.pkl`.*
+
+#### D. Membangun Ground Truth & Menjalankan Evaluasi Benchmark
+```bash
+# Bangun 942 penilaian relevansi ground truth untuk 33 kueri
+python scripts/build_comprehensive_qrels.py
+
+# Eksekusi full benchmark TF-IDF vs BM25 (menghasilkan tabel komparasi & analisis galat)
+python scripts/run_full_benchmark.py
+
+# Eksekusi uji latensi P50/P95/P99
+python scripts/benchmark_latency.py
+```
+
+---
+
+### 5. Menjalankan Backend API (FastAPI)
+Pastikan virtual environment aktif di direktori `academic-ir`:
+```powershell
+python -m uvicorn app.api:app --host 127.0.0.1 --port 8000
+```
+- Endpoint API siap melayani di: `http://127.0.0.1:8000`
+- Dokumentasi Swagger interaktif: `http://127.0.0.1:8000/docs`
+- Health check: `http://127.0.0.1:8000/api/health`
+
+---
+
+### 6. Menjalankan Frontend Web (Next.js 15)
+Buka terminal baru, masuk ke direktori frontend:
 ```bash
 cd academic-ir/academic-ir-frontend
 ```
 
-#### A. Install Dependensi Frontend
-
-Jalankan perintah berikut:
-
+Install dependensi Node.js:
 ```bash
-npm install --legacy-peer-deps
+npm install
 ```
 
-*(Catatan: Menggunakan flag `--legacy-peer-deps` direkomendasikan untuk menghindari konflik peer dependensi React 19 / Next 15).*
-
-#### B. Jalankan Server Development Frontend
-
+Jalankan server pengembangan:
 ```bash
 npm run dev
 ```
 
-Aplikasi frontend sekarang dapat diakses melalui browser di:
-👉 **[http://localhost:3000](http://localhost:3000)**
-
----
-
-### 4. (Alternatif) Menjalankan Streamlit UI
-
-Jika ingin mencoba antarmuka alternatif berbasis Streamlit:
-
-1. Buka terminal di folder `academic-ir/` dan aktifkan virtual environment.
-2. Jalankan perintah:
-   ```bash
-   streamlit run app/streamlit_app.py
-   ```
-3. Akses di browser pada `http://localhost:8501`.
+Buka peramban (*browser*) Anda pada:
+👉 **`http://localhost:3000`**
 
 ---
 
@@ -165,69 +199,51 @@ Jika ingin mencoba antarmuka alternatif berbasis Streamlit:
 
 ```text
 TemuKembaliInformasi/
-├── README.md                           # Dokumentasi utama proyek
-├── .gitignore                          # Konfigurasi ignore git
-├── academic-ir/
-│   ├── app/
-│   │   ├── api.py                      # FastAPI Backend Server (Endpoint /api/search, /api/stats)
-│   │   └── streamlit_app.py            # Aplikasi antarmuka Streamlit alternatif
-│   ├── database/
-│   │   └── academic_ir.db              # Database SQLite (9,600+ chunks terindeks)
-│   ├── models/                         # Serialized TF-IDF Index & Vocabulary
-│   │   ├── chunk_ids.pkl               # Mapping ID chunk
-│   │   ├── tfidf_matrix.npz            # Matriks sparse TF-IDF (Scipy)
-│   │   ├── tfidf_vectorizer.pkl        # Fitted Scikit-Learn Vectorizer
-│   │   └── index_metadata.json         # Info versi, vocab size, & parameter
-│   ├── data/
-│   │   ├── manifests/                  # CSV manifest metadata dokumen
-│   │   ├── reports/                    # Laporan evaluasi retrieval (JSON)
-│   │   └── raw/                        # File PDF mentah (diabaikan dari Git karena ukuran besar)
-│   ├── src/
-│   │   ├── database/                   # Model ORM / SQLite schema & queries
-│   │   ├── indexing/                   # Modul pembangunan indeks TF-IDF
-│   │   ├── preprocessing/              # Stemmer, tokenisasi, stopword Sastrawi/NLTK
-│   │   └── retrieval/                  # Mesin ranking Cosine Similarity & Search Engine
-│   ├── scripts/
-│   │   ├── build_index.py              # Script membangun indeks dari database
-│   │   ├── collect_ocw.py              # Scraper materi OCW UI
-│   │   └── evaluate.py                 # Evaluasi metriks MAP, MRR, Precision@K
-│   ├── requirements.txt                # Dependensi Python
-│   └── academic-ir-frontend/           # Frontend Next.js 15
-│       ├── src/
-│       │   ├── app/                    # Next.js App Router (layout, globals.css, page.tsx)
-│       │   ├── components/             # UI Components (ResultCard, FilterSidebar, SearchBar)
-│       │   │   └── ui/                 # shadcn/ui components (Card, Button, Badge, Dialog, dll)
-│       │   └── lib/                    # API client (`api.ts`), tipe data, utilities
-│       ├── package.json                # Dependensi Node.js
-│       └── tailwind.config.ts          # Konfigurasi Tailwind CSS v3
+├── README.md                              ← Dokumentasi Utama Sistem
+├── LAPORAN_PROJECT_TAHAP_1.md             ← Laporan Akademik Lengkap Tahap I
+│
+└── academic-ir/
+    ├── app/
+    │   ├── api.py                         ← FastAPI REST Controller
+    │   └── bm25_loader.py                 ← Lazy Loader Singleton BM25
+    │
+    ├── src/
+    │   ├── collectors/                    ← Scraper OCW UI, arXiv, Repositori
+    │   ├── database/                      ← Skema & Operasi SQLite
+    │   ├── preprocessing/                 ← Pipeline Tokenisasi, Stopwords, Stemmer
+    │   ├── indexing/                      ← TF-IDF CSR Matrix Indexer
+    │   ├── retrieval/
+    │   │   ├── search.py                  ← TF-IDF Search Engine & Pre-filtering
+    │   │   ├── bm25.py                    ← Okapi BM25 Retrieval Engine
+    │   │   └── aggregation.py             ← Modul Agregasi Dokumen (max, max+2nd, topN)
+    │   └── evaluation/
+    │       └── metrics.py                 ← P@K, R@K, MAP, NDCG@K, MRR
+    │
+    ├── evaluation/
+    │   ├── queries.csv                    ← 33 Kueri Benchmark (Kategori A-F)
+    │   ├── qrels.csv                      ← 942 Penilaian Relevansi Ground Truth
+    │   ├── judging_guide.md               ← Panduan Penilaian Relevansi
+    │   └── results/                       ← Laporan Evaluasi & Error Analysis
+    │
+    ├── data/
+    │   ├── manifests/                     ← Metadata Manifest (material, research, thesis)
+    │   └── provenance/                    ← corpus_sources.json (Legalitas & Akses Data)
+    │
+    ├── models/                            ← Serialisasi Model TF-IDF & BM25
+    ├── scripts/                           ← Skrip Ingestion, Indexing, & Benchmark
+    │
+    └── academic-ir-frontend/              ← Frontend Next.js 15
+        ├── src/
+        │   ├── app/                       ← Next.js App Router (page.tsx, layout.tsx)
+        │   ├── components/                ← SearchBar, FilterSidebar, ResultCard
+        │   └── lib/api.ts                 ← Client API Fetcher
+        └── package.json
 ```
 
 ---
 
-## 🔄 Membangun Ulang Indeks (Opsional)
+## 📜 Lisensi & Etika Data
 
-Jika Anda menambahkan dokumen baru atau ingin mengubah parameter TF-IDF (seperti ukuran n-gram atau min_df), Anda dapat melatih ulang indeks:
-
-```bash
-cd academic-ir
-python scripts/build_index.py
-```
-
-Script ini akan membaca ulang semua data dari `database/academic_ir.db` dan memperbarui berkas di dalam folder `models/`.
-
----
-
-## 🛠️ Panduan Penyelesaian Masalah (Troubleshooting)
-
-1. **Error: `fetch failed` atau hasil pencarian tidak keluar di Frontend:**
-   - Pastikan backend FastAPI sedang aktif di `http://localhost:8000`.
-   - Cek `http://localhost:8000/api/health` di browser untuk memastikan statusnya `"healthy"`.
-2. **Error `EADDRINUSE: address already in use`:**
-   - Port 3000 atau 8000 sedang digunakan oleh proses lain. Matikan proses sebelumnya atau ubah port saat menjalankan (`uvicorn app.api:app --port 8001` atau `npm run dev -- -p 3001`).
-3. **NLTK Data Missing:**
-   - Jika muncul peringatan punkt/stopwords dari NLTK, jalankan di Python:
-     ```python
-     import nltk
-     nltk.download('punkt')
-     nltk.download('stopwords')
-     ```
+- Sistem ini mematuhi standar etika penambangan data publik (*polite scraping rate-limiting* dan kepatuhan `robots.txt`).
+- Korpus publik digunakan secara transparan sebagai *reproducible benchmark proxy*.
+- Lisensi kode terbuka untuk keperluan pendidikan dan riset akademik.

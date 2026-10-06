@@ -31,8 +31,10 @@ academic-ir/academic-ir-frontend/node_modules/
 academic-ir/academic-ir-frontend/.next/
 out/
 dist/
+academic-ir/academic-ir-frontend/tsconfig.tsbuildinfo
+academic-ir/academic-ir-frontend/.turbo/
 
-# Large Document Data (PDF files & raw crawlers ~277MB)
+# Large Document Data (PDF files & raw crawlers)
 *.pdf
 *.PDF
 academic-ir/data/raw/
@@ -41,12 +43,26 @@ dataset_ocw_ui/
 data/raw/
 data/extracted/
 
-# SQLite WAL & temporary files (keep main academic_ir.db)
+# SQLite Database (>100MB exceeds GitHub limits)
+*.db
+*.sqlite
+*.sqlite3
 *.db-wal
 *.db-shm
+academic-ir/database/*.db
+
+# Large Model Indices (>100MB)
+academic-ir/models/bm25_v1/
 
 # Logs & OS artifacts
 *.log
 scraper.log
 .DS_Store
 Thumbs.db
+
+# Internal Prompt / Development Planning Markdown Files
+Jalaskan.md
+academic_ir_revised_expert_plan.md
+academic-ir/antigravity-shadcn-mcp-setup.md
+academic-ir/academic-ir-frontend/AGENTS.md
+academic-ir/docs/plan.md

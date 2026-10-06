@@ -1,0 +1,97 @@
+{
+  "project_context": "Benchmark corpus for OASE-like academic IR prototype. This corpus is NOT the actual OASE Udayana corpus. It is a publicly accessible representative corpus used to develop and evaluate the IR system prototype.",
+  "target_use_case": "Universitas Udayana OASE — academic document discovery for students and lecturers",
+  "prototype_corpus": "Publicly accessible academic sources listed below",
+  "disclaimer": "This system does not claim to index OASE Udayana documents. OASE documents are not publicly accessible and cannot be crawled without authorized access.",
+  "sources": [
+    {
+      "source_name": "OCW UI",
+      "source_identifier": "OCW_UI",
+      "source_url": "https://ocw.ui.ac.id",
+      "institution": "Universitas Indonesia",
+      "document_types": ["material"],
+      "access_type": "public",
+      "license": "Creative Commons (varies per course — check individual course pages)",
+      "collection_date_range": "2026-09 to 2026-10",
+      "faculties_covered": [
+        "Fakultas Ilmu Komputer (Fasilkom)",
+        "Fakultas Kedokteran (FK)",
+        "Fakultas Matematika dan IPA (FMIPA)",
+        "Fakultas Teknik (FT)",
+        "Fakultas Hukum (FH)",
+        "Fakultas Ekonomi dan Bisnis (FEB)",
+        "Fakultas Ilmu Budaya (FIB)",
+        "Fakultas Psikologi (FPsi)",
+        "Fakultas Ilmu Sosial dan Ilmu Politik (FISIP)",
+        "Fakultas Kesehatan Masyarakat (FKM)",
+        "Fakultas Ilmu Keperawatan (FIK)",
+        "Fakultas Farmasi (FF)",
+        "Fakultas Ilmu Administrasi (FIA)",
+        "Fakultas Kedokteran Gigi (FKG)"
+      ],
+      "note": "Used as lecture material benchmark corpus. Materials are publicly accessible via OCW UI portal without authentication."
+    },
+    {
+      "source_name": "arXiv",
+      "source_identifier": "ARXIV",
+      "source_url": "https://arxiv.org",
+      "institution": "Cornell University (arXiv.org)",
+      "document_types": ["research"],
+      "access_type": "public_open_access",
+      "license": "arXiv non-exclusive license to distribute (see https://arxiv.org/help/license)",
+      "collection_method": "arXiv REST API (https://export.arxiv.org/api/)",
+      "note": "Research preprints collected via official arXiv API. Computer Science and AI/ML domains."
+    },
+    {
+      "source_name": "CORE",
+      "source_identifier": "CORE",
+      "source_url": "https://core.ac.uk",
+      "institution": "Open University / CORE Project",
+      "document_types": ["research"],
+      "access_type": "public_open_access",
+      "license": "Varies per paper (open access journals)",
+      "collection_method": "CORE API (requires API key)",
+      "note": "Open access research papers aggregated from multiple institutional repositories."
+    },
+    {
+      "source_name": "DOAJ",
+      "source_identifier": "DOAJ",
+      "source_url": "https://doaj.org",
+      "institution": "Directory of Open Access Journals",
+      "document_types": ["research"],
+      "access_type": "public_open_access",
+      "license": "Varies per journal (all open access)",
+      "collection_method": "DOAJ API",
+      "note": "Open access journal articles from DOAJ-indexed publications."
+    },
+    {
+      "source_name": "Institutional Repository",
+      "source_identifier": "REPOSITORY",
+      "source_url": "Various institutional repositories",
+      "institution": "Various universities",
+      "document_types": ["thesis"],
+      "access_type": "public",
+      "license": "Varies (typically institutional open access)",
+      "note": "Thesis and dissertation documents from publicly accessible institutional repositories."
+    }
+  ],
+  "data_stats": {
+    "as_of": "2026-10-06",
+    "total_documents": 1364,
+    "total_chunks": 57202,
+    "by_type": {
+      "MATERIAL": 1074,
+      "RESEARCH": 169,
+      "THESIS": 121
+    },
+    "vocabulary_size": 1969538,
+    "tfidf_matrix_shape": [56881, 1969538]
+  },
+  "ethical_notes": [
+    "Only publicly accessible documents without authentication requirements are indexed.",
+    "Documents requiring login, institutional access, or payment are excluded.",
+    "OASE Udayana documents are NOT indexed — they require institutional authentication.",
+    "robots.txt and rate limits were respected during data collection.",
+    "SHA-256 deduplication prevents double-indexing of identical files."
+  ]
+}

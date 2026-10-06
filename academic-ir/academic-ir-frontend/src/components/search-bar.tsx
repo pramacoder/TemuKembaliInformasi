@@ -33,11 +33,12 @@ export function SearchBar({ query, onChange, onSearch, isLoading }: SearchBarPro
           onKeyDown={handleKeyDown}
           className="pl-9 h-11 text-base"
           autoComplete="off"
+          suppressHydrationWarning
         />
       </div>
       <Button
         id="search-button"
-        onClick={onSearch}
+        onClick={() => onSearch()}
         disabled={isLoading}
         size="lg"
         className="h-11 px-6 gap-2"

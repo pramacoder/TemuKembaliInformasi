@@ -45,7 +45,7 @@ class RepositoryCollector(BaseCollector):
         ])
         self.pipeline = PreprocessingPipeline(default_language="id")
 
-    def discover(self, endpoint: str = None, set_spec: str = "thesis", limit: int = 50) -> list:
+    def discover(self, endpoint: str = None, set_spec: str = None, limit: int = 50) -> list:
         """
         Harvest Dublin Core records via OAI-PMH ListRecords verb.
         """
@@ -55,79 +55,136 @@ class RepositoryCollector(BaseCollector):
             return []
 
         logger.info(f"[REPOSITORY] Harvesting records from {target_endpoint}")
+        effective_set = set_spec if set_spec is not None else self.config.get("set_spec", "74797065733D746865736973")
         params = {
             "verb": "ListRecords",
             "metadataPrefix": "oai_dc",
         }
-        if set_spec:
-            params["set"] = set_spec
+        if effective_set:
+            params["set"] = effective_set
 
         discovered = []
-        try:
-            resp = self.fetch_url(target_endpoint, params=params)
-            root = ET.fromstring(resp.content)
+        page_num = 1
+        max_pages = 50
 
-            records = root.findall(".//oai:record", OAI_NAMESPACES)
-            for rec in records:
-                if len(discovered) >= limit:
+        try:
+            while len(discovered) < limit and page_num <= max_pages:
+                logger.info(f"[REPOSITORY] Fetching page {page_num} from {target_endpoint} (found so far: {len(discovered)}/{limit})")
+                resp = self.fetch_url(target_endpoint, params=params)
+                root = ET.fromstring(resp.content)
+
+                records = root.findall(".//oai:record", OAI_NAMESPACES)
+                # If no records found with set filter on first page, retry without set filter
+                if not records and effective_set and page_num == 1:
+                    logger.info(f"[REPOSITORY] No records with set={effective_set}, retrying without set filter...")
+                    params.pop("set", None)
+                    resp = self.fetch_url(target_endpoint, params=params)
+                    root = ET.fromstring(resp.content)
+                    records = root.findall(".//oai:record", OAI_NAMESPACES)
+
+                if not records:
+                    logger.info(f"[REPOSITORY] No more records found on page {page_num}.")
                     break
 
-                header = rec.find("oai:header", OAI_NAMESPACES)
-                if header is not None and header.get("status") == "deleted":
-                    continue
-
-                metadata = rec.find(".//oai_dc:dc", OAI_NAMESPACES)
-                if metadata is None:
-                    continue
-
-                titles = metadata.findall("dc:title", OAI_NAMESPACES)
-                creators = metadata.findall("dc:creator", OAI_NAMESPACES)
-                descriptions = metadata.findall("dc:description", OAI_NAMESPACES)
-                dates = metadata.findall("dc:date", OAI_NAMESPACES)
-                identifiers = metadata.findall("dc:identifier", OAI_NAMESPACES)
-                subjects = metadata.findall("dc:subject", OAI_NAMESPACES)
-
-                title = titles[0].text.strip() if titles and titles[0].text else None
-                if not title:
-                    continue
-
-                # Look for PDF URL in dc:identifier
-                pdf_url = None
-                for ident in identifiers:
-                    text = (ident.text or "").strip()
-                    if text.lower().endswith(".pdf"):
-                        pdf_url = text
+                for rec in records:
+                    if len(discovered) >= limit:
                         break
 
-                abstract = descriptions[0].text.strip() if descriptions and descriptions[0].text else None
-                year = None
-                if dates and dates[0].text:
-                    m = re.search(r'(19|20)\d{2}', dates[0].text)
-                    if m:
-                        year = int(m.group())
+                    header = rec.find("oai:header", OAI_NAMESPACES)
+                    if header is not None and header.get("status") == "deleted":
+                        continue
 
-                discovered.append({
-                    "title": title,
-                    "authors": [c.text.strip() for c in creators if c.text],
-                    "abstract": abstract,
-                    "year": year,
-                    "keywords": [s.text.strip() for s in subjects if s.text],
-                    "pdf_url": pdf_url,
-                    "source_url": identifiers[0].text if identifiers else None,
-                })
+                    metadata = rec.find(".//oai_dc:dc", OAI_NAMESPACES)
+                    if metadata is None:
+                        continue
 
-            logger.info(f"[REPOSITORY] Discovered {len(discovered)} records from OAI endpoint.")
+                    titles = metadata.findall("dc:title", OAI_NAMESPACES)
+                    creators = metadata.findall("dc:creator", OAI_NAMESPACES)
+                    descriptions = metadata.findall("dc:description", OAI_NAMESPACES)
+                    dates = metadata.findall("dc:date", OAI_NAMESPACES)
+                    identifiers = metadata.findall("dc:identifier", OAI_NAMESPACES)
+                    subjects = metadata.findall("dc:subject", OAI_NAMESPACES)
+
+                    title = titles[0].text.strip() if titles and titles[0].text else None
+                    if not title:
+                        continue
+
+                    # Look for PDF URL in dc:identifier
+                    pdf_url = None
+                    for ident in identifiers:
+                        text = (ident.text or "").strip()
+                        if text.lower().endswith(".pdf"):
+                            pdf_url = text
+                            break
+
+                    if not pdf_url:
+                        continue
+
+                    abstract = descriptions[0].text.strip() if descriptions and descriptions[0].text else None
+                    year = None
+                    if dates and dates[0].text:
+                        m = re.search(r'(19|20)\d{2}', dates[0].text)
+                        if m:
+                            year = int(m.group())
+
+                    discovered.append({
+                        "title": title,
+                        "authors": [c.text.strip() for c in creators if c.text],
+                        "abstract": abstract,
+                        "year": year,
+                        "keywords": [s.text.strip() for s in subjects if s.text],
+                        "pdf_url": pdf_url,
+                        "source_url": identifiers[0].text if identifiers else None,
+                    })
+
+                # Check for resumptionToken for next page
+                resumption = root.find(".//oai:resumptionToken", OAI_NAMESPACES)
+                if resumption is not None and resumption.text and resumption.text.strip():
+                    token = resumption.text.strip()
+                    params = {
+                        "verb": "ListRecords",
+                        "resumptionToken": token,
+                    }
+                    page_num += 1
+                else:
+                    break
+
+            logger.info(f"[REPOSITORY] Discovered {len(discovered)} records with PDF from OAI endpoint.")
 
         except Exception as e:
-            logger.error(f"[REPOSITORY] OAI-PMH harvest failed: {e}")
+            logger.error(f"[REPOSITORY] OAI-PMH harvest failed for {target_endpoint}: {e}")
 
         self.stats['discovered'] = len(discovered)
         return discovered
 
     def collect(self, limit: int = 50) -> list:
-        """Collect theses from configured OAI-PMH endpoint."""
-        discovered = self.discover(limit=limit)
-        return self._ingest_records(discovered, limit=limit)
+        """Collect theses across configured OAI-PMH endpoints."""
+        all_collected = []
+        endpoints = self.oai_endpoints if self.oai_endpoints else ["http://eprints.undip.ac.id/cgi/oai2"]
+
+        for ep in endpoints:
+            if len(all_collected) >= limit:
+                break
+            remaining = limit - len(all_collected)
+            # determine institution name
+            if "undip" in ep:
+                inst_name = "Universitas Diponegoro"
+            elif "uin-malang" in ep:
+                inst_name = "UIN Maulana Malik Ibrahim Malang"
+            elif "unair" in ep:
+                inst_name = "Universitas Airlangga"
+            else:
+                inst_name = "Institutional Repository"
+
+            logger.info(f"[REPOSITORY] Collecting from {inst_name} ({ep}). Target: {remaining}")
+            disc = self.discover(endpoint=ep, limit=min(remaining * 2, 80))
+            for item in disc:
+                item["institution"] = inst_name
+
+            collected = self._ingest_records(disc, limit=remaining)
+            all_collected.extend(collected)
+
+        return all_collected
 
     def ingest_local_theses(self, folder_path: str, limit: int = None) -> list:
         """
@@ -190,12 +247,24 @@ class RepositoryCollector(BaseCollector):
                     continue
 
                 extract_res = extract_pdf(str(dest_file))
+                if not extract_res.is_valid() or extract_res.total_words < 30:
+                    logger.warning(f"[REPOSITORY] Skipping thesis with insufficient text ({extract_res.total_words} words): {item['title'][:40]}")
+                    dest_file.unlink(missing_ok=True)
+                    continue
+
+                chunks_preview = create_chunks(extract_res.pages, "TEMP", max_words=500, overlap_words=50)
+                if not chunks_preview:
+                    logger.warning(f"[REPOSITORY] No chunks generated for: {item['title'][:40]}")
+                    dest_file.unlink(missing_ok=True)
+                    continue
+
                 doc_id = self.generate_id()
                 raw_fulltext = extract_res.full_text
 
                 lang_info = detect_language(raw_fulltext)
                 lang_code = lang_info.get("language") or "id"
                 lang_conf = lang_info.get("confidence", 0.0)
+                inst_name = item.get("institution", "Institutional Repository")
 
                 doc_meta = {
                     "document_id": doc_id,
@@ -203,14 +272,14 @@ class RepositoryCollector(BaseCollector):
                     "title": item.get("title"),
                     "abstract": item.get("abstract"),
                     "authors": json.dumps(item.get("authors", [])),
-                    "institution": "Institutional Repository",
-                    "department": "Fakultas Ilmu Komputer",
+                    "institution": inst_name,
+                    "department": "Fakultas Ilmu Komputer / Pascasarjana",
                     "course": None,
                     "year": item.get("year"),
                     "language": lang_code,
                     "language_confidence": lang_conf,
                     "keywords": json.dumps(item.get("keywords", [])),
-                    "source": "REPOSITORY",
+                    "source": inst_name,
                     "source_url": item.get("source_url"),
                     "fulltext_url": item.get("pdf_url"),
                     "local_path": str(dest_file.relative_to(self.output_dir.parent)),
@@ -222,7 +291,7 @@ class RepositoryCollector(BaseCollector):
                     "doi": None,
                     "extraction_method": extract_res.extraction_method,
                     "extraction_status": extract_res.extraction_status,
-                    "collection_status": "READY_FOR_INDEXING" if extract_res.is_valid() else "EXTRACTED",
+                    "collection_status": "READY_FOR_INDEXING",
                     "collected_at": self.create_metadata()["collected_at"],
                 }
 

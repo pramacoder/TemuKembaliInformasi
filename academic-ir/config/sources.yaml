@@ -45,11 +45,14 @@ sources:
     timeout: 30
 
   repositories:
-    enabled: false
+    enabled: true
     type: thesis
-    sources: []
+    endpoints:
+      - "http://eprints.undip.ac.id/cgi/oai2"
+      - "http://repository.uin-malang.ac.id/cgi/oai2"
+    set_spec: "74797065733D746865736973"
     pilot_limit: 100
-    rate_limit_seconds: 3
+    rate_limit_seconds: 2
     timeout: 60
 
 # =========================================================

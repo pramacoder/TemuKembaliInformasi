@@ -1,11 +1,34 @@
-query_id,query
-Q01,analisis perancangan sistem informasi use case diagram
-Q02,work breakdown structure manajemen proyek teknologi informasi
-Q03,critical path method network diagram activity durasi
-Q04,data mining business intelligence clustering classification
-Q05,aljabar linier matriks transformasi linier
-Q06,pemrograman fungsional higher order function recursi
-Q07,sistem operasi proses thread scheduling virtual memory
-Q08,human computer interaction evaluasi usability antarmuka pengguna
-Q09,metodologi penelitian rumusan masalah tinjauan pustaka
-Q10,arsitektur komputer instruction set pipeline cache memory
+query_id,query,category,note
+Q01,analisis perancangan sistem informasi use case diagram,A,Known-item - Mata kuliah APSI Fasilkom
+Q02,work breakdown structure manajemen proyek teknologi informasi,A,Known-item - Manpro TI
+Q03,critical path method network diagram activity durasi,A,Known-item - Riset Operasi/Manpro
+Q04,data mining business intelligence clustering classification,A,Known-item - Data Mining
+Q05,aljabar linier matriks transformasi linier,A,Known-item - Matematika
+Q06,pemrograman fungsional higher order function recursi,B,Topical - Dasar Pemrograman
+Q07,sistem operasi proses thread scheduling virtual memory,B,Topical - Sistem Operasi
+Q08,human computer interaction evaluasi usability antarmuka pengguna,B,Topical - IMK
+Q09,metodologi penelitian rumusan masalah tinjauan pustaka,B,Topical - Metodologi Penelitian
+Q10,arsitektur komputer instruction set pipeline cache memory,B,Topical - Arkom
+Q11,pembelajaran mesin supervised unsupervised neural network,B,Topical - Machine Learning
+Q12,pengolahan citra digital segmentasi deteksi tepi,B,Topical - Computer Vision
+Q13,analisis sentimen opini publik media sosial,B,Topical - NLP/Sentimen
+Q14,jaringan komputer TCP IP routing switching,B,Topical - Jarkom
+Q15,TF-IDF vector space model cosine similarity temu kembali informasi,C,Methodological - IR
+Q16,naive bayes support vector machine klasifikasi teks,C,Methodological - ML Classification
+Q17,K-means hierarchical clustering silhouette index,C,Methodological - Clustering
+Q18,backpropagation gradient descent optimasi deep learning,C,Methodological - Deep Learning
+Q19,random forest decision tree ensemble method akurasi,C,Methodological - Ensemble ML
+Q20,materi kuliah sistem operasi proses manajemen,D,Learning material - SO
+Q21,bahan ajar pemrograman web HTML CSS JavaScript,D,Learning material - Web
+Q22,slide kuliah struktur data linked list tree graph,D,Learning material - Struktur Data
+Q23,silabus mata kuliah kalkulus integral diferensial,D,Learning material - Kalkulus
+Q24,buku rancangan pengajaran basis data relasional SQL,D,Learning material - Basis Data
+Q25,data clustering,E,Cross-lingual - EN vs ID docs about clustering
+Q26,sentiment analysis,E,Cross-lingual - EN vs ID analisis sentimen
+Q27,information retrieval ranking,E,Cross-lingual - EN vs ID temu kembali informasi
+Q28,machine learning classification,E,Cross-lingual - EN vs ID klasifikasi ML
+Q29,natural language processing text mining,E,Cross-lingual - EN vs ID NLP
+Q30,skripsi analisis sentimen media sosial 2023,F,Constrained - Thesis + Sentiment + Year
+Q31,tesis machine learning prediksi penyakit,F,Constrained - Thesis + ML Health
+Q32,jurnal penelitian deep learning image recognition 2024,F,Constrained - Research + DL + Year
+Q33,materi kuliah kedokteran bioengineering,F,Constrained - Material + FK + Cross-domain

@@ -1,7 +1,11 @@
 """
 Academic IR System — Evaluation Metrics
 =========================================
-Precision@K, Recall@K, F1, MAP, NDCG for retrieval evaluation.
+Precision@K, Recall@K, F1, MAP, NDCG, MRR for retrieval evaluation.
+
+Added in revision:
+  - compute_mrr(): Mean Reciprocal Rank (expert plan §21.1)
+  - evaluate() now includes MRR in aggregate metrics
 """
 
 import math
@@ -144,6 +148,45 @@ def ndcg_at_k(retrieved: list, relevance_map: dict, k: int) -> float:
     return actual_dcg / ideal_dcg
 
 
+def reciprocal_rank(retrieved: list, relevant: set) -> float:
+    """
+    Reciprocal Rank for a single query.
+    Returns 1/rank of first relevant document found, or 0 if none found.
+
+    Args:
+        retrieved: Ordered list of document IDs (ranked by score)
+        relevant: Set of relevant document IDs
+
+    Returns:
+        Reciprocal Rank score (0.0 to 1.0)
+    """
+    for rank, doc_id in enumerate(retrieved, 1):
+        if doc_id in relevant:
+            return 1.0 / rank
+    return 0.0
+
+
+def mean_reciprocal_rank(queries_results: list) -> float:
+    """
+    Mean Reciprocal Rank (MRR) across multiple queries.
+
+    MRR = (1/|Q|) * sum(1/rank_i)
+
+    Measures at what average rank the first relevant document appears.
+    Higher is better (1.0 = always returned as rank 1).
+
+    Args:
+        queries_results: List of tuples (retrieved_list, relevant_set)
+
+    Returns:
+        MRR score (0.0 to 1.0)
+    """
+    if not queries_results:
+        return 0.0
+    rrs = [reciprocal_rank(ret, rel) for ret, rel in queries_results]
+    return sum(rrs) / len(rrs)
+
+
 # ─── Evaluation Runner ──────────────────────────────────────────────────
 
 def load_qrels(qrels_path: str) -> dict:
@@ -208,6 +251,7 @@ def evaluate(search_engine, queries: dict, qrels: dict,
     }
 
     all_ap = []
+    all_rr = []  # Reciprocal Ranks for MRR
 
     for qid, query_text in queries.items():
         if qid not in qrels:
@@ -235,11 +279,16 @@ def evaluate(search_engine, queries: dict, qrels: dict,
         query_metrics['AP'] = round(ap, 4)
         all_ap.append(ap)
 
+        rr = reciprocal_rank(retrieved, relevant)
+        query_metrics['RR'] = round(rr, 4)
+        all_rr.append(rr)
+
         results['per_query'][qid] = query_metrics
 
     # Aggregate metrics
     if all_ap:
         results['aggregate']['MAP'] = round(sum(all_ap) / len(all_ap), 4)
+        results['aggregate']['MRR'] = round(sum(all_rr) / len(all_rr), 4) if all_rr else 0.0
         for k in k_values:
             key_p = f'P@{k}'
             key_r = f'R@{k}'

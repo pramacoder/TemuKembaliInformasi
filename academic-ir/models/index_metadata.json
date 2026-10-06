@@ -1,9 +1,9 @@
 {
-  "chunk_count": 9684,
-  "vocab_size": 247509,
+  "chunk_count": 56881,
+  "vocab_size": 1969538,
   "matrix_shape": [
-    9684,
-    247509
+    56881,
+    1969538
   ],
   "ngram_range": [
     1,

@@ -11,22 +11,50 @@ import {
   type SearchResult,
 } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { BookOpen, Calendar, ExternalLink, FileText, Globe, Tag, Users } from "lucide-react";
+import { BookOpen, Calendar, ExternalLink, FileText, Globe, Layers, Tag, Users } from "lucide-react";
 
 interface ResultCardProps {
   result: SearchResult;
 }
 
 export function ResultCard({ result }: ResultCardProps) {
-  const scorePercent = Math.round(result.relevance_score * 100);
-  const scoreColor =
-    result.relevance_score >= 0.5
-      ? "text-emerald-600 dark:text-emerald-400"
-      : result.relevance_score >= 0.2
-        ? "text-amber-600 dark:text-amber-400"
-        : "text-muted-foreground";
+  // Qualitative relevance label (expert plan §19)
+  const score = result.relevance_score;
+  let relevanceLabel = "Kurang Relevan";
+  let labelBadgeClass = "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300";
+
+  if (score >= 0.80) {
+    relevanceLabel = "Sangat Relevan";
+    labelBadgeClass = "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-300";
+  } else if (score >= 0.60) {
+    relevanceLabel = "Relevan";
+    labelBadgeClass = "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300 border-blue-300";
+  } else if (score >= 0.40) {
+    relevanceLabel = "Cukup Relevan";
+    labelBadgeClass = "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border-amber-300";
+  }
+
+  // Provenance label
+  const provenanceLabel =
+    result.source === "OCW_UI"
+      ? "OCW UI (Benchmark)"
+      : result.source === "CORE"
+        ? "CORE Open Access"
+        : result.source === "DOAJ"
+          ? "DOAJ Open Journal"
+          : result.source === "REPOSITORY"
+            ? "Repository Kampus"
+            : result.source;
 
   const openUrl = result.source_url ?? null;
+
+  // Page range
+  const pageDisplay =
+    result.best_page_start && result.best_page_end && result.best_page_start !== result.best_page_end
+      ? `Hal. ${result.best_page_start}–${result.best_page_end}`
+      : result.best_page_start || result.page
+        ? `Hal. ${result.best_page_start || result.page}`
+        : null;
 
   return (
     <Card className="group transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
@@ -44,18 +72,23 @@ export function ResultCard({ result }: ResultCardProps) {
             </div>
           </div>
 
-          {/* Relevance Score */}
+          {/* Qualitative Score Badge with numerical tooltip */}
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="shrink-0 flex flex-col items-center cursor-help">
-                <span className={cn("text-lg font-bold tabular-nums leading-none", scoreColor)}>
-                  {scorePercent}
+              <div className="shrink-0 flex flex-col items-end cursor-help">
+                <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full border", labelBadgeClass)}>
+                  {relevanceLabel}
                 </span>
-                <span className="text-[10px] text-muted-foreground uppercase tracking-wide">score</span>
+                <span className="text-[11px] text-muted-foreground font-mono mt-0.5 tabular-nums">
+                  {score.toFixed(4)}
+                </span>
               </div>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Cosine similarity: {result.relevance_score.toFixed(6)}</p>
+              <p>Relevance score: {score.toFixed(6)}</p>
+              {result.aggregation_strategy && (
+                <p className="text-xs text-muted-foreground">Strategi: {result.aggregation_strategy}</p>
+              )}
             </TooltipContent>
           </Tooltip>
         </div>
@@ -71,6 +104,11 @@ export function ResultCard({ result }: ResultCardProps) {
             {DOCUMENT_TYPE_LABELS[result.document_type]}
           </Badge>
 
+          {/* Provenance Badge */}
+          <Badge variant="outline" className="text-xs text-muted-foreground">
+            {provenanceLabel}
+          </Badge>
+
           {result.year && (
             <span className="flex items-center gap-1 text-xs text-muted-foreground">
               <Calendar className="h-3 w-3" />
@@ -78,10 +116,12 @@ export function ResultCard({ result }: ResultCardProps) {
             </span>
           )}
 
-          <span className="flex items-center gap-1 text-xs text-muted-foreground truncate max-w-[200px]">
-            <BookOpen className="h-3 w-3 shrink-0" />
-            <span className="truncate">{result.source}</span>
-          </span>
+          {result.chunk_count && result.chunk_count > 1 && (
+            <span className="flex items-center gap-1 text-xs text-muted-foreground">
+              <Layers className="h-3 w-3" />
+              {result.chunk_count} bagian cocok
+            </span>
+          )}
 
           {result.institution && (
             <span className="flex items-center gap-1 text-xs text-muted-foreground truncate max-w-[200px]">
@@ -110,7 +150,7 @@ export function ResultCard({ result }: ResultCardProps) {
 
         {result.course && (
           <p className="text-xs text-muted-foreground">
-            <span className="font-medium">Course:</span> {result.course}
+            <span className="font-medium">Mata Kuliah:</span> {result.course}
           </p>
         )}
 
@@ -122,7 +162,7 @@ export function ResultCard({ result }: ResultCardProps) {
             {result.snippet}
           </p>
         ) : (
-          <p className="text-sm text-muted-foreground italic">No preview available.</p>
+          <p className="text-sm text-muted-foreground italic">Pratinjau tidak tersedia.</p>
         )}
 
         {/* Keywords */}
@@ -146,15 +186,15 @@ export function ResultCard({ result }: ResultCardProps) {
               onClick={() => window.open(openUrl, "_blank")}
             >
               <ExternalLink className="h-3 w-3" />
-              Open Document
+              Buka Dokumen
             </Button>
           ) : (
             <Button size="sm" variant="outline" className="h-7 text-xs" disabled>
-              No URL available
+              URL tidak tersedia
             </Button>
           )}
-          {result.page && (
-            <span className="text-xs text-muted-foreground">p.{result.page}</span>
+          {pageDisplay && (
+            <span className="text-xs text-muted-foreground font-medium">{pageDisplay}</span>
           )}
           {result.doi && (
             <span className="text-xs text-muted-foreground font-mono truncate max-w-[160px]">
