@@ -25,7 +25,9 @@ Proyek ini mengembangkan **Academic IR**, sebuah perangkat lunak sistem temu kem
 
 Sebagai peningkatan lanjutan pada arsitektur temu kembali informasi (Revisi Tahap II), sistem diperkaya dengan modul **Tolerant Retrieval** yang berfungsi sebagai lapisan normalisasi dan pemulihan kueri (*Query Normalization & Recovery Layer*) sebelum tahap retrieval leksikal BM25. Lapisan ini menangani kesalahan pengetikan (*typo tolerance* melalui Damerau-Levenshtein distance), variasi ejaan akademik (`analisa` → `analisis`), ekspansi singkatan (`NLP` → `Natural Language Processing`), dan perlindungan istilah teknis bernilai khusus (`C++`, `.NET`, `TF-IDF`). Sistem menerapkan prinsip **Exact-First Priority**, di mana kueri eksak selalu dieksekusi terlebih dahulu dan mekanisme *fallback* hanya dipicu jika hasil penelusuran awal minim atau nihil. Seluruh transformasi kueri didukung oleh transparansi *audit log* (*explainability*) dan diintegrasikan secara interaktif pada antarmuka *Search Bar* (Next.js 15) melalui fitur *real-time live suggestions dropdown*, selektor mode toleransi instan (*Auto / Always / Off*), serta banner pemulihan hasil (*recovery banner*).
 
-Melengkapi kemampuan temu kembali informasi hingga tingkat pemahaman isi, sistem mengintegrasikan modul **Text Summarization** (*Language-Aware Extractive & Query-Focused Summarization*). Modul ini mengatasi tantangan heterogenitas bahasa korpus (skripsi bahasa Indonesia, paper riset bahasa Inggris, dan materi kuliah dwibahasa) tanpa melakukan penerjemahan paksa ke satu bahasa. Sistem mengimplementasikan algoritma **TextRank** (graf kemiripan kosinus antar-kalimat berbasis *Power Iteration PageRank*) yang dipadukan dengan **Maximal Marginal Relevance (MMR, $\lambda=0.70$)** untuk mengeliminasi redundansi pengulangan ide dan menyajikan alur ringkasan kronologis berdasar dokumen asli. Selain itu, sistem mendukung **Query-Focused Cross-Lingual Evidence Extraction** menggunakan representasi semantik multibahasa untuk mengekstrak kalimat-kalimat bukti yang secara presisi menjawab kueri pengguna (misalnya kueri berbahasa Indonesia pada paper berbahasa Inggris). Seluruh ringkasan dilengkapi atribusi nomor halaman fisik asli (*traceability*, 100% bebas halusinasi) dan diakselerasi melalui persistensi *caching* SQLite tabel `document_summaries` dengan latensi akses secepat **1,7–2,1 ms**. Laporan ini menyajikan analisis kebutuhan, arsitektur berlapis, pemodelan UML, perancangan basis data, flowchart perankingan, evaluasi Cranfield (*P@K, R@K, MAP, NDCG, MRR*), studi ablasi, validasi toleransi kueri, serta desain dan evaluasi komprehensif modul peringkasan teks.
+Untuk mengatasi dilema penyajian pada sistem temu kembali informasi (*The Passage Dilemma in IR*)—di mana pemeringkatan matematis memerlukan pengindeksan berbasis potongan (*passage/chunk-level indexing*) guna mencegah dilusi term, namun pengguna membutuhkan pembacaan dokumen utuh—sistem bertransformasi dari sekadar penyaji fragmen teks menjadi **Full Document Delivery Platform**. Kartu hasil pencarian menyajikan identitas dokumen utuh, meliputi abstrak resmi dokumen, total halaman fisik, serta pemetaan nomor halaman spesifik yang membahas kueri pengguna (`Relevan di Hal. 1, 2, 4...`). Sistem mengintegrasikan modul pembaca dokumen utuh (**In-App Full Document Reader**) melalui endpoint `GET /api/documents/{document_id}/pages` yang mengakses lebih dari **50.218 halaman fisik asli** dari basis data SQLite. Pembaca dokumen ini mendukung navigasi halaman fisik, *continuous scrolling*, tombol pintasan (*quick-jump*) ke halaman relevan, penyorotan kata kunci kueri (*query term highlighting*), serta perpindahan instan ke fitur peringkasan cerdas.
+
+Melengkapi kemampuan temu kembali informasi hingga tingkat pemahaman isi, sistem mengintegrasikan modul **Text Summarization** (*Language-Aware Extractive & Query-Focused Summarization*). Modul ini mengatasi tantangan heterogenitas bahasa korpus (skripsi bahasa Indonesia, paper riset bahasa Inggris, dan materi kuliah dwibahasa) tanpa melakukan penerjemahan paksa ke satu bahasa. Sistem mengimplementasikan algoritma **TextRank** (graf kemiripan kosinus antar-kalimat berbasis *Power Iteration PageRank*) yang dipadukan dengan **Maximal Marginal Relevance (MMR, $\lambda=0.70$)** untuk mengeliminasi redundansi pengulangan ide dan menyajikan alur ringkasan kronologis berdasar dokumen asli. Selain itu, sistem mendukung **Query-Focused Cross-Lingual Evidence Extraction** menggunakan representasi semantik multibahasa untuk mengekstrak kalimat-kalimat bukti yang secara presisi menjawab kueri pengguna (misalnya kueri berbahasa Indonesia pada paper berbahasa Inggris). Seluruh ringkasan dilengkapi atribusi nomor halaman fisik asli (*traceability*, 100% bebas halusinasi) dan diakselerasi melalui persistensi *caching* SQLite tabel `document_summaries` dengan latensi akses secepat **1,7–2,1 ms**. Laporan ini menyajikan analisis kebutuhan, arsitektur berlapis, pemodelan UML, perancangan basis data, flowchart perankingan, evaluasi Cranfield (*P@K, R@K, MAP, NDCG, MRR*), studi ablasi, validasi toleransi kueri, desain pembaca dokumen utuh, serta desain dan evaluasi komprehensif modul peringkasan teks.
 
 ---
 
@@ -48,23 +50,25 @@ Untuk menjawab permasalahan tersebut, diperlukan pengembangan perangkat lunak si
 Berdasarkan latar belakang di atas, rumusan masalah dalam pengembangan perangkat lunak ini dirumuskan sebagai berikut:
 1. Bagaimana merancang arsitektur sistem temu kembali informasi yang mampu mengintegrasikan tiga jenis korpus akademik (Bahan Kuliah, Riset, dan Skripsi) dalam satu antarmuka kueri terpadu?
 2. Bagaimana membangun pipeline pemrosesan teks dwibahasa (*bilingual text preprocessing*) dan segmentasi dokumen (*chunking*) berbasis halaman untuk mengindeks dokumen PDF akademik?
-3. Bagaimana menerapkan algoritma *Machine Learning* berbasis Vector Space Model (VSM) dengan pembobotan TF-IDF dan Cosine Similarity untuk menghasilkan perankingan dokumen akademik yang relevan secara matematis?
+3. Bagaimana menerapkan algoritma *Machine Learning* berbasis Vector Space Model (VSM) dengan pembobotan TF-IDF dan Cosine Similarity serta Okapi BM25 untuk menghasilkan perankingan dokumen akademik yang relevan secara matematis?
 4. Bagaimana merancang skema basis data relasional dan antarmuka web interaktif yang responsif untuk menampilkan hasil pencarian beserta cuplikan (*snippet*), nomor halaman, dan metadata dokumen?
 5. Bagaimana merancang instrumen evaluasi sistem yang komprehensif, mencakup pengujian fungsionalitas perangkat lunak (*Black-box Testing*) dan evaluasi metrik kinerja Information Retrieval (*Precision, Recall, MAP, NDCG*)?
+6. Bagaimana menjembatani dilema penyajian temu kembali informasi (*The Passage Dilemma*) agar sistem tidak hanya mengembalikan potongan teks (*chunks*) terisolasi, melainkan mampu menyajikan dokumen utuh multi-halaman secara interaktif (*In-App Full Document Reader*) dengan navigasi halaman dan penyorotan kata kunci kueri?
 
 ### 1.3 Tujuan Pengembangan Perangkat Lunak
 Tujuan dari proyek pengembangan perangkat lunak ini adalah:
 1. Menganalisis kebutuhan fungsional dan non-fungsional sistem temu kembali informasi akademik terpadu (*Unified Academic IR*).
 2. Merancang arsitektur perangkat lunak berbasis layanan mikro/terpisah (*decoupled architecture*) yang memisahkan frontend interaktif (Next.js), backend REST API (FastAPI), dan mesin temu kembali informasi berbasis Python.
-3. Merancang pipeline *preprocessing*, *feature extraction*, dan *training* model TF-IDF VSM untuk memproses lebih dari 50.000 *chunks* teks akademik nyata.
-4. Merancang skema basis data relasional (SQLite) yang efisien untuk menyimpan metadata dokumen, teks per halaman, dan unit pencarian granular (*chunks*).
-5. Merancang antarmuka pengguna modern dengan fitur penyaringan segi (*faceted filtering*), pencarian instan, dan penyorotan kata kunci (*highlighting*).
+3. Merancang pipeline *preprocessing*, *feature extraction*, dan *training* model TF-IDF VSM serta indeks Okapi BM25 untuk memproses lebih dari 56.000 *chunks* teks akademik nyata.
+4. Merancang skema basis data relasional (SQLite) yang efisien untuk menyimpan metadata dokumen, teks per halaman fisik asli (50.218 halaman), dan unit pencarian granular (*chunks*).
+5. Merancang antarmuka pengguna modern dengan fitur penyaringan segi (*faceted filtering*), pencarian instan, penanganan toleransi kueri (*Tolerant Retrieval*), dan modul pembaca dokumen utuh interaktif (*In-App Full Document Reader*).
 6. Menyusun rencana pengujian perangkat lunak (*Black-box testing*) dan perancangan eksperimen evaluasi model Information Retrieval berstandar benchmark ilmiah.
+7. Mengembangkan modul pembaca dokumen utuh dan peringkasan cerdas ekstraktif (*Text Summarization TextRank + MMR*) untuk mempercepat pemahaman isi literatur ilmiah oleh pengguna secara terintegrasi.
 
 ### 1.4 Deskripsi Singkat Aplikasi
 Aplikasi yang dikembangkan diberi nama **Academic IR** (*Academic Information Retrieval System*). Aplikasi ini merupakan mesin pencari akademik cerdas berbasis web yang memungkinkan pengguna mengetik kueri pencarian bebas (misalnya: *"analisis perancangan sistem informasi use case diagram"*, *"hukum gauss elektrostatis"*, atau *"metode penelitian komparatif"*). 
 
-Sistem secara otomatis memproses kueri melalui pipeline NLP dwibahasa, mengonversinya menjadi vektor representasi fitur, menghitung derajat kemiripan sudut kosinus terhadap seluruh basis korpus, dan menyajikan daftar hasil pencarian terbaik (*Top-K results*). Setiap hasil dilengkapi dengan judul dokumen, kategori korpus (*Material / Research / Thesis*), cuplikan teks kontekstual (*smart snippet*), lokasi nomor halaman dokumen asli, skor kemiripan relevansi, tautan unduh/akses dokumen asli, serta panel filter multi-dimensi (filter fakultas, tahun publikasi, dan jenis dokumen).
+Sistem secara otomatis memproses kueri melalui pipeline NLP dwibahasa, menerapkan normalisasi toleran (*Tolerant Retrieval* untuk typo, variasi ejaan, dan singkatan), menghitung derajat relevansi leksikal menggunakan model probabilistik Okapi BM25 atau TF-IDF Cosine Similarity, dan mengagregasi skor tingkat dokumen (`max+2nd`). Sistem menyajikan daftar hasil pencarian terbaik (*Top-K results*) yang dilengkapi judul dokumen, kategori korpus (*Material / Research / Thesis*), abstrak dokumen utuh resmi, cuplikan kontekstual (*smart snippet*), peta sebaran halaman relevan, serta tombol aksi **"Baca Dokumen Lengkap"**. Melalui tombol ini, pengguna dapat membaca seluruh halaman fisik dokumen secara langsung di dalam aplikasi (*In-App Full Document Reader*) lengkap dengan penyorotan kata kunci kueri (*keyword highlighting*), navigasi halaman fleksibel, serta peralihan satu klik ke modul peringkasan AI ekstraktif (*TextRank + MMR*).
 
 ---
 
@@ -142,6 +146,21 @@ Oleh karena itu, sistem merancang modul **Document-Level Aggregation** dengan ti
 3. **Strategi Rata-rata Top-N Terbobot (`topN_avg`)**:
    $$Score(D) = \frac{\sum_{i=1}^{N} \frac{1}{i} S(c_{(i)})}{\sum_{i=1}^{N} \frac{1}{i}}, \quad N = 3$$
    Menghitung rata-rata harmonik berbobot dari 3 potongan teratas.
+
+### 2.6.2 Dilema Penyajian dalam Passage Retrieval: Passage Scoring vs. Full Document Delivery
+Dalam literatur temu kembali informasi klasik maupun modern, segmentasi dokumen menjadi bagian-bagian lebih kecil (*passage retrieval*) diakui secara luas sebagai pendekatan paling efektif untuk menangani dokumen teks berukuran besar (Callan, 1994; Kaszkiel & Zobel, 1997). Dokumen akademik (skripsi 100+ halaman, modul kuliah, buku referensi) memiliki cakupan topik yang heterogen. Jika seluruh dokumen diindeks sebagai satu kesatuan teks raksasa, muncul dua kendala matematis serius:
+1. **Pengeceran Term (*Term Dilution*)**: Istilah kueri spesifik yang hanya muncul 3–5 kali pada satu subbab penting akan memiliki frekuensi relatif yang amat kecil dibanding total puluhan ribu kata dalam dokumen, sehingga skor BM25/TF-IDF dokumen tersebut terdilusi drastis.
+2. **Penalti Panjang Dokumen (*Document Length Penalty*)**: Komponen normalisasi panjang dokumen pada Okapi BM25 ($\frac{|D|}{\text{avgdl}}$) akan memberikan penalti berat pada dokumen tebal, menyebabkan artikel 5 halaman mengalahkan disertasi 150 halaman meskipun disertasi tersebut memuat pembahasan yang jauh lebih mendalam.
+
+Namun demikian, sistem IR yang **hanya mengembalikan potongan teks (*raw chunks*)** kepada pengguna menimbulkan degradasi pengalaman pengguna (*User Experience / UX degradation*):
+- **Kehilangan Konteks Naratif (*Loss of Global Context*)**: Pengguna hanya disajikan 200–300 kata tanpa mengetahui posisi bagian tersebut di dalam struktur hierarki dokumen (apakah bagian dari latar belakang, kajian teori, metodologi, atau temuan).
+- **Friksi Akses Dokumen (*High Access Friction*)**: Pengguna harus berpindah ke aplikasi pembaca PDF eksternal dan mencari secara manual kata kunci yang dicari, menghilangkan efisiensi penelusuran.
+- **Ketiadaan Representasi Makro**: Tanpa abstrak resmi dokumen utuh, pengguna kesulitan mengevaluasi apakah dokumen tersebut layak dibaca lebih lanjut.
+
+Untuk menyelesaikan dilema tersebut, **Academic IR** menerapkan prinsip **"Index by Passage for Mathematical Accuracy, Present as Whole Document for Human Consumption"** (Indeksasi berbasis potongan untuk presisi perankingan, penyajian berbasis dokumen utuh untuk pemahaman pengguna):
+- **Di Balik Layar (Backend Engine)**: Pemeringkatan matematis tetap dihitung pada granularitas *chunk* dengan agregasi dokumen `max+2nd` agar akurasi P@K, MAP, dan NDCG tetap maksimal tanpa bias panjang dokumen.
+- **Di Hadapan Pengguna (Frontend & API)**: Hasil pencarian dirangkum sebagai satu kartu dokumen utuh yang menampilkan **Abstrak Resmi Dokumen**, total halaman fisik dokumen, dan badge sebaran halaman yang relevan dengan topik kueri (`Relevan di Hal. 1, 4, 12...`).
+- **Modul Pembaca Terpadu (*In-App Full Document Reader*)**: Pengguna dapat membaca keseluruhan halaman fisik dokumen secara langsung di dalam aplikasi melalui endpoint `GET /api/documents/{document_id}/pages`, lengkap dengan navigasi antar-halaman (*pagination / continuous scroll*), tombol pintasan (*jump*) ke halaman-halaman relevan, serta penyorotan kata kunci kueri (*query-term highlighting*) di seluruh teks dokumen asli.
 
 ### 2.7 Desain Evaluasi Sistem Temu Kembali Informasi
 Kinerja sistem IR diukur menggunakan metrik evaluasi baku berbasis *ground truth* (*Query Relevance Judgments / Qrels*):
@@ -249,6 +268,8 @@ Kebutuhan fungsional mendefinisikan layanan operasional yang wajib disediakan ol
 | **FR-14** | Peringkasan Teks Ekstraktif (*Document TextRank + MMR*) | Sistem menyediakan ringkasan intisari dokumen berbasis graf sentralitas kalimat TextRank dan eliminasi redundansi MMR yang sadar bahasa (*language-aware*). |
 | **FR-15** | Ekstraksi Bukti Relevan Kueri Lintas Bahasa (*Query-Focused Evidence*) | Pengguna dapat melihat bukti kalimat-kalimat dokumen yang paling relevan menjawab kueri pencarian (termasuk kueri bahasa Indonesia pada dokumen berbahasa Inggris). |
 | **FR-16** | Keterlacakan Nomor Halaman & Caching Ringkasan | Setiap butir kalimat ringkasan menyertakan nomor halaman fisik dokumen sumber asli dan diakselerasi melalui persistensi cache SQLite untuk akses instan (< 5 ms). |
+| **FR-17** | Pembaca Dokumen Utuh Multi-Halaman (*In-App Full Document Reader*) | Pengguna dapat membaca keseluruhan halaman fisik dokumen langsung di aplikasi web melalui endpoint `/api/documents/{id}/pages`, dengan kontrol pagination, continuous scroll, dan penyorotan istilah kueri. |
+| **FR-18** | Penyajian Dokumen Utuh & Peta Halaman Relevan | Kartu hasil pencarian menyajikan identitas dokumen utuh: abstrak resmi dokumen, total halaman fisik, serta pill nomor halaman yang relevan (`Relevan di Hal. X, Y, Z`). |
 
 ### 3.2.2 Kebutuhan Non-Fungsional (*Non-Functional Requirements*)
 Kebutuhan non-fungsional menetapkan batasan kualitas arsitektural perangkat lunak:
@@ -267,11 +288,13 @@ Kebutuhan non-fungsional menetapkan batasan kualitas arsitektural perangkat luna
 
 ### 3.3.1 Arsitektur Sistem (*System Architecture*)
 Perangkat lunak Academic IR dirancang menggunakan arsitektur berlapis modular (*Three-Tier Decoupled Architecture with Tolerant Pre-Retrieval Layer*):
-1. **Presentation Tier (Frontend)**: Dibangun menggunakan **Next.js 15 (React 19)**, **Tailwind CSS**, dan pustaka antarmuka **shadcn/ui**, berkomunikasi secara asinkron (*REST/JSON*) ke backend pada port 3000. Dilengkapi *Live Suggestions Dropdown*, *Tolerant Mode Selector* (*Auto/Always/Off*), *Recovery Banner*, dan *Audit Log Dialog*.
+1. **Presentation Tier (Frontend)**: Dibangun menggunakan **Next.js 15 (React 19)**, **Tailwind CSS**, dan pustaka antarmuka **shadcn/ui**, berkomunikasi secara asinkron (*REST/JSON*) ke backend pada port 3000. Dilengkapi *Live Suggestions Dropdown*, *Tolerant Mode Selector* (*Auto/Always/Off*), *Recovery Banner*, *Audit Log Dialog*, serta modal pembaca dokumen utuh (**In-App Full Document Reader Dialog**) dan modal peringkasan cerdas (**Summary Dialog**).
 2. **Application & Service Tier (Backend)**: Menggunakan **FastAPI (Python 3.10+)** pada port 8000 yang mengorkestrasi:
    - **Tolerant Retrieval Subsystem (`src/retrieval/tolerant/`)**: Modul normalisasi kueri, pencocokan fuzzy Damerau-Levenshtein, penanganan singkatan/ejaan, perlindungan istilah teknis, serta pengendali *adaptive fallback*.
    - **Primary Lexical Retrieval Engine**: Mesin perankingan dual-baseline **Okapi BM25** dan **TF-IDF Vector Space Model** yang terintegrasi dengan modul agregasi dokumen (`max+2nd`).
-3. **Data & Model Tier (Persistence Layer)**: Terdiri dari basis data relasional **SQLite (`academic_ir.db`)** untuk metadata dan teks dokumen, kamus istilah terlindungi & kosa kata korpus (26.000+ terms), serta direktori serialisasi indeks **BM25 (`models/bm25_v1/`)** dan **TF-IDF (`models/`)**.
+   - **Full Document Delivery & Reader Service**: Endpoint `GET /api/documents/{document_id}/pages` untuk menyajikan seluruh teks halaman fisik dengan indikator kecocokan istilah kueri (*has_match*).
+   - **Text Summarization Subsystem (`src/summarization/`)**: Peringkasan ekstraktif TextRank + MMR dan ekstraksi bukti semantik lintas bahasa.
+3. **Data & Model Tier (Persistence Layer)**: Terdiri dari basis data relasional **SQLite (`academic_ir.db`)** untuk metadata dokumen (1.364 baris), teks halaman fisik (`pages` - 50.218 baris), unit pencarian granular (`chunks` - 57.202 baris), dan cache ringkasan (`document_summaries`), serta serialisasi indeks **BM25 (`models/bm25_v1/`)** dan **TF-IDF (`models/`)**.
 
 ```mermaid
 graph TD
@@ -282,7 +305,9 @@ graph TD
         FT[Faceted Filters Sidebar]
         RB[Tolerant Recovery Banner]
         AUD[Explainability Audit Dialog]
-        RC[Result Cards & Page Jump]
+        RC[Result Cards: Full Abstract & Matched Pages]
+        RDR[In-App Document Reader: DocumentReaderDialog]
+        SUMM_UI[AI Summarization Dialog: SummaryDialog]
     end
 
     subgraph Application_Tier [Application & IR Service Tier - Port 8000]
@@ -300,13 +325,16 @@ graph TD
         TFIDF_ENG[TF-IDF VSM Secondary Engine]
         AGG[Document-Level Aggregator: max+2nd]
         SNIP[Smart Snippet Generator]
+        PAGES_API[Pages Reader Endpoint: /api/documents/id/pages]
+        SUMM_ENG[TextRank + MMR Summarizer Engine]
     end
 
     subgraph Storage_Tier [Data & Model Persistence Tier]
         DB[(SQLite Database - academic_ir.db)]
         DOCS[Table: documents - 1,364 rows]
-        PAGES[Table: pages]
+        PAGES[Table: pages - 50,218 rows]
         CHUNKS[Table: chunks - 57,202 rows]
+        CACHE_SUMM[Table: document_summaries]
         
         BM25_IDX[BM25 Inverted Index: 56.8k Chunks]
         TFIDF_IDX[TF-IDF Matrix & Vectorizer: 1.9M Vocab]
@@ -314,6 +342,9 @@ graph TD
 
     UI -->|HTTP GET /api/tolerant/suggest| API
     UI -->|HTTP GET /api/search?tolerant_mode=...| API
+    RDR -->|HTTP GET /api/documents/id/pages?q=...| PAGES_API
+    SUMM_UI -->|HTTP GET /api/documents/id/summary| SUMM_ENG
+    
     API --> TPROC
     TPROC --> FUZZY
     TPROC --> DICT
@@ -328,7 +359,10 @@ graph TD
     
     BM25_ENG --> AGG
     TFIDF_ENG --> AGG
-    AGG -->|Fetch Document Metadata| DB
+    AGG -->|Fetch Document Metadata & Matched Pages| DB
+    PAGES_API -->|Stream All Pages| PAGES
+    SUMM_ENG -->|Read Pages & Cache Summary| CACHE_SUMM
+    
     DB --> DOCS
     DB --> PAGES
     DB --> CHUNKS
@@ -612,14 +646,15 @@ Antarmuka pengguna didesain dengan prinsip kesederhanaan, keterbacaan tinggi (*h
 | Model Retrieval:                    | Ditemukan 15 hasil relevan (BM25: 0.08 detik)                |
 | (*) Okapi BM25 (Utama)              |                                                              |
 | ( ) TF-IDF VSM (Baseline A)         | +----------------------------------------------------------+ |
-|                                     | | [RESEARCH] [arXiv:2304.01928] [Skor: 1.482]              | |
+|                                     | | [RESEARCH] [CORE OA] [Sangat Relevan - 1.4820]            | |
 | Kategori Korpus:                    | | Analisis Sentimen Ulasan Menggunakan Model BERT          | |
 | [X] Semua Korpus                    | | Penulis: Tim Peneliti CS UI | Tahun: 2023               | |
-| [ ] Bahan Kuliah (Material)         | | "...menggunakan arsitektur Transformer BERT untuk..."    | |
-| [ ] Jurnal Riset (Research)         | | [Halaman 4-6]  [Unduh PDF Asli]  [Lihat Detail Dokumen]  | |
-| [ ] Skripsi / Tesis (Thesis)        | +----------------------------------------------------------+ |
+| [ ] Bahan Kuliah (Material)         | | [Relevan di Hal. 4, 5, 8]  [26 Hal. Total]  [ID]         | |
+| [ ] Jurnal Riset (Research)         | | Abstrak Dokumen Utuh:                                     | |
+| [ ] Skripsi / Tesis (Thesis)        | | "Penelitian ini mengkaji penerapan model BERT untuk..."  | |
+|                                     | | [ Baca Dokumen Lengkap ]  [ Ringkasan AI ]  [ Tautan ]  | |
+| [ Reset Seluruh Filter ]            | +----------------------------------------------------------+ |
 |                                     |                                                              |
-| [ Reset Seluruh Filter ]            |                                                              |
 +----------------------------------------------------------------------------------------------------+
 |  Footer: Academic IR Project © 2026 — Kelompok [Nama] — Program Studi Ilmu Komputer                |
 +----------------------------------------------------------------------------------------------------+
@@ -630,9 +665,38 @@ Antarmuka pengguna didesain dengan prinsip kesederhanaan, keterbacaan tinggi (*h
 2. **Selektor Mode Toleransi Langsung (*Quick Tolerant Mode Switcher*)**: Tersemat langsung di samping bilah pencarian dan panel filter. Memungkinkan pengguna beralih antara mode *Otomatis (Fallback)*, *Selalu Aktif*, dan *Nonaktif (Eksak Murni)* dalam satu kali klik untuk keperluan komparasi pengujian.
 3. **Banner Pemulihan Kueri (*Tolerant Recovery Banner*)**: Memberikan transparansi jika kueri mengalami koreksi otomatis (*"Menampilkan hasil untuk: 'menggunakan'"*), lengkap dengan opsi satu klik untuk mencari kueri asli tanpa toleransi.
 4. **Modal Dialog Audit Log & Explainability**: Menampilkan rincian teknis proses transformasi kueri: kueri asal $\rightarrow$ kueri efektif, status fallback, confidence score, dan pemetaan kata per kata sesuai prinsip keterjelasan (*explainability*).
-5. **Badge Metadata & Relevansi**: Setiap kartu hasil dilengkapi badge warna berbeda untuk setiap kategori korpus (Biru untuk *Material*, Hijau untuk *Research*, Ungu untuk *Thesis*) serta nilai skor kemiripan numerik.
-6. **Penanda Halaman Spesifik (*Direct Page Jump*)**: Menampilkan nomor halaman tepat di mana informasi ditemukan (misal: `Halaman 12-14`), menghemat waktu pembaca tanpa perlu mencari manual di file PDF 100+ halaman.
-7. **Modal Pratinjau Terperinci (*Document Detail Dialog*)**: Menampilkan abstrak lengkap, daftar penulis, lisensi berkas, nama mata kuliah, institusi, dan SHA-256 dokumen asli.
+5. **Badge Metadata & Relevansi Dokumen Utuh**: Setiap kartu hasil dilengkapi badge warna kategori korpus, skor relevansi kualitatif (*Sangat Relevan / Relevan / Cukup Relevan*), jumlah total halaman fisik, serta daftar nomor halaman yang membahas kueri (`Relevan di Hal. 1, 4, 10`).
+6. **Penyajian Abstrak Dokumen Resmi**: Menampilkan teks abstrak dokumen utuh asli pada kartu hasil pencarian, menggantikan potongan teks acak yang terfragmentasi.
+7. **In-App Full Document Reader (`DocumentReaderDialog`)**: Pengguna dapat membaca keseluruhan halaman fisik dokumen langsung di dalam aplikasi tanpa harus mengunduh file PDF besar atau meninggalkan halaman web. Mendukung navigasi halaman fisik (*Sebelumnya / Selanjutnya / Jump to Page*), *continuous scrolling*, dan penyalinan teks per halaman.
+8. **Penyorotan Kata Kunci Otomatis (*Query-Term Highlighting*)**: Istilah kueri pencarian otomatis disorot dengan latar belakang kuning pada seluruh halaman teks dokumen yang sedang dibaca di dalam reader.
+9. **Pintasan Halaman Relevan (*Quick-Jump Chips*)**: Bilah kontrol pembaca dokumen menyediakan tombol-tombol chip halaman relevan (`[Hal. 1] [Hal. 4] [Hal. 10]`) yang dapat diklik untuk melompat langsung ke halaman yang memuat bukti jawaban kueri.
+10. **Akses Langsung ke Peringkasan AI (*Seamless AI Summarization Handoff*)**: Pengguna dapat beralih dalam satu klik dari pembaca dokumen ke modal peringkasan cerdas TextRank + MMR, atau sebaliknya.
+
+#### C. Wireframe Modal Pembaca Dokumen Utuh (*In-App Full Document Reader Dialog*)
+```text
++----------------------------------------------------------------------------------------------------+
+| [Buku] Pembaca Dokumen Lengkap                                                               [ X ] |
+| Judul: Analisis Perancangan Sistem Informasi Berorientasi Objek                                    |
+| [BAHAN KULIAH]  [OCW UI]  [2023]  [26 Halaman Fisik]  [Bahasa: ID]                                 |
++----------------------------------------------------------------------------------------------------+
+| Navigasi: [ < Sebelumnya ]  Hal. 4 dari 26  [ Selanjutnya > ]  | Lompat ke Hal: [ 4 ] [ Go ]       |
+| Halaman Relevan Kueri: [Hal. 1] [*Hal. 4*] [Hal. 8] [Hal. 15]  | Mode: [Per Halaman | Semua Hal]   |
++----------------------------------------------------------------------------------------------------+
+| +------------------------------------------------------------------------------------------------+ |
+| | [KOTAK ABSTRAK RESMI DOKUMEN]                                                                  | |
+| | Dokumen ini membahas tahapan analisis dan perancangan sistem berorientasi objek menggunakan... | |
+| +------------------------------------------------------------------------------------------------+ |
+|                                                                                                    |
+| HALAMAN 4 (412 kata):                                                                              |
+| "...Pada tahapan ini, [use case diagram] digunakan untuk memodelkan interaksi antara [aktor] dan   |
+| [sistem informasi]. Setiap [use case] merepresentasikan fungsionalitas utama yang disediakan..."   |
+|                                                                                                    |
+| (Catatan: Kata kunci kueri di atas otomatis tersorot kuning / highlighted)                         |
+|                                                                                                    |
++----------------------------------------------------------------------------------------------------+
+| [ Sparkles: Ringkas Dokumen Ini ]   [ Unduh / Buka Dokumen Asli ]                  [ Tutup Reader] |
++----------------------------------------------------------------------------------------------------+
+```
 
 ---
 
@@ -642,7 +706,7 @@ Antarmuka pengguna didesain dengan prinsip kesederhanaan, keterbacaan tinggi (*h
 Pengujian fungsionalitas sistem dilakukan menggunakan metode pengujian kotak hitam (*Black-box Testing*) untuk memvalidasi bahwa setiap modul bekerja sesuai spesifikasi kebutuhan perangkat lunak tanpa memandang kode internal:
 
 | ID Uji | Modul / Skenario Pengujian | Masukan (*Input*) | Tindakan Pengujian | Keluaran yang Diharapkan (*Expected Output*) | Kriteria Keberhasilan |
-| :---: | :--- | :--- | :--- | :--- | :---: |
+| :---: | :--- | :--- | :--- | :--- | :--- |
 | **TC-01** | Pencarian Normal Kueri Tunggal | Kueri: `"algoritma"` | Pengguna mengetik kueri dan menekan tombol *Cari* | Sistem menampilkan daftar kartu hasil relevan yang memuat term "algoritma" dengan skor terurut menurun. | Lolos jika kartu hasil muncul dan skor terurut |
 | **TC-02** | Pencarian Multi-Kata Dwibahasa | Kueri: `"machine learning sistem pakar"` | Pengguna mengirimkan kueri gabungan Bahasa Inggris dan Indonesia | Pipeline preprocessing memisahkan stopword kedua bahasa, melakukan stemming ganda, dan mengembalikan hasil akurat. | Lolos jika kueri dwibahasa diproses tanpa eror |
 | **TC-03** | Pencarian Kueri Kosong / Spasi | Kueri: `"   "` (hanya spasi) | Pengguna menekan tombol cari tanpa memasukkan karakter valid | Sistem tidak mengirim request pencarian ke backend dan menampilkan pesan peringatan ramah bagi pengguna. | Lolos jika tidak terjadi crash atau blank page |
@@ -658,6 +722,12 @@ Pengujian fungsionalitas sistem dilakukan menggunakan metode pengujian kotak hit
 | **TC-13** | Mekanisme Fallback Otomatis Kueri Typo | Kueri: `"menggunkan bert"`, Mode: `auto` | Pengguna mencari kueri yang mengalami typo | Sistem mendeteksi hasil eksak minim, memicu fallback ke kueri baku "menggunakan BERT", mengembalikan 15 dokumen, dan merender Recovery Banner. | Lolos jika kueri typo dipulihkan dan dokumen relevan muncul |
 | **TC-14** | Pemulihan Singkatan & Ejaan Baku | Kueri: `"NLP"`, `"analisa sentimen"` | Pengguna mengirimkan singkatan atau variasi ejaan | Sistem mengenali singkatan "NLP" -> "Natural Language Processing" dan ejaan "analisa" -> "analisis" tanpa kesalahan interpretasi. | Lolos jika kueri dipetakan ke bentuk baku |
 | **TC-15** | Perlindungan Istilah Teknis (*Protected Terms*) | Kueri: `"pemrograman C++"`, `"TF-IDF"` | Pengguna mencari istilah pemrograman dengan simbol khusus | Tokenizer khusus melindungi karakter `++` dan `-`, mencegah korupsi menjadi "pemrograman C" atau "TF IDF". | Lolos jika istilah teknis terlindungi utuh |
+| **TC-16** | Pembaca Dokumen Utuh (*In-App Reader*) | Klik tombol *"Baca Dokumen Lengkap"* pada kartu hasil | Pengguna mengklik tombol pembaca dokumen utuh | Modal `DocumentReaderDialog` terbuka, memuat seluruh halaman fisik dari database SQLite (`GET /api/documents/{id}/pages`), menampilkan total halaman dan teks halaman 1. | Lolos jika seluruh halaman termuat lengkap |
+| **TC-17** | Navigasi & Pintasan Halaman Relevan | Klik chip `[Hal. 4]` atau tombol `[Selanjutnya]` | Pengguna berpindah halaman atau mengklik pintasan halaman relevan | Halaman aktif berpindah secara instan ke nomor halaman yang dituju dan menampilkan teks halaman tersebut secara mulus. | Lolos jika teks berganti sesuai nomor halaman terpilih |
+| **TC-18** | Penyorotan Kata Kunci pada Reader | Buka dokumen dengan kueri `"algoritma"` | Pengguna membaca halaman dokumen yang memuat kata kueri | Seluruh kemunculan kata "algoritma" di teks halaman tersorot warna kuning cerah secara otomatis. | Lolos jika term kueri tersorot visual |
+| **TC-19** | Peringkasan Teks Ekstraktif Dokumen | Klik tombol *"Ringkasan AI"* | Pengguna meminta ringkasan intisari dokumen | Modal `SummaryDialog` memuat ringkasan berbasis TextRank + MMR, menampilkan kalimat inti beserta atribusi nomor halaman fisik asli. | Lolos jika ringkasan muncul berdasar kalimat dokumen asli |
+| **TC-20** | Ekstraksi Bukti Kueri Lintas Bahasa | Kueri ID pada paper EN | Pengguna membuka tab *"Relevansi Kueri"* | Sistem menyajikan kalimat-kalimat bukti berbahasa Inggris yang menjawab kueri bahasa Indonesia dengan skor similaritas dan nomor halaman. | Lolos jika bukti kalimat lintas bahasa relevan |
+| **TC-21** | Akselerasi Cache Ringkasan Dokumen | Permintaan ringkasan kedua untuk dokumen yang sama | Pengguna membuka kembali ringkasan dokumen | Sistem mengambil ringkasan dari tabel `document_summaries` dengan latensi sub-5ms (**1,7–2,1 ms**) tanpa komputasi ulang TextRank. | Lolos jika latensi < 5 ms dan data identik |
 
 ---
 
@@ -1065,20 +1135,43 @@ Evaluasi empiris dijalankan menggunakan skrip benchmark resmi [`scripts/evaluate
 
 ---
 
+# V. KESIMPULAN DAN RENCANA PENGEMBANGAN TAHAP II
+
+### 5.1 Kesimpulan
+Berdasarkan hasil analisis, perancangan arsitektur, implementasi perangkat lunak, dan evaluasi empiris yang telah dilaksanakan pada Proyek Tahap I, dapat diambil kesimpulan sebagai berikut:
+1. **Keberhasilan Integrasi Multi-Korpus Akademik**: Perangkat lunak **Academic IR** berhasil mengintegrasikan tiga pilar repositori akademik yang sebelumnya terisolasi (*Bahan Kuliah OCW UI, Artikel Jurnal Riset DOAJ/arXiv, dan Skripsi Institusi*) ke dalam satu indeks terpadu berskala representatif yang mencakup **1.364 dokumen**, **56.881 unit potongan teks (*chunks*)**, serta **50.218 halaman fisik asli**.
+2. **Superioritas Empiris Model Probabilistik Okapi BM25**: Pengujian benchmark pada 33 kueri terstruktur membuktikan keunggulan Okapi BM25 ($k_1=1.5, b=0.75$) dibanding TF-IDF Vector Space Model konvensional pada literatur akademik, ditandai dengan peningkatan signifikan pada **MAP (+48.4%, 0.1235 vs 0.0832)**, peningkatan **NDCG@10 (+20.2%, 0.2992 vs 0.2490)**, serta latensi pemrosesan 9 kali lebih cepat (**P50: 83.71 ms vs 751.84 ms**). Modul agregasi dokumen `max+2nd` secara efektif melenyapkan bias dominasi dokumen tebal.
+3. **Ketangguhan Penanganan Kueri Melalui Tolerant Retrieval**: Lapisan *Tolerant Retrieval* dengan prinsip *Exact-First Priority* berhasil menormalisasi variasi ejaan akademik, memetakan singkatan teknis, serta memulihkan kesalahan pengetikan (*typo*) secara adaptif tanpa mengorbankan performa kueri eksak, didukung oleh transparansi *audit log* dan antarmuka *live suggestion autocomplete*.
+4. **Penyelesaian Dilema Penyajian Temu Kembali Informasi (*Full Document Delivery*)**: Sistem berhasil menjembatani paradoks antara *passage retrieval* (yang mutlak dibutuhkan untuk mencegah *term dilution* pada dokumen multi-halaman) dan kebutuhan pembacaan dokumen utuh oleh pengguna. Melalui kartu hasil yang menampilkan abstrak resmi dan peta halaman relevan, serta penyediaan modul **In-App Full Document Reader** yang terhubung langsung ke tabel `pages`, pengguna dapat membaca seluruh halaman fisik dokumen secara berkesinambungan dengan penyorotan kata kunci kueri otomatis.
+5. **Peringkasan Teks Cerdas Bebas Halusinasi**: Modul *Text Summarization* berbasis graf sentralitas kalimat **TextRank** dan eliminasi redundansi **MMR ($\lambda=0.70$)** berhasil menghasilkan intisari dokumen yang 100% faktual berdasar kalimat dokumen asli, mendukung ekstraksi bukti lintas bahasa (kueri Indonesia $\rightarrow$ paper Inggris), serta menyajikan waktu respons instan (**1,7–2,1 ms**) berkat persistensi tabel *cache* SQLite.
+
+### 5.2 Rencana Pengembangan Tahap Selanjutnya (Roadmap Tahap II)
+Untuk menyempurnakan sistem pada pengembangan tahap selanjutnya, direncanakan beberapa peningkatan strategis:
+1. **Penerapan Pencarian Hibrida (*Hybrid Sparse-Dense Retrieval*)**: Memadukan kekuatan penelusuran leksikal Okapi BM25 dengan penelusuran semantik padat (*Dense Retrieval*) berbasis model *embedding* multibahasa (seperti *BGE-M3* atau *ColBERT*) menggunakan algoritma penggabungan peringkat *Reciprocal Rank Fusion (RRF)* untuk mengatasi kesenjangan kosakata (*vocabulary mismatch*).
+2. **Neural Re-ranking Lapisan Kedua (*Cross-Encoder Re-ranking*)**: Menambahkan modul pemeringkatan ulang (*re-ranker*) berbobot ringan (*FlashRank / MiniLM*) pada Top-50 kandidat dokumen hasil BM25 untuk memperhitungkan interaksi semantik mendalam antara kueri dan konteks dokumen.
+3. **Evaluasi Pengalaman Pengguna Formal (*Formal User Usability Study*)**: Melakukan pengujian kegunaan berbasis skenario tugas (*task-based user study*) dengan kuesioner *System Usability Scale (SUS)* yang melibatkan mahasiswa dan dosen untuk mengukur peningkatan efisiensi penemuan literatur akademik secara kuantitatif di lingkungan nyata.
+
+---
+
 # DAFTAR PUSTAKA
 
 1. **Manning, C. D., Raghavan, P., & Schütze, H.** (2008). *Introduction to Information Retrieval*. Cambridge University Press.
 2. **Salton, G., & Buckley, C.** (1988). Term-weighting approaches in automatic text retrieval. *Information Processing & Management*, 24(5), 513–523.
 3. **Baeza-Yates, R., & Ribeiro-Neto, B.** (2011). *Modern Information Retrieval: The Concepts and Technology behind Search* (2nd ed.). Addison-Wesley.
 4. **Robertson, S. E., & Jones, K. S.** (1976). Relevance weighting of search terms. *Journal of the American Society for Information Science*, 27(3), 129–146.
-5. **Järvelin, K., & Kekäläinen, J.** (2002). Cumulated gain-based evaluation of retrieval techniques. *ACM Transactions on Information Systems (TOIS)*, 20(4), 422–446.
-6. **Asian, J., Williams, H. E., & Tahaghoghi, S. M.** (2005). Stemming Indonesian: A confix-stripping approach. *ACM Transactions on Asian Language Information Processing (TALIP)*, 4(4), 407–426.
-7. **Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Duchesnay, É.** (2011). Scikit-learn: Machine learning in Python. *Journal of Machine Learning Research*, 12, 2825–2830.
-8. **Tiangolo, S.** (2023). *FastAPI: Modern, Fast (High-Performance), Web Framework for Building APIs with Python 3.8+*. Dokumen daring: `https://fastapi.tiangolo.com`.
-9. **Next.js Team (Vercel)**. (2024). *Next.js 15 Documentation: The React Framework for the Web*. Dokumen daring: `https://nextjs.org/docs`.
-10. **OpenCourseWare Universitas Indonesia**. (2026). *OCW UI — Free and Open Educational Resources*. `https://ocw.ui.ac.id`.
-11. **Mihalcea, R., & Tarau, P.** (2004). TextRank: Bringing order into texts. In *Proceedings of the 2004 Conference on Empirical Methods in Natural Language Processing (EMNLP)*, 404–411.
-12. **Carbonell, J., & Goldstein, J.** (1998). The use of MMR, diversity-based reranking for reordering documents and producing summaries. In *Proceedings of the 21st Annual International ACM SIGIR Conference*, 335–336.
-13. **Erkan, G., & Radev, D. R.** (2004). LexRank: Graph-based lexical centrality as salience in text summarization. *Journal of Artificial Intelligence Research*, 22, 457–479.
-14. **Reimers, N., & Gurevych, I.** (2019). Sentence-BERT: Sentence embeddings using Siamese BERT-networks. In *Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing (EMNLP)*, 3982–3992.
+5. **Robertson, S. E., & Zaragoza, H.** (2009). The probabilistic relevance framework: BM25 and beyond. *Foundations and Trends in Information Retrieval*, 3(4), 333–389.
+6. **Callan, J. P.** (1994). Passage-level retrieval of unstructured, informative documents. In *Proceedings of the 17th Annual International ACM SIGIR Conference*, 189–198.
+7. **Kaszkiel, M., & Zobel, J.** (1997). Passage retrieval revisited. In *Proceedings of the 20th Annual International ACM SIGIR Conference*, 178–185.
+8. **Järvelin, K., & Kekäläinen, J.** (2002). Cumulated gain-based evaluation of retrieval techniques. *ACM Transactions on Information Systems (TOIS)*, 20(4), 422–446.
+9. **Asian, J., Williams, H. E., & Tahaghoghi, S. M.** (2005). Stemming Indonesian: A confix-stripping approach. *ACM Transactions on Asian Language Information Processing (TALIP)*, 4(4), 407–426.
+10. **Damerau, F. J.** (1964). A technique for computer detection and correction of spelling errors. *Communications of the ACM*, 7(3), 171–176.
+11. **Levenshtein, V. I.** (1966). Binary codes capable of correcting deletions, insertions, and reversals. *Soviet Physics Doklady*, 10(8), 707–710.
+12. **Mihalcea, R., & Tarau, P.** (2004). TextRank: Bringing order into texts. In *Proceedings of the 2004 Conference on Empirical Methods in Natural Language Processing (EMNLP)*, 404–411.
+13. **Carbonell, J., & Goldstein, J.** (1998). The use of MMR, diversity-based reranking for reordering documents and producing summaries. In *Proceedings of the 21st Annual International ACM SIGIR Conference*, 335–336.
+14. **Erkan, G., & Radev, D. R.** (2004). LexRank: Graph-based lexical centrality as salience in text summarization. *Journal of Artificial Intelligence Research*, 22, 457–479.
+15. **Reimers, N., & Gurevych, I.** (2019). Sentence-BERT: Sentence embeddings using Siamese BERT-networks. In *Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing (EMNLP)*, 3982–3992.
+16. **Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Duchesnay, É.** (2011). Scikit-learn: Machine learning in Python. *Journal of Machine Learning Research*, 12, 2825–2830.
+17. **Tiangolo, S.** (2023). *FastAPI: Modern, Fast (High-Performance), Web Framework for Building APIs with Python 3.8+*. Dokumen daring: `https://fastapi.tiangolo.com`.
+18. **Next.js Team (Vercel)**. (2024). *Next.js 15 Documentation: The React Framework for the Web*. Dokumen daring: `https://nextjs.org/docs`.
+19. **OpenCourseWare Universitas Indonesia**. (2026). *OCW UI — Free and Open Educational Resources*. `https://ocw.ui.ac.id`.
 
