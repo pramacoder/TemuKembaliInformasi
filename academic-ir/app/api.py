@@ -102,6 +102,10 @@ class SearchResultItem(BaseModel):
     source_url: Optional[str]
     doi: Optional[str]
     keywords: list[str]
+    # Full document fields
+    abstract: Optional[str] = None
+    matched_pages: list[int] = []
+    page_count: Optional[int] = None
     # Document aggregation info
     best_page_start: Optional[int]
     best_page_end: Optional[int]
@@ -282,6 +286,9 @@ def search(
             source_url=r.get("source_url"),
             doi=r.get("doi"),
             keywords=keywords,
+            abstract=r.get("abstract"),
+            matched_pages=r.get("matched_pages", []),
+            page_count=r.get("page_count"),
             best_page_start=r.get("best_page_start"),
             best_page_end=r.get("best_page_end"),
             chunk_count=r.get("chunk_count"),
@@ -337,6 +344,99 @@ def get_document(document_id: str):
                 except Exception:
                     pass
         return d
+    finally:
+        conn.close()
+
+
+@app.get("/api/documents/{document_id}/pages")
+def get_document_pages(
+    document_id: str,
+    q: Optional[str] = Query(None, description="Optional search query to flag matched pages"),
+):
+    """
+    Retrieve all pages of a document for full-text reading in the document reader.
+    Includes page-by-page text, word count, and query match indicators.
+    """
+    if not db:
+        raise HTTPException(status_code=503, detail="Database not loaded.")
+    conn = db.get_connection()
+    try:
+        doc_row = conn.execute("SELECT * FROM documents WHERE document_id = ?", (document_id,)).fetchone()
+        if not doc_row:
+            raise HTTPException(status_code=404, detail=f"Document {document_id} not found.")
+        doc_dict = dict(doc_row)
+        for json_col in ("authors", "keywords"):
+            if doc_dict.get(json_col):
+                try:
+                    doc_dict[json_col] = json.loads(doc_dict[json_col])
+                except Exception:
+                    pass
+
+        page_rows = conn.execute(
+            """
+            SELECT page_number, raw_text, clean_text, word_count
+            FROM pages
+            WHERE document_id = ?
+            ORDER BY page_number ASC
+            """,
+            (document_id,),
+        ).fetchall()
+
+        query_tokens = [t.lower() for t in q.split()] if q else []
+
+        pages = []
+        if page_rows:
+            for r in page_rows:
+                text = (r["raw_text"] or r["clean_text"] or "").strip()
+                text_lower = text.lower()
+                has_match = any(token in text_lower for token in query_tokens) if query_tokens else False
+                pages.append({
+                    "page_number": r["page_number"],
+                    "text": text,
+                    "word_count": r["word_count"] or len(text.split()),
+                    "has_match": has_match,
+                })
+
+        # Fallback to chunks if no pages table rows
+        if not pages:
+            chunk_rows = conn.execute(
+                """
+                SELECT chunk_index, page_start, raw_text, clean_text, word_count
+                FROM chunks
+                WHERE document_id = ?
+                ORDER BY chunk_index ASC
+                """,
+                (document_id,),
+            ).fetchall()
+            for c in chunk_rows:
+                text = (c["raw_text"] or c["clean_text"] or "").strip()
+                text_lower = text.lower()
+                has_match = any(token in text_lower for token in query_tokens) if query_tokens else False
+                pages.append({
+                    "page_number": c["page_start"] or (c["chunk_index"] + 1),
+                    "text": text,
+                    "word_count": c["word_count"] or len(text.split()),
+                    "has_match": has_match,
+                })
+
+        matched_p_nums = [p["page_number"] for p in pages if p["has_match"]]
+
+        return {
+            "document_id": document_id,
+            "title": doc_dict.get("title") or "Dokumen Akademik",
+            "document_type": doc_dict.get("document_type"),
+            "authors": doc_dict.get("authors") or [],
+            "year": doc_dict.get("year"),
+            "institution": doc_dict.get("institution"),
+            "course": doc_dict.get("course"),
+            "language": doc_dict.get("language"),
+            "abstract": doc_dict.get("abstract"),
+            "source": doc_dict.get("source"),
+            "source_url": doc_dict.get("source_url"),
+            "total_pages": len(pages),
+            "matched_pages": matched_p_nums,
+            "pages": pages,
+        }
     finally:
         conn.close()
 

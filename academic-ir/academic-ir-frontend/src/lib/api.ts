@@ -28,6 +28,9 @@ export interface SearchResult {
   source_url: string | null;
   doi: string | null;
   keywords: string[];
+  abstract?: string | null;
+  matched_pages?: number[];
+  page_count?: number | null;
 }
 
 export interface TolerantCorrection {
@@ -213,6 +216,48 @@ export async function fetchQuerySummary(
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
     throw new Error(err.detail ?? "Gagal mengambil ringkasan relevan");
+  }
+  return res.json();
+}
+
+// ─── Full Document Pages Reader API ───────────────────────────────────────────
+
+export interface DocumentPageItem {
+  page_number: number;
+  text: string;
+  word_count: number;
+  has_match: boolean;
+}
+
+export interface DocumentPagesResponse {
+  document_id: string;
+  title: string;
+  document_type: DocumentType;
+  authors: string[];
+  year: number | null;
+  institution: string | null;
+  course: string | null;
+  language: string | null;
+  abstract: string | null;
+  source: string;
+  source_url: string | null;
+  total_pages: number;
+  matched_pages: number[];
+  pages: DocumentPageItem[];
+}
+
+export async function fetchDocumentPages(
+  documentId: string,
+  query?: string
+): Promise<DocumentPagesResponse> {
+  const params = new URLSearchParams();
+  if (query) params.set("q", query);
+  const res = await fetch(
+    `${API_BASE}/api/documents/${encodeURIComponent(documentId)}/pages?${params.toString()}`
+  );
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail ?? "Gagal mengambil teks lengkap dokumen");
   }
   return res.json();
 }

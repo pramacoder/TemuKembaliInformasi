@@ -12,8 +12,9 @@ import {
   type SearchResult,
 } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { Calendar, ExternalLink, FileText, Globe, Layers, Tag, Users, Sparkles } from "lucide-react";
+import { Calendar, ExternalLink, FileText, Globe, Layers, Tag, Users, Sparkles, BookOpen } from "lucide-react";
 import { SummaryDialog } from "@/components/summary-dialog";
+import { DocumentReaderDialog } from "@/components/document-reader-dialog";
 
 interface ResultCardProps {
   result: SearchResult;
@@ -22,6 +23,7 @@ interface ResultCardProps {
 
 export function ResultCard({ result, activeQuery = "" }: ResultCardProps) {
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [isReaderOpen, setIsReaderOpen] = useState(false);
 
   // Qualitative relevance label (expert plan §19)
   const score = result.relevance_score;
@@ -121,10 +123,22 @@ export function ResultCard({ result, activeQuery = "" }: ResultCardProps) {
             </span>
           )}
 
-          {result.chunk_count && result.chunk_count > 1 && (
+          {result.matched_pages && result.matched_pages.length > 0 ? (
+            <span className="flex items-center gap-1 text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
+              <Layers className="h-3 w-3" />
+              Relevan di Hal. {result.matched_pages.slice(0, 4).join(", ")}{result.matched_pages.length > 4 ? "..." : ""}
+            </span>
+          ) : result.chunk_count && result.chunk_count > 1 ? (
             <span className="flex items-center gap-1 text-xs text-muted-foreground">
               <Layers className="h-3 w-3" />
-              {result.chunk_count} bagian cocok
+              {result.chunk_count} bagian relevan
+            </span>
+          ) : null}
+
+          {result.page_count && result.page_count > 1 && (
+            <span className="flex items-center gap-1 text-xs text-muted-foreground">
+              <FileText className="h-3 w-3" />
+              {result.page_count} Hal. Total
             </span>
           )}
 
@@ -161,11 +175,27 @@ export function ResultCard({ result, activeQuery = "" }: ResultCardProps) {
 
         <Separator />
 
-        {/* Snippet */}
-        {result.snippet ? (
-          <p className="text-sm text-foreground/80 leading-relaxed line-clamp-4">
-            {result.snippet}
-          </p>
+        {/* Abstract or Snippet */}
+        {result.abstract ? (
+          <div className="space-y-1">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-primary/80 flex items-center gap-1">
+              <FileText className="h-3 w-3" />
+              Abstrak Dokumen Utuh
+            </span>
+            <p className="text-sm text-foreground/85 leading-relaxed line-clamp-3">
+              {result.abstract}
+            </p>
+          </div>
+        ) : result.snippet ? (
+          <div className="space-y-1">
+            <span className="text-[11px] font-medium text-muted-foreground flex items-center gap-1">
+              <FileText className="h-3 w-3" />
+              Cuplikan Halaman Terkait ({pageDisplay || "Bagian Relevan"}):
+            </span>
+            <p className="text-sm text-foreground/80 leading-relaxed line-clamp-3 italic">
+              "{result.snippet}"
+            </p>
+          </div>
         ) : (
           <p className="text-sm text-muted-foreground italic">Pratinjau tidak tersedia.</p>
         )}
@@ -184,20 +214,14 @@ export function ResultCard({ result, activeQuery = "" }: ResultCardProps) {
 
         {/* Actions */}
         <div className="flex items-center gap-2 pt-1 flex-wrap">
-          {openUrl ? (
-            <Button
-              size="sm"
-              className="h-7 text-xs gap-1.5"
-              onClick={() => window.open(openUrl, "_blank")}
-            >
-              <ExternalLink className="h-3 w-3" />
-              Buka Dokumen
-            </Button>
-          ) : (
-            <Button size="sm" variant="outline" className="h-7 text-xs" disabled>
-              URL tidak tersedia
-            </Button>
-          )}
+          <Button
+            size="sm"
+            className="h-7 text-xs gap-1.5 font-medium shadow-sm"
+            onClick={() => setIsReaderOpen(true)}
+          >
+            <BookOpen className="h-3 w-3" />
+            Baca Dokumen Lengkap
+          </Button>
 
           <Button
             size="sm"
@@ -206,11 +230,23 @@ export function ResultCard({ result, activeQuery = "" }: ResultCardProps) {
             onClick={() => setIsSummaryOpen(true)}
           >
             <Sparkles className="h-3 w-3" />
-            Ringkasan
+            Ringkasan AI
           </Button>
 
+          {openUrl && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-7 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
+              onClick={() => window.open(openUrl, "_blank")}
+            >
+              <ExternalLink className="h-3 w-3" />
+              Tautan Luar
+            </Button>
+          )}
+
           {pageDisplay && (
-            <span className="text-xs text-muted-foreground font-medium">{pageDisplay}</span>
+            <span className="text-xs text-muted-foreground font-medium ml-auto">{pageDisplay}</span>
           )}
           {result.doi && (
             <span className="text-xs text-muted-foreground font-mono truncate max-w-[160px]">
@@ -227,6 +263,19 @@ export function ResultCard({ result, activeQuery = "" }: ResultCardProps) {
           documentTitle={result.title}
           activeQuery={activeQuery}
           documentType={result.document_type}
+        />
+
+        {/* Full Document Reader Dialog */}
+        <DocumentReaderDialog
+          isOpen={isReaderOpen}
+          onClose={() => setIsReaderOpen(false)}
+          documentId={result.document_id}
+          initialPage={result.best_page_start || result.page || 1}
+          activeQuery={activeQuery}
+          onOpenSummary={() => {
+            setIsReaderOpen(false);
+            setIsSummaryOpen(true);
+          }}
         />
       </CardContent>
     </Card>

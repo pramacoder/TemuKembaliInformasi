@@ -115,6 +115,7 @@ def aggregate_by_document(
             "best_page_start": best_chunk.get("page_start"),
             "best_page_end": best_chunk.get("page_end"),
             "matched_chunks": matched_chunks,
+            "matched_pages": sorted(list(set(c.get("page_start") for c in chunks if c.get("page_start") is not None))),
 
             # Document metadata (from best chunk)
             "title": best_chunk.get("title", ""),
@@ -129,6 +130,7 @@ def aggregate_by_document(
             "local_path": best_chunk.get("local_path", ""),
             "abstract": best_chunk.get("abstract", ""),
             "keywords": best_chunk.get("keywords", ""),
+            "page_count": best_chunk.get("page_count"),
 
             # Evidence snippet from best-scoring chunk
             "snippet": best_chunk.get("snippet", best_chunk.get("raw_text", "")[:200]),
