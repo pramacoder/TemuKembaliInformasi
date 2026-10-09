@@ -145,3 +145,74 @@ export async function fetchProvenance() {
   const res = await fetch(`${API_BASE}/api/provenance`);
   return res.json();
 }
+
+// ─── Text Summarization API ───────────────────────────────────────────────────
+
+export interface SentenceItem {
+  text: string;
+  page?: number | null;
+  score: number;
+  order_idx: number;
+}
+
+export interface SummaryResponse {
+  document_id: string;
+  title: string;
+  summary_type: "document" | "query_focused";
+  query_text?: string | null;
+  language: string;
+  algorithm: string;
+  summary_text: string;
+  key_sentences: SentenceItem[];
+  source_pages: number[];
+  sentence_count: number;
+  processing_time_ms: number;
+  cached: boolean;
+  status: "success" | "insufficient_text" | "not_found" | "error";
+  error_message?: string | null;
+}
+
+export async function fetchDocumentSummary(
+  documentId: string,
+  maxSentences = 4,
+  forceRefresh = false
+): Promise<SummaryResponse> {
+  const params = new URLSearchParams({
+    max_sentences: String(maxSentences),
+    force_refresh: String(forceRefresh),
+  });
+  const res = await fetch(`${API_BASE}/api/documents/${encodeURIComponent(documentId)}/summary?${params.toString()}`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail ?? "Gagal mengambil ringkasan dokumen");
+  }
+  return res.json();
+}
+
+export async function fetchQuerySummary(
+  documentId: string,
+  query: string,
+  maxSentences = 4,
+  forceRefresh = false
+): Promise<SummaryResponse> {
+  const params = new URLSearchParams({
+    force_refresh: String(forceRefresh),
+  });
+  const res = await fetch(
+    `${API_BASE}/api/documents/${encodeURIComponent(documentId)}/query-summary?${params.toString()}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query,
+        max_sentences: maxSentences,
+        lambda_param: 0.7,
+      }),
+    }
+  );
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail ?? "Gagal mengambil ringkasan relevan");
+  }
+  return res.json();
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -11,13 +12,17 @@ import {
   type SearchResult,
 } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { Calendar, ExternalLink, FileText, Globe, Layers, Tag, Users } from "lucide-react";
+import { Calendar, ExternalLink, FileText, Globe, Layers, Tag, Users, Sparkles } from "lucide-react";
+import { SummaryDialog } from "@/components/summary-dialog";
 
 interface ResultCardProps {
   result: SearchResult;
+  activeQuery?: string;
 }
 
-export function ResultCard({ result }: ResultCardProps) {
+export function ResultCard({ result, activeQuery = "" }: ResultCardProps) {
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+
   // Qualitative relevance label (expert plan §19)
   const score = result.relevance_score;
   let relevanceLabel = "Kurang Relevan";
@@ -178,7 +183,7 @@ export function ResultCard({ result }: ResultCardProps) {
         )}
 
         {/* Actions */}
-        <div className="flex items-center gap-2 pt-1">
+        <div className="flex items-center gap-2 pt-1 flex-wrap">
           {openUrl ? (
             <Button
               size="sm"
@@ -193,6 +198,17 @@ export function ResultCard({ result }: ResultCardProps) {
               URL tidak tersedia
             </Button>
           )}
+
+          <Button
+            size="sm"
+            variant="secondary"
+            className="h-7 text-xs gap-1.5 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 font-medium"
+            onClick={() => setIsSummaryOpen(true)}
+          >
+            <Sparkles className="h-3 w-3" />
+            Ringkasan
+          </Button>
+
           {pageDisplay && (
             <span className="text-xs text-muted-foreground font-medium">{pageDisplay}</span>
           )}
@@ -202,6 +218,16 @@ export function ResultCard({ result }: ResultCardProps) {
             </span>
           )}
         </div>
+
+        {/* Modal Dialog for Summarization */}
+        <SummaryDialog
+          isOpen={isSummaryOpen}
+          onClose={() => setIsSummaryOpen(false)}
+          documentId={result.document_id}
+          documentTitle={result.title}
+          activeQuery={activeQuery}
+          documentType={result.document_type}
+        />
       </CardContent>
     </Card>
   );

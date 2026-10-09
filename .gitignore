@@ -34,9 +34,12 @@ dist/
 academic-ir/academic-ir-frontend/tsconfig.tsbuildinfo
 academic-ir/academic-ir-frontend/.turbo/
 
-# Large Document Data (PDF files & raw crawlers)
+# Large Document Data (PDF files & raw crawlers & archives)
 *.pdf
 *.PDF
+*.zip
+*.tar.gz
+*.7z
 academic-ir/data/raw/
 academic-ir/data/extracted/
 dataset_ocw_ui/

@@ -92,6 +92,26 @@ CREATE TABLE IF NOT EXISTS ingestion_logs (
 );
 
 -- =================================================================
+-- Text summarization cache (extractive & query-focused)
+-- =================================================================
+CREATE TABLE IF NOT EXISTS document_summaries (
+    id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+    document_id         TEXT NOT NULL,
+    summary_type        TEXT NOT NULL,        -- 'document' or 'query_focused'
+    query_text          TEXT,                 -- NULL if summary_type = 'document'
+    summary_text        TEXT NOT NULL,
+    language            TEXT NOT NULL,        -- 'id', 'en', 'mixed'
+    algorithm           TEXT NOT NULL,        -- 'textrank_mmr' or 'multilingual_embedding_mmr'
+    key_sentences_json  TEXT NOT NULL,        -- JSON array: [{text, page, score}]
+    source_pages_json   TEXT NOT NULL,        -- JSON array: [1, 3, 5]
+    sentence_count      INTEGER NOT NULL,
+    processing_time_ms  REAL NOT NULL,
+    created_at          DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (document_id) REFERENCES documents(document_id),
+    UNIQUE(document_id, summary_type, query_text)
+);
+
+-- =================================================================
 -- Indexes for common queries
 -- =================================================================
 CREATE INDEX IF NOT EXISTS idx_documents_type ON documents(document_type);
@@ -102,6 +122,7 @@ CREATE INDEX IF NOT EXISTS idx_documents_collection_status ON documents(collecti
 CREATE INDEX IF NOT EXISTS idx_pages_document_id ON pages(document_id);
 CREATE INDEX IF NOT EXISTS idx_chunks_document_id ON chunks(document_id);
 CREATE INDEX IF NOT EXISTS idx_ingestion_logs_document_id ON ingestion_logs(document_id);
+CREATE INDEX IF NOT EXISTS idx_summaries_doc ON document_summaries(document_id, summary_type);
 """
 
 

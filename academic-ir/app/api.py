@@ -32,6 +32,8 @@ from src.preprocessing.pipeline import PreprocessingPipeline
 from src.retrieval.search import SearchEngine
 from src.retrieval.ranking import rank_results
 from src.retrieval.snippet import generate_snippet
+from src.summarization.schemas import SummaryResponse, QuerySummaryRequest
+from src.summarization.service import get_summarization_service
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -313,6 +315,79 @@ def get_suggestions(
         expanded_terms=data.get("expanded_terms", []),
         confidence=data.get("confidence", 1.0),
     )
+
+
+# ─── Document Detail & Summarization Endpoints ─────────────────────────────────
+
+@app.get("/api/documents/{document_id}")
+def get_document(document_id: str):
+    """Retrieve full metadata for a specific document."""
+    if not db:
+        raise HTTPException(status_code=503, detail="Database not loaded.")
+    conn = db.get_connection()
+    try:
+        row = conn.execute("SELECT * FROM documents WHERE document_id = ?", (document_id,)).fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail=f"Document {document_id} not found.")
+        d = dict(row)
+        for json_col in ("authors", "keywords"):
+            if d.get(json_col):
+                try:
+                    d[json_col] = json.loads(d[json_col])
+                except Exception:
+                    pass
+        return d
+    finally:
+        conn.close()
+
+
+@app.get("/api/documents/{document_id}/summary", response_model=SummaryResponse)
+def get_document_summary(
+    document_id: str,
+    max_sentences: int = Query(4, ge=1, le=10, description="Target number of key sentences"),
+    lambda_param: float = Query(0.70, ge=0.0, le=1.0, description="MMR trade-off weight"),
+    force_refresh: bool = Query(False, description="Bypass SQLite cache and recompute"),
+):
+    """
+    Extractive document-level summary in native language via TextRank + TF-IDF + MMR.
+    Includes page numbers for factual verification.
+    """
+    if not db:
+        raise HTTPException(status_code=503, detail="Database not loaded.")
+    svc = get_summarization_service(db)
+    result = svc.summarize_document(
+        document_id=document_id,
+        max_sentences=max_sentences,
+        lambda_param=lambda_param,
+        force_refresh=force_refresh,
+    )
+    if result.status == "not_found":
+        raise HTTPException(status_code=404, detail=f"Document {document_id} not found.")
+    return result
+
+
+@app.post("/api/documents/{document_id}/query-summary", response_model=SummaryResponse)
+def get_query_summary(
+    document_id: str,
+    req: QuerySummaryRequest,
+    force_refresh: bool = Query(False, description="Bypass SQLite cache and recompute"),
+):
+    """
+    Query-focused cross-lingual evidence summary matching user query to document sentences.
+    """
+    if not db:
+        raise HTTPException(status_code=503, detail="Database not loaded.")
+    svc = get_summarization_service(db)
+    result = svc.summarize_query_focused(
+        document_id=document_id,
+        query=req.query,
+        max_sentences=req.max_sentences,
+        lambda_param=req.lambda_param,
+        force_refresh=force_refresh,
+    )
+    if result.status == "not_found":
+        raise HTTPException(status_code=404, detail=f"Document {document_id} not found.")
+    return result
 
 
 @app.get("/api/stats")

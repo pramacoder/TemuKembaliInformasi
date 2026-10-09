@@ -311,7 +311,7 @@ export default function Home() {
                   </div>
 
                   {paginatedResults.map((result) => (
-                    <ResultCard key={result.id} result={result} />
+                    <ResultCard key={result.id} result={result} activeQuery={query} />
                   ))}
 
                   {/* Pagination */}
