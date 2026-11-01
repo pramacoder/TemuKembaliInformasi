@@ -4,6 +4,18 @@ Sistem Information Retrieval (IR) untuk pencarian dokumen akademik multi-korpus 
 
 ---
 
+## 🖼️ Tampilan Antarmuka Sistem (Modern Editorial Web Interface)
+
+![Landing Page Hero Showcase](docs/images/landing_page_hero.png)
+
+*Halaman awal (Landing Page) dengan pencarian multi-korpus terpadu dan display 3D perspektif cover dokumen.*
+
+![Katalog Hasil Pencarian](docs/images/search_results_catalog.png)
+
+*Tampilan katalog hasil pencarian dengan cover dokumen minimalis Swiss berindeks numerik.*
+
+---
+
 ## 🌟 Fitur Utama
 
 - **Unified Multi-Corpus Search**: Mencari di seluruh korpus akademik (Bahan Kuliah OCW UI, Riset Ilmiah, & Skripsi/Thesis) dalam satu query.

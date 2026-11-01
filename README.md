@@ -5,6 +5,22 @@
 
 ---
 
+## 🖼️ Tampilan Antarmuka Sistem (Modern Editorial Web Interface)
+
+Sistem Information Retrieval ini dilengkapi antarmuka web modern bergaya editorial monokromatik dengan cover dokumen prosedural minimalis Swiss:
+
+### 1. Halaman Awal & Hero Showcase (Landing Page)
+Menghadirkan pencarian multi-korpus terpadu, pemilih korpus, tag kueri populer, dan display 3D perspektif cover dokumen akademik.
+
+![Landing Page Hero Showcase](docs/images/landing_page_hero.png)
+
+### 2. Tampilan Katalog Hasil Pencarian (Grid Catalog & Swiss Cover)
+Menampilkan potongan dokumen relevan dalam format katalog buku/jurnal ber-cover minimalis yang memuat nomor indeks numerik, penanda korpus, judul, dan institusi.
+
+![Katalog Hasil Pencarian](docs/images/search_results_catalog.png)
+
+---
+
 ## 📌 Ringkasan Sistem (*Executive Summary*)
 
 **Academic IR** dirancang untuk menyelesaikan masalah *information silo* dan *fragment redundancy* pada repositori akademik. Sistem ini menyatukan pencarian terhadap tiga pilar dokumen ilmiah:

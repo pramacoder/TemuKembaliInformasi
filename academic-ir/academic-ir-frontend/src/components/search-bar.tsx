@@ -422,18 +422,28 @@ export function SearchBar({
   );
 }
 
-export function AppHeader() {
+interface AppHeaderProps {
+  onGoHome?: () => void;
+  onSelectCategory?: () => void;
+}
+
+export function AppHeader({ onGoHome, onSelectCategory }: AppHeaderProps) {
   return (
     <header className="border-b bg-background/95 backdrop-blur sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center h-14 gap-3">
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <BookMarked className="h-4 w-4 text-primary-foreground" />
+          <div
+            onClick={onGoHome}
+            className="flex items-center gap-2 shrink-0 cursor-pointer group"
+          >
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 dark:bg-zinc-100 group-hover:scale-105 transition-transform">
+              <BookMarked className="h-4 w-4 text-white dark:text-zinc-900" />
             </div>
             <div>
-              <p className="text-sm font-bold leading-none">Academic IR</p>
-              <p className="text-[10px] text-muted-foreground leading-none mt-0.5">
+              <p className="text-sm font-extrabold leading-none text-zinc-950 dark:text-zinc-50">
+                Academic IR
+              </p>
+              <p className="text-[10px] text-muted-foreground leading-none mt-0.5 font-mono">
                 Information Retrieval
               </p>
             </div>
@@ -442,14 +452,21 @@ export function AppHeader() {
           <div className="h-5 w-px bg-border mx-2" />
 
           <nav className="flex items-center gap-1 text-sm text-muted-foreground">
-            <Button variant="ghost" size="sm" className="h-7 text-xs">
-              Pencarian
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 text-xs"
+              onClick={onGoHome}
+            >
+              Beranda
             </Button>
-            <Button variant="ghost" size="sm" className="h-7 text-xs">
-              Koleksi Dokumen
-            </Button>
-            <Button variant="ghost" size="sm" className="h-7 text-xs">
-              Tentang
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 text-xs"
+              onClick={onSelectCategory}
+            >
+              Koleksi &amp; Kategori
             </Button>
           </nav>
 
