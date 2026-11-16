@@ -92,19 +92,23 @@ Berdasarkan pengujian otomatis pada **33 kueri akademik terstruktur** (mencakup 
 
 ---
 
-## 🚀 Panduan Menjalankan Sistem Dari Nol (*Setup From Scratch*)
+## 🚀 Panduan Menjalankan Sistem (*Setup & Running Guide*)
 
-Berikut adalah instruksi lengkap untuk menyiapkan dan menjalankan seluruh sistem dari awal pada mesin atau perangkat baru.
+Bagian ini menyediakan panduan langkah demi langkah agar siapa pun yang melakukan `git clone` terhadap repositori ini dapat langsung menyiapkan lingkungan dan menjalankan sistem secara lancar.
+
+---
 
 ### 1. Prasyarat Lingkungan (*Prerequisites*)
-Pastikan perangkat Anda telah terinstal:
+
+Pastikan perangkat Anda telah terpasang:
 - **Git** (`git --version`)
 - **Python 3.10+** (`python --version`)
-- **Node.js 18+ atau 20+ LTS** (`node --version`) dan **npm**
+- **Node.js 18+ atau 20+ LTS** (`node --version`) dan **npm** (`npm --version`)
 
 ---
 
 ### 2. Clone Repositori
+
 ```bash
 git clone https://github.com/pramacoder/TemuKembaliInformasi.git
 cd TemuKembaliInformasi
@@ -112,102 +116,194 @@ cd TemuKembaliInformasi
 
 ---
 
-### 3. Setup Lingkungan Python & Dependensi Backend
-Masuk ke direktori backend `academic-ir`:
+### ⚡ Quick Start: Menjalankan Sistem (2 Terminal)
+
+Sistem menggunakan arsitektur terpisah antara backend FastAPI dan frontend Next.js. Jalankan keduanya pada dua terminal terpisah:
+
+#### 🖥️ Terminal 1 — Backend REST API (FastAPI)
+
+1. Masuk ke direktori backend:
+   ```bash
+   cd academic-ir
+   ```
+
+2. Buat dan aktifkan *Python Virtual Environment*:
+   ```powershell
+   # Di Windows (PowerShell):
+   python -m venv venv
+   .\venv\Scripts\activate
+
+   # Di Windows (Command Prompt / CMD):
+   python -m venv venv
+   venv\Scripts\activate.bat
+
+   # Di macOS / Linux:
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+3. Install seluruh dependensi backend:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Siapkan file konfigurasi environment:
+   ```powershell
+   # Di Windows:
+   copy .env.example .env
+
+   # Di macOS / Linux:
+   cp .env.example .env
+   ```
+
+5. **Pastikan Basis Data & Indeks Model Siap**:
+   - **TF-IDF Model**: File representasi vektor (`models/tfidf_matrix.npz`, `models/tfidf_vectorizer.pkl`, dan `models/chunk_ids.pkl`) **sudah tersedia langsung** di repositori.
+   - **BM25 Model**: Jika folder `models/bm25_v1/bm25_index.pkl` belum ada, bangun indeks BM25 dalam hitungan detik:
+     ```bash
+     python scripts/build_bm25_index.py
+     ```
+   - **SQLite Database (`database/academic_ir.db`)**:
+     Jika file database belum ada pada hasil clone (misal karena aturan `.gitignore`), inisialisasi basis data dan data korpus melalui salah satu opsi berikut:
+     ```bash
+     # Opsi Cepat (Seeder korpus terkurasi ~20 dokumen):
+     python scripts/seed_sample_corpus.py
+
+     # Opsi Penuh (Panen korpus riset & tesis skala penuh):
+     python scripts/harvest_large_corpus.py --research 50 --thesis 50
+     ```
+
+6. Jalankan server FastAPI:
+   ```bash
+   python -m uvicorn app.api:app --host 127.0.0.1 --port 8000
+   ```
+   - REST API aktif di: `http://127.0.0.1:8000`
+   - Dokumentasi Swagger interaktif: `http://127.0.0.1:8000/docs`
+   - Health check status: `http://127.0.0.1:8000/api/health`
+
+---
+
+#### 🌐 Terminal 2 — Frontend Web (Next.js 15)
+
+1. Buka jendela terminal baru, masuk ke direktori frontend:
+   ```bash
+   cd academic-ir/academic-ir-frontend
+   ```
+
+2. Siapkan file environment frontend:
+   ```powershell
+   # Di Windows:
+   copy .env.example .env.local
+
+   # Di macOS / Linux:
+   cp .env.example .env.local
+   ```
+   > File `.env.local` memastikan frontend terhubung ke backend pada `NEXT_PUBLIC_API_URL=http://localhost:8000`.
+
+3. Install dependensi Node.js:
+   ```bash
+   npm install
+   ```
+
+4. Jalankan development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Buka antarmuka web pada peramban (*browser*):
+   👉 **`http://localhost:3000`**
+
+---
+
+### 🧪 Verifikasi Sistem (*End-to-End Verification*)
+
+Untuk memastikan seluruh komponen (database, index TF-IDF, search engine, snippet generator, proposal similarity, dan benchmark metrics) berfungsi normal tanpa error, jalankan skrip verifikasi otomatis berikut:
+
 ```bash
-cd academic-ir
+# Pastikan venv aktif di direktori academic-ir
+python scripts/verify_system.py
 ```
-
-Buat dan aktifkan virtual environment:
-```powershell
-# Di Windows (PowerShell):
-python -m venv venv
-.\venv\Scripts\activate
-
-# Di macOS / Linux:
-python3 -m venv venv
-source venv/bin/activate
-```
-
-Install seluruh dependensi backend:
-```bash
-pip install -r requirements.txt
-pip install rank-bm25
+Jika berhasil, output akan menampilkan:
+```text
+=================================================================
+  ALL VERIFICATION CHECKS PASSED [OK]
+=================================================================
 ```
 
 ---
 
-### 4. Pembangunan Basis Data & Indeks Model (*Build From Scratch*)
+### 🛠️ Pembangunan Basis Data & Indeks Model Dari Awal (*Build From Scratch*)
 
-Jika Anda menjalankan dari nol (database belum ada):
+Jika Anda ingin melakukan panen data ulang (*data harvesting*), merekonstruksi representasi vektor, atau mengeksekusi benchmark evaluasi IREval secara lengkap:
 
 #### A. Pengumpulan / Ingestion Data Korpus
-Jalankan skrip panen data untuk mengisi database SQLite:
 ```bash
-# Opsi 1: Panen korpus multi-sumber (OCW UI, arXiv, Repositori)
-python scripts/harvest_large_corpus.py
+# Panen korpus multi-sumber (arXiv, DOAJ, dan Repositori)
+python scripts/harvest_large_corpus.py --research 100 --thesis 100
 
-# Opsi 2: Atau jalankan kolektor spesifik (misal OCW UI semua fakultas)
+# Atau panen materi kuliah OCW UI dari seluruh program studi
 python scripts/collect_materials_all_prodi.py
 ```
 
-#### B. Pembangunan Indeks TF-IDF
-Latih dan bentuk representasi ruang vektor (*Vector Space Model*):
+#### B. Pembangunan Ulang Indeks TF-IDF
+Latih representasi ruang vektor (*Vector Space Model*) dari tabel `chunks`:
 ```bash
 python scripts/build_index.py
 ```
-*Output: Menghasilkan `models/tfidf_vectorizer.pkl`, `models/tfidf_matrix.npz`, dan `models/chunk_ids.pkl`.*
+*Output: Memperbarui `models/tfidf_vectorizer.pkl`, `models/tfidf_matrix.npz`, dan `models/chunk_ids.pkl`.*
 
-#### C. Pembangunan Indeks BM25
-Bentuk indeks terbalik (*inverted index*) Okapi BM25:
+#### C. Pembangunan Indeks Okapi BM25
+Bentuk *inverted index* Okapi BM25 ($k_1=1.5, b=0.75$):
 ```bash
 python scripts/build_bm25_index.py
 ```
 *Output: Menghasilkan `models/bm25_v1/bm25_index.pkl`.*
 
-#### D. Membangun Ground Truth & Menjalankan Evaluasi Benchmark
+#### D. Menjalankan Evaluasi Benchmark & Uji Latensi
 ```bash
-# Bangun 942 penilaian relevansi ground truth untuk 33 kueri
+# Bentuk ground truth 942 qrels untuk 33 kueri akademik
 python scripts/build_comprehensive_qrels.py
 
-# Eksekusi full benchmark TF-IDF vs BM25 (menghasilkan tabel komparasi & analisis galat)
+# Eksekusi full benchmark komparasi TF-IDF vs BM25
 python scripts/run_full_benchmark.py
 
-# Eksekusi uji latensi P50/P95/P99
+# Eksekusi uji latensi P50 / P95 / P99
 python scripts/benchmark_latency.py
 ```
 
 ---
 
-### 5. Menjalankan Backend API (FastAPI)
-Pastikan virtual environment aktif di direktori `academic-ir`:
-```powershell
-python -m uvicorn app.api:app --host 127.0.0.1 --port 8000
-```
-- Endpoint API siap melayani di: `http://127.0.0.1:8000`
-- Dokumentasi Swagger interaktif: `http://127.0.0.1:8000/docs`
-- Health check: `http://127.0.0.1:8000/api/health`
+### ❓ Pemecahan Masalah Umum (*Troubleshooting & FAQ*)
 
----
+1. **Port 8000 atau 3000 sudah terpakai (*Port already in use*)**:
+   - Di Windows PowerShell:
+     ```powershell
+     # Cek proses yang mendengarkan di port 8000 atau 3000
+     Get-NetTCPConnection -LocalPort 8000, 3000 -ErrorAction SilentlyContinue | Select-Object OwningProcess, LocalPort
+     # Hentikan proses jika diperlukan:
+     Stop-Process -Id <PID> -Force
+     ```
+   - Di Linux / macOS:
+     ```bash
+     lsof -ti:8000,3000 | xargs kill -9
+     ```
 
-### 6. Menjalankan Frontend Web (Next.js 15)
-Buka terminal baru, masuk ke direktori frontend:
-```bash
-cd academic-ir/academic-ir-frontend
-```
+2. **Frontend gagal mengambil data hasil pencarian (*Fetch Error / Connection Refused*)**:
+   - Pastikan backend FastAPI di Terminal 1 sudah aktif dan menampilkan log `Uvicorn running on http://127.0.0.1:8000`.
+   - Pastikan file `academic-ir/academic-ir-frontend/.env.local` berisi:
+     ```env
+     NEXT_PUBLIC_API_URL=http://localhost:8000
+     ```
 
-Install dependensi Node.js:
-```bash
-npm install
-```
+3. **Indeks BM25 tidak ditemukan (*BM25 index not found*)**:
+   - Sistem memiliki mekanisme *graceful fallback* di mana pencarian otomatis beralih ke TF-IDF VSM jika BM25 belum dibangun.
+   - Untuk mengaktifkan mode BM25, cukup jalankan:
+     ```bash
+     python scripts/build_bm25_index.py
+     ```
 
-Jalankan server pengembangan:
-```bash
-npm run dev
-```
-
-Buka peramban (*browser*) Anda pada:
-👉 **`http://localhost:3000`**
+4. **ModuleNotFoundError saat menjalankan script**:
+   - Pastikan Anda sudah mengaktifkan *virtual environment* (`venv`) sebelum menjalankan skrip Python.
+   - Pastikan seluruh dependensi telah terinstal via `pip install -r requirements.txt`.
 
 ---
 

@@ -59,7 +59,7 @@ def main():
 
     print(f"\n[3] Search Test (Query: '{test_query}'):")
     for r in ranked:
-        clean_snip = generate_snippet(r['raw_text'], test_query, max_chars=100)
+        clean_snip = r.get('snippet') or generate_snippet(r.get('raw_text', r.get('abstract', '')), test_query, max_chars=100)
         # Remove HTML mark tags for terminal output
         term_snip = clean_snip.replace("<mark>", "[").replace("</mark>", "]")
         print(f"    - Score: {r['score']:.4f} | {r['document_id']} | {r['title']} (p.{r['page_start']})")
